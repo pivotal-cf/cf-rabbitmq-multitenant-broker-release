@@ -1,3 +1,10 @@
-# cf-rabbitmq-broker-release
+# rabbitmq-broker
 
-BOSH release for the RabbitMQ Broker. Previously bundled in https://github.com/pivotal-cf/cf-rabbitmq-release
+## Testing
+
+### Unit
+
+```
+bin/test-from-docker
+```
+

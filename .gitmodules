@@ -1,0 +1,3 @@
+[submodule "tools/leiningen"]
+	path = tools/leiningen
+	url = git@github.com:michaelklishin/standalone-lein.git
