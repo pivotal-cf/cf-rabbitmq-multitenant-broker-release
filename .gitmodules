@@ -1,3 +1,6 @@
 [submodule "src/rabbitmq-broker/tools/leiningen"]
 	path = src/rabbitmq-broker/tools/leiningen
 	url = git@github.com:michaelklishin/standalone-lein.git
+[submodule "src/github.com/pivotal-cf/cf-rabbitmq-smoke-tests"]
+	path = src/github.com/pivotal-cf/cf-rabbitmq-smoke-tests
+	url = git@github.com:pivotal-cf/cf-rabbitmq-smoke-tests
