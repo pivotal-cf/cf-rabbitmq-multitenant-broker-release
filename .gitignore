@@ -3,3 +3,15 @@ target
 .lein-failures
 .idea/
 *.iml
+config/dev.yml
+config/private.yml
+releases/*.tgz
+dev_releases
+.dev_builds
+.idea
+.final_builds/jobs/**/*.tgz
+.final_builds/packages/**/*.tgz
+*.swp
+*~
+blobs
+.blobs
