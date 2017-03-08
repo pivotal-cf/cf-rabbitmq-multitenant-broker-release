@@ -125,6 +125,7 @@ properties:
       level: debug
       print_stack_traces: false
     rabbitmq:
+      hosts: ((rabbitmq-hosts))
       operator_set_policy:
         enabled: true
         policy_name: "operator_set_policy"
