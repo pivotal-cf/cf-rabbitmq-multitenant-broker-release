@@ -25,11 +25,10 @@ instance_groups:
     release: routing
     properties:
       nats:
-        machines:
-        - ((nats-ip-address))
+        machines:  ((nats-ip-addresses))
         port: 4222
         user: nats
-        password: ((cf-admin-password))
+        password: ((nats-password))
       route_registrar:
         routes:
         - name: ((rabbitmq-broker-domain))
@@ -56,9 +55,9 @@ instance_groups:
   vm_type: m3.medium
   stemcell: trusty
   azs:
-  - eu-west-1a
+  - z1
   networks:
-  - name: services
+  - name: default
 
 - name: broker-registrar
   jobs:
@@ -66,12 +65,12 @@ instance_groups:
     release: ((cf-rabbitmq-broker-release-name))
   instances: 1
   lifecycle: errand
-  vm_type: t2.micro
+  vm_type: small-burstable
   stemcell: trusty
   azs:
-  - eu-west-1a
+  - z1
   networks:
-  - name: services
+  - name: default
 
 - name: broker-deregistrar
   jobs:
@@ -79,12 +78,12 @@ instance_groups:
     release: ((cf-rabbitmq-broker-release-name))
   instances: 1
   lifecycle: errand
-  vm_type: t2.micro
+  vm_type: small-burstable
   stemcell: trusty
   azs:
-  - eu-west-1a
+  - z1
   networks:
-  - name: services
+  - name: default
 
 - name: smoke-tests
   jobs:
@@ -95,9 +94,9 @@ instance_groups:
   vm_type: m3.medium
   stemcell: trusty
   azs:
-  - eu-west-1a
+  - z1
   networks:
-  - name: services
+  - name: default
 
 properties:
   # for broker and route registrars
