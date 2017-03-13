@@ -1,7 +1,5 @@
 <%
 rabbitmq_broker_config = p("rabbitmq-broker")
-
-rabbitmq_broker_config["ip"] = link("rabbitmq-broker").instances.first.address
 %>
 
 <%= rabbitmq_broker_config.to_yaml %>
