@@ -65,7 +65,7 @@ instance_groups:
     release: ((cf-rabbitmq-broker-release-name))
   instances: 1
   lifecycle: errand
-  vm_type: small-burstable
+  vm_type: t2.small
   stemcell: trusty
   azs:
   - z1
@@ -78,7 +78,7 @@ instance_groups:
     release: ((cf-rabbitmq-broker-release-name))
   instances: 1
   lifecycle: errand
-  vm_type: small-burstable
+  vm_type: t2.small
   stemcell: trusty
   azs:
   - z1
@@ -111,6 +111,8 @@ properties:
     name: ((product-name))
     username: ((multitenant-rabbitmq-broker-username))
     password: ((multitenant-rabbitmq-broker-password))
+    service:
+      name: ((product-name))
   rabbitmq-broker:
     route: ((rabbitmq-broker-domain))
     cc_endpoint: http://api.((bosh-hostname))
