@@ -1,0 +1,7 @@
+--color
+--format documentation
+--order rand
+--profile
+--require spec_helper
+--require rspec/instafail
+--format RSpec::Instafail
