@@ -16,3 +16,5 @@ rabbitmq-broker-username:
 rabbitmq-broker-uuid:
 rabbitmq-management-domain:
 stemcell-version:
+syslog-aggregator-address:
+syslog-aggregator-port:

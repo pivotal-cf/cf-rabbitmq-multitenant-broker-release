@@ -113,6 +113,9 @@ properties:
     password: ((multitenant-rabbitmq-broker-password))
     service:
       name: ((product-name))
+  syslog_aggregator:
+    address: ((syslog-aggregator-address))
+    port: ((syslog-aggregator-port))
   rabbitmq-broker:
     route: ((rabbitmq-broker-domain))
     cc_endpoint: http://api.((bosh-hostname))
