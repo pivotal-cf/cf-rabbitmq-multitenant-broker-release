@@ -1,1 +1,7 @@
-name: cf-rabbitmq-broker
+---
+final_name: cf-rabbitmq-broker
+min_cli_version: 1.2690.0
+blobstore:
+  provider: s3
+  options:
+    bucket_name: rabbitmq-bosh-release-blobs
