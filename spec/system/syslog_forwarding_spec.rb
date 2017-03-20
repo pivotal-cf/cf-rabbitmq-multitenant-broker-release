@@ -33,22 +33,19 @@ def five_minutes_ago
 end
 
 RSpec.describe "Syslog forwarding" do
-  def search_for_events(search_string)
+  def has_event_for?(log_entry)
     options = { :group_id => PAPERTRAIL_GROUP_ID, :min_time => five_minutes_ago }
-    events = []
-    REMOTE_LOG_DESTINATION.each_event(search_string, options) do |event|
-      events.push(event)
-    end
-    events
+    query = REMOTE_LOG_DESTINATION.query(log_entry, options)
+    !query.search.events.empty?
   end
 
   describe "rmq_broker host" do
     rmq_broker_hosts = DEPLOYMENT_INSTANCES.select { |i| i.job == "rmq-broker" }
 
     rmq_broker_hosts.each do |rmq_broker_host|
-      search_string = host_search_string(rmq_broker_host)
-      it "forwards rmq_broker hosts logs (#{search_string})" do
-        expect(search_for_events(search_string).size).to be > 0
+      job_host_log_entry = host_search_string(rmq_broker_host)
+      it "forwards rmq_broker hosts logs (#{job_host_log_entry})" do
+        expect(has_event_for?(job_host_log_entry)).to be_truthy
       end
     end
   end
