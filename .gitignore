@@ -16,3 +16,4 @@ dev_releases
 blobs
 .blobs
 manifests/cf-rabbitmq-broker-vars.yml
+rspec.xml
