@@ -9,6 +9,12 @@ releases:
   version: latest
 - name: routing
   version: 0.143.0
+- name: rabbitmq-metrics
+  version: latest
+- name: service-metrics
+  version: 1.5.5
+- name: loggregator
+  version: 65
 
 stemcells:
 - alias: trusty
