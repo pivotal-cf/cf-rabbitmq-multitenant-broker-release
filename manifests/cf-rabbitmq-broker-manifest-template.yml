@@ -65,7 +65,7 @@ instance_groups:
   azs:
   - z1
   networks:
-  - name: default
+  - name: services
 
 - name: broker-registrar
   jobs:
@@ -78,7 +78,7 @@ instance_groups:
   azs:
   - z1
   networks:
-  - name: default
+  - name: services
 
 - name: broker-deregistrar
   jobs:
@@ -91,7 +91,7 @@ instance_groups:
   azs:
   - z1
   networks:
-  - name: default
+  - name: services
 
 - name: smoke-tests
   jobs:
@@ -104,7 +104,7 @@ instance_groups:
   azs:
   - z1
   networks:
-  - name: default
+  - name: services
 
 properties:
   # for broker and route registrars
