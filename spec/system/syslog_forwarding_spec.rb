@@ -28,13 +28,13 @@ def host_search_string(host)
   "[job=#{host.job} index=#{host.index} id=#{host.id}]"
 end
 
-def five_minutes_ago
-  Time.now - (5 * 60)
+def one_hour_ago
+  Time.now - (60 * 60)
 end
 
 RSpec.describe "Syslog forwarding" do
   def has_event_for?(log_entry)
-    options = { :group_id => PAPERTRAIL_GROUP_ID, :min_time => five_minutes_ago }
+    options = { :group_id => PAPERTRAIL_GROUP_ID, :min_time => one_hour_ago }
     query = REMOTE_LOG_DESTINATION.query(log_entry, options)
     !query.search.events.empty?
   end
