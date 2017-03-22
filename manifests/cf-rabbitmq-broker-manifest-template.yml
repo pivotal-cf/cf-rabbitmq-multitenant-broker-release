@@ -63,7 +63,7 @@ instance_groups:
   vm_type: m3.medium
   stemcell: trusty
   azs:
-  - z1
+  - eu-west-1a
   networks:
   - name: services
 
@@ -73,10 +73,10 @@ instance_groups:
     release: ((cf-rabbitmq-broker-release-name))
   instances: 1
   lifecycle: errand
-  vm_type: t2.small
+  vm_type: t2.micro
   stemcell: trusty
   azs:
-  - z1
+  - eu-west-1a
   networks:
   - name: services
 
@@ -86,10 +86,10 @@ instance_groups:
     release: ((cf-rabbitmq-broker-release-name))
   instances: 1
   lifecycle: errand
-  vm_type: t2.small
+  vm_type: t2.micro
   stemcell: trusty
   azs:
-  - z1
+  - eu-west-1a
   networks:
   - name: services
 
@@ -102,7 +102,7 @@ instance_groups:
   vm_type: m3.medium
   stemcell: trusty
   azs:
-  - z1
+  - eu-west-1a
   networks:
   - name: services
 
