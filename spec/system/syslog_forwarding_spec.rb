@@ -34,9 +34,12 @@ end
 
 RSpec.describe "Syslog forwarding" do
   def has_event_for?(log_entry)
+    events = []
     options = { :group_id => PAPERTRAIL_GROUP_ID, :min_time => one_hour_ago }
-    query = REMOTE_LOG_DESTINATION.query(log_entry, options)
-    !query.search.events.empty?
+    REMOTE_LOG_DESTINATION.each_event(log_entry, options) do |event|
+      events << event
+    end
+    events.any?
   end
 
   describe "rmq_broker host" do
