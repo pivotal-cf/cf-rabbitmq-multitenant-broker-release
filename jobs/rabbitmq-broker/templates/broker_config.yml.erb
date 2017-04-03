@@ -1,5 +1,10 @@
 <%
 rabbitmq_broker_config = p("rabbitmq-broker")
+
+if_link("rabbitmq-haproxy") do |haproxy|
+    rabbitmq_broker_config["rabbitmq"]["hosts"] = haproxy.instances.map(&:address)
+end
+
 %>
 
 <%= rabbitmq_broker_config.to_yaml %>

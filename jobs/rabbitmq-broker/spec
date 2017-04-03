@@ -107,5 +107,7 @@ provides:
   type: rabbitmq-broker
 
 consumes:
+- name: rabbitmq-haproxy
+  type: rabbitmq-haproxy
 - name: rabbitmq-broker
   type: rabbitmq-broker
