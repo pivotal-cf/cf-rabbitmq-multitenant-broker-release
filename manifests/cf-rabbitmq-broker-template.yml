@@ -3,8 +3,6 @@ name: ((deployment-name))
 director_uuid: ((director-uuid))
 
 releases:
-- name: cf-rabbitmq
-  version: latest
 - name: ((cf-rabbitmq-broker-release-name))
   version: latest
 - name: cf-rabbitmq-test
