@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# ensure_dir_with_permissions
+#
+# @param directory name
+#
+# Creates  directory <directory name> if it doesn't exist
+# sets the ownership recursively to vcap and
+# changes the permissions to rwxr-x---
+#
+function ensure_dir_with_permissions() {
+    local target_dir=${1:?missing directory}
+    local ownership=${2:-vcap:vcap}
+
+    mkdir -p "${target_dir}"
+    ( cd "$target_dir"
+      chown -R -P "$ownership" .
+      chmod 750 .
+      chmod -R o-rwx .
+    )
+}
