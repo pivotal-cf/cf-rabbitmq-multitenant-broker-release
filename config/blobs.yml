@@ -1,8 +1,4 @@
 ---
-cf-cli/cf-cli_6.19.0_linux_x86-64.tgz:
-  size: 6450885
-  object_id: 22ad54c4-568e-4ca3-aa73-12b691e3f678
-  sha: 625170654ffa4568dae97b4d3915e87557b29261
 golang/go1.8.linux-amd64.tar.gz:
   object_id: 0c4ed1e4-436a-4604-bec4-010100816119
   sha: a93fe8fc245e3554f956bc823f30ef4eb23c2068
@@ -11,3 +7,7 @@ java/jre-1.8.0_121.tar.gz:
   object_id: c2d9eb0c-983c-462a-94c9-4cf82d2feaf8
   sha: f62168513348184e3d18c69795ecb220456514a3
   size: 73676107
+cf-cli/cf-cli_6.26.0_linux_x86-64.tgz:
+  object_id: f1fc6b4a-241c-4ecd-a9f0-1647f016b43a
+  sha: 6fe2df0ef09820a3a46db5cac9152fb8f1ecca02
+  size: 5174999
