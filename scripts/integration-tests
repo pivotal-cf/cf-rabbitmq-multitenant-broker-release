@@ -1,9 +1,11 @@
-#!/bin/bash -ex
+#!/usr/bin/env bash
+
+set -e
 
 main() {
   write_keys_to_file
   install_dependencies
-  run_system_tests_individually_to_isolate_state
+  run_integration_tests_individually_to_isolate_state
   delete_bosh_deployment_to_remove_state
 }
 
@@ -17,7 +19,7 @@ install_dependencies() {
   bundle install
 }
 
-run_system_tests_individually_to_isolate_state() {
+run_integration_tests_individually_to_isolate_state() {
   spec_files=($(find spec/integration/ -type f))
 
   for spec_file in "${spec_files[@]}"
