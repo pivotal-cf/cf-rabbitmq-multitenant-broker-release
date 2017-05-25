@@ -100,7 +100,7 @@ properties:
   cf:
     admin_username: ((cf-admin-username))
     admin_password: ((cf-admin-password))
-    api_url: http://api.((bosh-hostname))
+    api_url: https://api.((bosh-hostname))
     domain: ((bosh-hostname))
   broker:
     host: ((rabbitmq-broker-domain)).((bosh-hostname))
