@@ -24,7 +24,7 @@ bosh interpolate \
 To run all the tests do `bundle exec rake spec`.
 
 Use `rspec` to run a specific test:
-`bundle exec rspec spec/system/syslog_forwarding_spec.rb`
+`bundle exec rspec spec/integration/syslog_forwarding_spec.rb`
 
 ### Unit Tests
 
@@ -32,6 +32,7 @@ To run only unit tests locally, run: `bundle exec rake spec:unit`.
 
 ### Integration Tests
 To run integration tests, run: `bundle exec rake spec:integration`.
+
 In order to be able to run the tests locally, you need to have the following
 environment variables correctly configured:
 
