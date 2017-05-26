@@ -3,6 +3,10 @@
 This repository contains the release for a multi-tenant RabbitMQ service broker
 for Cloud Foundry. It's deployable by BOSH in the usual way.
 
+## Updating
+
+Clone the repository and run `./scripts/update-release` to update submodules and install dependencies.
+
 ## Testing
 
 To run all the tests do `bundle exec rake spec`.
