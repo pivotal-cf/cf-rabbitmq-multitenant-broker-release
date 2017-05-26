@@ -25,6 +25,11 @@ namespace :spec do
     t.pattern = FileList['spec/unit/**/*_spec.rb']
   end
 
+  desc 'runs basht unit tests'
+  task :bash_unit do
+    execute_cmd('./scripts/run-basht-tests')
+  end
+
   desc 'runs broker tests'
   task :broker do
     host_os = RbConfig::CONFIG['host_os']
@@ -35,14 +40,14 @@ namespace :spec do
     end
   end
 
-  task :unit => [:rspec_unit, :broker]
+  task :unit => [:bash_unit, :rspec_unit, :broker]
 end
 
 def execute_cmd(cmd)
   system("bash -c #{cmd.shellescape}")
   status = $?
-    if status != 0
-      raise "'#{cmd}' execution failed (exit code: #{status}"
+  if status != 0
+    raise "'#{cmd}' execution failed (exit code: #{status}"
   end
 end
 
