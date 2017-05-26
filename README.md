@@ -7,6 +7,18 @@ for Cloud Foundry. It's deployable by BOSH in the usual way.
 
 Clone the repository and run `./scripts/update-release` to update submodules and install dependencies.
 
+## Deploying
+
+Once you have a [BOSH Lite up and running locally](https://github.com/cloudfoundry/bosh-lite), run `scripts/deploy-bosh-lite`.
+
+To deploy the release into BOSH you will need a deployment manifest. You can generate a deployment manifest using the following command:
+```sh
+bosh interpolate \
+  --vars-file=manifests/lite-vars-file.yml \
+  --var=director-uuid=$(bosh status --uuid) \
+  manifests/cf-rabbitmq-broker-template.yml > manifests/cf-rabbitmq-broker.yml
+```
+
 ## Testing
 
 To run all the tests do `bundle exec rake spec`.

@@ -1,0 +1,19 @@
+deployment-name: cf-rabbitmq-broker-standalone
+cf-rabbitmq-broker-release-name: cf-rabbitmq-broker
+stemcell-version: 3262.2
+rabbitmq-broker-domain: rabbitmq-multitenant-broker-standalone
+bosh-hostname: bosh-lite.com
+cf-admin-password: admin
+cf-admin-username: admin
+multitenant-rabbitmq-broker-password: broker
+multitenant-rabbitmq-broker-username: broker
+product-name: p-rabbitmq
+rabbitmq-broker-password: broker
+rabbitmq-broker-plan-uuid: 22F0B28C-B886-4123-B01B-95E54D3DE6DA
+rabbitmq-broker-protocol: http
+rabbitmq-broker-username: broker
+rabbitmq-broker-uuid: 568725FD-AD46-44CA-9853-621416E983A4
+rabbitmq-management-domain: pivotal-rabbitmq
+rabbitmq-hosts: NO_RABBITMQ_SERVER_IS_REQUIRED_FOR_INTEGRATION_TESTS
+syslog-aggregator-address:
+syslog-aggregator-port:
