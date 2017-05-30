@@ -40,4 +40,16 @@ Integration tests require this release to be deployed into a BOSH director (see 
 
 To run integration tests, run: `bundle exec rake spec:integration`.
 
-Use `SKIP_SYSLOG=true bundle exec rake spec:integration` to skip syslog tests if you don't have `PAPERTAIL_TOKEN` and `PAPERTRAIL_GROUP_ID` environment variables configured.
+Use `SKIP_SYSLOG=true bundle exec rake spec:integration` to skip syslog tests if you don't have `PAPERTRAIL_TOKEN` and `PAPERTRAIL_GROUP_ID` environment variables configured.
+
+For testing with syslog, remove the `SYSLOG` environment variable from the command line and generate and deploy a new manifest with syslog:
+
+```sh
+boshgo interpolate \
+  --ops-file=manifests/add-syslog-release.yml \
+  --vars-file=manifests/lite-vars-file.yml \
+  --var=director-uuid=$(bosh status --uuid) \
+  --var=syslog-aggregator-address= \
+  --var=syslog-aggregator-port= \
+  manifests/cf-rabbitmq-broker-template.yml > manifests/cf-rabbitmq-broker.yml
+```
