@@ -7,7 +7,7 @@ cf-admin-password: admin
 cf-admin-username: admin
 multitenant-rabbitmq-broker-password: broker
 multitenant-rabbitmq-broker-username: broker
-product-name: p-rabbitmq
+product-name: p-rabbitmq-standalone
 rabbitmq-broker-password: broker
 rabbitmq-broker-plan-uuid: 22F0B28C-B886-4123-B01B-95E54D3DE6DA
 rabbitmq-broker-protocol: http
