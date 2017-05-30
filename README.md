@@ -1,23 +1,27 @@
-# Cloud Foundry RabbitMQ Broker
+# Cloud Foundry RabbitMQ Multi-tenant Broker
 
 This repository contains the release for a multi-tenant RabbitMQ service broker
 for Cloud Foundry. It's deployable by BOSH in the usual way.
 
-## Updating
+## Dependencies
+
+- [bundler](http://bundler.io/)
+
+## Install
 
 Clone the repository and run `./scripts/update-release` to update submodules and install dependencies.
 
 ## Deploying
 
-Once you have a [BOSH Lite up and running locally](https://github.com/cloudfoundry/bosh-lite), run `scripts/deploy-to-bosh-lite`.
-
 To deploy the release into BOSH you will need a deployment manifest. You can generate a deployment manifest using the following command:
 ```sh
-bosh interpolate \
+boshgo interpolate \
   --vars-file=manifests/lite-vars-file.yml \
   --var=director-uuid=$(bosh status --uuid) \
   manifests/cf-rabbitmq-broker-template.yml > manifests/cf-rabbitmq-broker.yml
 ```
+
+Once you have a [BOSH Lite up and running locally](https://github.com/cloudfoundry/bosh-lite), run `scripts/deploy-to-bosh-lite`.
 
 ## Testing
 
@@ -28,28 +32,12 @@ Use `rspec` to run a specific test:
 
 ### Unit Tests
 
-To run only unit tests locally, run: `bundle exec rake spec:unit`.
+To run only unit tests locally, run: `bundle exec rake spec:unit`. Unit tests do not require the release to be deployed.
 
 ### Integration Tests
+
+Integration tests require this release to be deployed into a BOSH director (see [Deploying section above](#deploying)).
+
 To run integration tests, run: `bundle exec rake spec:integration`.
 
-In order to be able to run the tests locally, you need to have the following
-environment variables correctly configured:
-
-```bash
-export PAPERTRAIL_TOKEN=
-export PAPERTRAIL_GROUP_ID=
-
-export DEPLOYMENT_NAME=cf-rabbitmq-broker
-
-export BOSH_DIRECTOR_URL=https://<director_username>:<director_password>@<director_ip_address_or_domain>:25555
-export BOSH_MANIFEST=<path to the bosh manifest you will use in the tests>
-export BOSH_TARGET=https://<director_ip_address_or_domain>:25555
-export BOSH_USERNAME=<director_username>
-export BOSH_PASSWORD=<director_password>
-
-export CF_API=
-export CF_DOMAIN=
-export CF_USERNAME=
-export CF_PASSWORD=
-```
+Use `SKIP_SYSLOG=true bundle exec rake spec:integration` to skip syslog tests if you don't have `PAPERTAIL_TOKEN` and `PAPERTRAIL_GROUP_ID` environment variables configured.
