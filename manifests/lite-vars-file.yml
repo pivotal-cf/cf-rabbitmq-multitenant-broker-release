@@ -15,5 +15,3 @@ rabbitmq-broker-username: broker
 rabbitmq-broker-uuid: 568725FD-AD46-44CA-9853-621416E983A4
 rabbitmq-management-domain: pivotal-rabbitmq
 rabbitmq-hosts: NO_RABBITMQ_SERVER_IS_REQUIRED_FOR_INTEGRATION_TESTS
-syslog-aggregator-address:
-syslog-aggregator-port:

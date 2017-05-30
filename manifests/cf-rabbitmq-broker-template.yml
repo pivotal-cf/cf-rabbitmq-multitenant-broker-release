@@ -33,22 +33,6 @@ instance_groups:
           registration_interval: 20s
           uris:
           - ((rabbitmq-broker-domain)).((bosh-hostname))
-  - name: syslog-configuration-test
-    release: cf-rabbitmq-test
-    properties:
-      syslog-configuration-test:
-        watched-log-files:
-        - "/var/vcap/sys/log/rabbitmq-broker/startup_stdout.log"
-        - "/var/vcap/sys/log/rabbitmq-broker/startup_stderr.log"
-        - "/var/vcap/sys/log/route_registrar/route_registrar.log"
-        - "/var/vcap/sys/log/route_registrar/route_registrar.err.log"
-  - name: permissions-test
-    release: cf-rabbitmq-test
-    properties:
-      permissions-test:
-        directories:
-        - "/var/vcap/jobs/rabbitmq-broker"
-        - "/var/vcap/sys/log"
   vm_type: m3.medium
   stemcell: trusty
   azs:
