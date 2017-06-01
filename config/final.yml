@@ -1,5 +1,5 @@
 ---
-final_name: cf-rabbitmq-broker
+final_name: cf-rabbitmq-multitenant-broker
 min_cli_version: 1.2690.0
 blobstore:
   provider: s3

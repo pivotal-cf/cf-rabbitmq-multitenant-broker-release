@@ -1,5 +1,4 @@
 deployment-name: cf-rabbitmq-broker-standalone
-cf-rabbitmq-broker-release-name: cf-rabbitmq-broker
 stemcell-version: 3262.2
 rabbitmq-broker-domain: rabbitmq-multitenant-broker-standalone
 bosh-hostname: bosh-lite.com
