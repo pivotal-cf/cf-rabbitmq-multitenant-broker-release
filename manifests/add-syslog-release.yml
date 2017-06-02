@@ -1,5 +1,0 @@
-- type: replace
-  path: /properties/syslog_aggregator?
-  value:
-    address: ((syslog-aggregator-address))
-    port: ((syslog-aggregator-port))
