@@ -1,6 +1,21 @@
+<%
+
+app_domain = ""
+
+if (candidate = p("smoke_tests.apps_domain")) != ""
+  app_domain = candidate
+elsif (candidate = p("cf.domain")) != ""
+  app_domain = candidate
+elsif (candidate = link("cloud_controller").p("app_domains")).length != 0
+  app_domain = candidate.first()
+else
+  app_domain = link("cloud_controller").p("system_domain")
+end
+
+%>
 {
   "api":                              "<%= p('cf.api_url') %>",
-  "apps_domain":                      "<%= p('smoke_tests.apps_domain') != "" && p('smoke_tests.apps_domain') || p('cf.domain') %>",
+  "apps_domain":                      "<%= app_domain %>",
   "admin_user":                       "<%= p('cf.admin_username') %>",
   "admin_password":                   "<%= p('cf.admin_password') %>",
   "service_name":                     "<%= p('broker.name') %>",
