@@ -1,16 +1,31 @@
 <%
 
-app_domain = ""
+cc_link = nil
+app_domain = nil
 
-if (candidate = p("smoke_tests.apps_domain")) != ""
-  app_domain = candidate
-elsif (candidate = p("cf.domain")) != ""
-  app_domain = candidate
-elsif (candidate = link("cloud_controller").p("app_domains")).length != 0
-  app_domain = candidate.first()
-else
-  app_domain = link("cloud_controller").p("system_domain")
+if_link("cloud_controller") do |link|
+  cc_link = link
 end
+
+if cc_link.nil?
+  if_p("smoke_tests.apps_domain") do |domain|
+    app_domain = domain
+  end
+
+  app_domain.nil? and if_p("cf.domain") do |domain|
+    app_domain = domain
+  end
+else
+  cc_link.if_p("app_domains") do |domains|
+    app_domain = domains.first
+  end
+
+  app_domain.nil? and cc_link.if_p("system_domain") do |domain|
+    app_domain = domain
+  end
+end
+
+app_domain.nil? and app_domain = ""
 
 %>
 {
