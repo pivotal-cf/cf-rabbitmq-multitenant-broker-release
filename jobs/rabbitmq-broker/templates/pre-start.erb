@@ -14,7 +14,14 @@ ensure_dir() {
     chmod 750 "${_dir}"
 }
 
+remove_old_syslog_config() {
+  rm -f /etc/rsyslog.d/00-syslog_forwarder.conf
+  rm -f /etc/rsyslog.d/broker_syslog.conf
+}
+
 main() {
+  remove_old_syslog_config
+
   ensure_dir "${BROKER_JOB_DIR}"
   ensure_dir "${COMMON_JOB_DIR}"
   ensure_dir "${ROOT_LOG_DIR}"
