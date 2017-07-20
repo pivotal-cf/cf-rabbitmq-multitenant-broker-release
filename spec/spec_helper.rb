@@ -74,14 +74,6 @@ def doppler_address
   @doppler_address ||= cf.info["doppler_logging_endpoint"]
 end
 
-def register_broker
-  bosh_director.run_errand('broker-registrar') unless ENV.has_key?('SKIP_ERRANDS')
-end
-
-def deregister_broker
-  bosh_director.run_errand('broker-deregistrar') unless ENV.has_key?('SKIP_ERRANDS')
-end
-
 def get_uuid(content)
   uuid_regex = /(\w{8}(-\w{4}){3}-\w{12}?)/
   uuid_regex.match(content)[0]
