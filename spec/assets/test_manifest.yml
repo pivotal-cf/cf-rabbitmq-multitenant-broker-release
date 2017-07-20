@@ -103,7 +103,7 @@ properties:
     administrators:
       broker:
         username: broker
-        password: CkY26kTuAyZT8r2
+        password: broker
     static_ips:
     - 10.244.9.6
     - 10.244.9.10
@@ -236,7 +236,7 @@ properties:
         - 10.244.9.50
       administrator:
         username: broker
-        password: CkY26kTuAyZT8r2
+        password: broker
 
 
 networks:
