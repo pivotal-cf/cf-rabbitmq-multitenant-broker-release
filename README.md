@@ -15,13 +15,14 @@ Clone the repository and run `./scripts/update-release` to update submodules and
 
 To deploy the release into BOSH you will need a deployment manifest. You can generate a deployment manifest using the following command:
 ```sh
+alias boshgo=bosh # This is just to make pcf-rabbitmq tile team's life simpler
 boshgo interpolate \
   --vars-file=manifests/lite-vars-file.yml \
   --var=director-uuid=$(bosh status --uuid) \
   manifests/cf-rabbitmq-broker-template.yml > manifests/cf-rabbitmq-broker.yml
 ```
 
-Once you have a [BOSH Lite up and running locally](https://github.com/cloudfoundry/bosh-lite), run `scripts/deploy-to-bosh-lite`.
+Once you have a [BOSH Lite up and running locally](https://github.com/cloudfoundry/bosh-lite), run `./scripts/deploy-to-bosh-lite`.
 
 ## Testing
 
@@ -32,10 +33,4 @@ Use `rspec` to run a specific test:
 
 ### Unit Tests
 
-To run only unit tests locally, run: `bundle exec rake spec:unit`. Unit tests do not require the release to be deployed.
-
-### Integration Tests
-
-Integration tests require this release to be deployed into a BOSH director (see [Deploying section above](#deploying)).
-
-To run integration tests, run: `bundle exec rake spec:integration`.
+To run only unit tests locally, run: `./scripts/unit-tests`. Unit tests do not require the release to be deployed.
