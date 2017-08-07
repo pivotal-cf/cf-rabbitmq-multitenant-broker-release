@@ -4,3 +4,6 @@
 [submodule "src/github.com/pivotal-cf/cf-rabbitmq-smoke-tests"]
 	path = src/github.com/pivotal-cf/cf-rabbitmq-smoke-tests
 	url = git@github.com:pivotal-cf/cf-rabbitmq-smoke-tests
+[submodule "assets/rabbit-labrat"]
+	path = assets/rabbit-labrat
+	url = https://github.com/pivotal-cf/rabbit-labrat
