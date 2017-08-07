@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-# pcf-tile-pipeline requires some script to run
+MY_DIR="$(dirname "$0")"
+
+bundle exec rspec "${MY_DIR}/../spec/system"
