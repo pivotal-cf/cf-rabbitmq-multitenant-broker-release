@@ -2,4 +2,6 @@
 
 MY_DIR="$(dirname "$0")"
 
-bundle exec rspec "${MY_DIR}/../spec/system"
+cd "${MY_DIR}/.."
+bundle install
+bundle exec rspec spec/system
