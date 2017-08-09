@@ -14,9 +14,10 @@ BOSH_CLOUD_CONFIG="manifests/lite-cloud-config.yml"
 read -rep "BOSH manifest for the cf-rabbitmq deployment (default: $PWD/manifests/cf-rabbitmq-broker.yml): " BOSH_MANIFEST
 BOSH_MANIFEST="${BOSH_MANIFEST:-$PWD/manifests/cf-rabbitmq-broker.yml}"
 
+BOSH_LITE_STEMCELL_NAME="bosh-warden-boshlite-ubuntu-trusty-go_agent"
 BOSH_LITE_STEMCELL_VERSION="$(yq .stemcells[0].version $BOSH_MANIFEST)"
-BOSH_LITE_STEMCELL="bosh-stemcell-${BOSH_LITE_STEMCELL_VERSION}-warden-boshlite-ubuntu-trusty-go_agent.tgz"
-BOSH_LITE_STEMCELL_URL="https://s3.amazonaws.com/bosh-warden-stemcells/$BOSH_LITE_STEMCELL"
+BOSH_LITE_STEMCELL_URL="https://bosh.io/d/stemcells/$BOSH_LITE_STEMCELL_NAME?v=$BOSH_LITE_STEMCELL_VERSION"
+
 
 BOSH_CMD="boshgo --environment=$BOSH_LITE_URL --ca-cert=$WORKSPACE/bosh-lite/ca/certs/ca.crt"
 
@@ -38,11 +39,7 @@ main() {
 }
 
 upload_stemcell() {
-  (
-    cd "$WORKSPACE"
-    [ -f "$BOSH_LITE_STEMCELL" ] || curl -LO "$BOSH_LITE_STEMCELL_URL"
-    $BOSH_CMD upload-stemcell "$BOSH_LITE_STEMCELL"
-  )
+  $BOSH_CMD upload-stemcell "$BOSH_LITE_STEMCELL_URL"
 }
 
 download_blobs() {
