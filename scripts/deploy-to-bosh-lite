@@ -6,8 +6,6 @@ set -e
 
 WORKSPACE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)" #taken from https://github.com/cloudfoundry/bosh-lite/blob/master/bin/provision_cf#L7
 BOSH_LITE_URL="${1:-https://192.168.50.4:25555}"
-BOSH_LITE_STEMCELL="bosh-stemcell-3262.2-warden-boshlite-ubuntu-trusty-go_agent.tgz"
-BOSH_LITE_STEMCELL_URL="https://s3.amazonaws.com/bosh-warden-stemcells/$BOSH_LITE_STEMCELL"
 CF_ROUTING_RELEASE_VERSION="0.152.0"
 CF_ROUTING_RELEASE="cf-routing-release-${CF_ROUTING_RELEASE_VERSION}.tgz"
 CF_ROUTING_RELEASE_URL="http://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=$CF_ROUTING_RELEASE_VERSION"
@@ -16,8 +14,13 @@ BOSH_CLOUD_CONFIG="manifests/lite-cloud-config.yml"
 read -rep "BOSH manifest for the cf-rabbitmq deployment (default: $PWD/manifests/cf-rabbitmq-broker.yml): " BOSH_MANIFEST
 BOSH_MANIFEST="${BOSH_MANIFEST:-$PWD/manifests/cf-rabbitmq-broker.yml}"
 
+BOSH_LITE_STEMCELL_VERSION="$(yq .stemcells[0].version $BOSH_MANIFEST)"
+BOSH_LITE_STEMCELL="bosh-stemcell-${BOSH_LITE_STEMCELL_VERSION}-warden-boshlite-ubuntu-trusty-go_agent.tgz"
+BOSH_LITE_STEMCELL_URL="https://s3.amazonaws.com/bosh-warden-stemcells/$BOSH_LITE_STEMCELL"
+
+BOSH_CMD="boshgo --environment=$BOSH_LITE_URL --ca-cert=$WORKSPACE/bosh-lite/ca/certs/ca.crt"
+
 main() {
-  target_bosh_lite
   upload_stemcell
 
   download_blobs
@@ -29,26 +32,21 @@ main() {
   upload_cf_rabbitmq_test_release
 
   update_cloud_config
-  set_deployment
   deploy
 
   target_cf || cf_required
-}
-
-target_bosh_lite() {
-  bosh target "$BOSH_LITE_URL" lite
 }
 
 upload_stemcell() {
   (
     cd "$WORKSPACE"
     [ -f "$BOSH_LITE_STEMCELL" ] || curl -LO "$BOSH_LITE_STEMCELL_URL"
-    bosh upload stemcell --skip-if-exists "$BOSH_LITE_STEMCELL"
+    $BOSH_CMD upload-stemcell "$BOSH_LITE_STEMCELL"
   )
 }
 
 download_blobs() {
-  bosh sync blobs
+  $BOSH_CMD sync-blobs
 }
 
 update_src_dependencies() {
@@ -56,39 +54,35 @@ update_src_dependencies() {
 }
 
 create_dev_release() {
-  bosh create release --force
+  $BOSH_CMD create-release --force
 }
 
 upload_dev_release() {
-  bosh upload release
+  $BOSH_CMD upload-release
 }
 
 upload_routing_release() {
   (
     cd "$WORKSPACE"
     [ -f "$CF_ROUTING_RELEASE" ] || curl -L -o "$CF_ROUTING_RELEASE" "$CF_ROUTING_RELEASE_URL"
-    bosh upload release "$CF_ROUTING_RELEASE"
+    $BOSH_CMD upload-release "$CF_ROUTING_RELEASE"
   )
 }
 
 upload_cf_rabbitmq_test_release() {
   (
     cd "$WORKSPACE"/cf-rabbitmq-test-release
-    bosh create release --force
-    bosh upload release
+    $BOSH_CMD create-release --force
+    $BOSH_CMD upload-release
   )
 }
 
 update_cloud_config() {
-  bosh update cloud-config "$BOSH_CLOUD_CONFIG"
-}
-
-set_deployment() {
-  bosh deployment "${BOSH_MANIFEST/#\~/$HOME}"
+  $BOSH_CMD update-cloud-config "$BOSH_CLOUD_CONFIG"
 }
 
 deploy() {
-  bosh -n deploy --no-redact
+  $BOSH_CMD -n deploy --var=stemcell-version=${BOSH_LITE_STEMCELL_VERSION} --no-redact -d cf-rabbitmq-multitenant-broker "${BOSH_MANIFEST/#\~/$HOME}"
 }
 
 target_cf() {

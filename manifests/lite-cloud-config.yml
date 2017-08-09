@@ -40,6 +40,7 @@ vm_types:
 - name: m3.medium
 - name: r3.large
 - name: c3.large
+- name: r3.xlarge
 
 disk_types:
 - name: 1GB
