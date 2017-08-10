@@ -17,7 +17,9 @@ main() {
 }
 
 get_local_bosh_lite_uuid() {
-  boshgo -e local-lite environment --json | jq  -r .Tables[].Rows[].uuid
+  boshgo --environment=https://192.168.50.4:25555 \
+    --ca-cert="$WORKSPACE/bosh-lite/ca/certs/ca.crt" \
+    environment --json | jq  -r .Tables[].Rows[].uuid
 }
 
 do_interpolate() {
