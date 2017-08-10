@@ -4,4 +4,4 @@ MY_DIR="$(dirname "$0")"
 
 cd "${MY_DIR}/.."
 bundle install
-bundle exec rspec spec/system
+bundle exec rspec spec/system --fail-fast
