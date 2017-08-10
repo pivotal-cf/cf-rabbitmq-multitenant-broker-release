@@ -1,5 +1,5 @@
 deployment-name: cf-rabbitmq-broker-standalone
-stemcell-version: 3262.2
+stemcell-version: 3363.29
 rabbitmq-broker-domain: rabbitmq-multitenant-broker-standalone
 bosh-hostname: bosh-lite.com
 cf-admin-password: admin

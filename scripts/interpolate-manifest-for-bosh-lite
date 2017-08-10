@@ -27,7 +27,8 @@ do_interpolate() {
   local new_manifest="$RELEASE_REPO/manifests/cf-rabbitmq-broker.yml"
 
   boshgo interpolate \
-    --vars-file="$RELEASE_REPO/manifests/lite-vars-file.yml" \
+    --var-errs \
+    --vars-file="$RELEASE_REPO/manifests/lite-vars-file-with-server.yml" \
     --ops-file="$RELEASE_REPO/manifests/change-vcap-password.yml" \
     --var=director-uuid="$bosh_uuid" \
   "$RELEASE_REPO/manifests/cf-rabbitmq-broker-with-server-template.yml" \
