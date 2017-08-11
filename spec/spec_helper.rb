@@ -14,7 +14,7 @@ def environment
   @environment ||= begin
                      options = {
                        bosh_manifest_path: ENV.fetch('BOSH_MANIFEST') { File.expand_path('../../manifests/cf-rabbitmq-broker.yml', __FILE__) },
-                       bosh_service_broker_job_name: 'cf-rabbitmq-broker'
+                       bosh_service_broker_job_name: 'cf-rabbitmq-multitenant-broker'
                      }
 
                      options[:cloud_foundry_domain]   = ENV.fetch('CF_DOMAIN', 'bosh-lite.com')
