@@ -226,12 +226,6 @@ def provides_mqtt_connectivity(app)
   expect(response.code).to eql(200)
   expect(response.body).to include('mqtt://')
   expect(response.body).to include('Payload published')
-
-  queues = ssh_gateway.execute_on(rmq_host, "curl -u #{rmq_server_admin_broker_username}:#{rmq_server_admin_broker_password} http://#{rmq_host}:15672/api/queues -s")
-  json = JSON.parse(queues)
-  json.select!{ |queue| queue["name"] == "mqtt-subscription-mqtt_test_clientqos1" }
-  expect(json.length).to eql(1)
-  expect(json[0]["arguments"]["x-expires"]).to eql(1800000)
 end
 
 def provides_stomp_connectivity(app)
