@@ -82,6 +82,9 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
 
         provides_no_amqp_connectivity(app)
         provides_no_mqtt_connectivity(app)
+ 
+        # Check #150334805
+        # provides_no_stomp_connectivity(app)
       end
     end
   end
