@@ -75,6 +75,15 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
         provides_stomp_connectivity(app)
       end
     end
+
+    it 'fails to connect if bindings are deleted', :pushes_cf_app do
+      cf.push_app_and_bind_with_service(test_app, service) do |app, service_instance|
+        cf.unbind_app_from_service(app, service_instance)
+
+        provides_no_amqp_connectivity(app)
+        provides_no_mqtt_connectivity(app)
+      end
+    end
   end
 
   context 'when stomp plugin is disabled'  do
@@ -126,9 +135,8 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
   context 'when provisioning a service key' do
     it 'provides defaults', :creates_service_key do
       cf.provision_and_create_service_key(service) do |service_instance, service_key, service_key_data|
-        provides_direct_amqp_connectivity(service_key_data)
-
-        provides_direct_stomp_connectivity(service_key_data)
+        check_that_amqp_connection_data_is_present_in(service_key_data)
+        check_that_stomp_connection_data_is_present_in(service_key_data)
       end
     end
   end
@@ -143,8 +151,19 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
         cf.delete_service_key(@service_instance, @service_key)
 
         expect(cf.list_service_keys(@service_instance)).to_not include(@service_key)
+      end
+    end
+
+    it 'is not possible to use the amqp credentials anymore', :creates_service_key do
+      cf.provision_and_create_service_key(service) do |service_instance, service_key, service_key_data|
+        @service_instance = service_instance
+        @service_key = service_key
+        @service_key_data = service_key_data
+
+        cf.delete_service_key(@service_instance, @service_key)
+
         expect{
-          provides_direct_amqp_connectivity(@service_key_data)
+          check_that_amqp_connection_data_is_present_in(@service_key_data)
         }.to raise_error(/Authentication with RabbitMQ failed./)
       end
     end
@@ -235,53 +254,51 @@ def provides_stomp_connectivity(app)
   expect(response.body).to include('Payload published')
 end
 
+def provides_no_amqp_connectivity(app)
+  provides_no_connectivity_for(app, 'amqp091')
+end
+
+def provides_no_mqtt_connectivity(app)
+  provides_no_connectivity_for(app, 'mqtt')
+end
+
 def provides_no_stomp_connectivity(app)
+  provides_no_connectivity_for(app, 'stomp')
+end
+
+def provides_no_connectivity_for(app, protocol)
   # This is a work-around for #144893311
   begin
-    response = get("#{app.url}/services/rabbitmq/protocols/stomp")
+    response = get("#{app.url}/services/rabbitmq/protocols/#{protocol}")
     expect(response.code).to eql(500)
   rescue Net::ReadTimeout => e
     puts "Caught exception #{e}!"
   end
 end
 
-def provides_direct_amqp_connectivity(service_key_data)
-  amqp_proto = service_key_data['protocols']['amqp'].dup
-
-  result = ssh_gateway.with_port_forwarded_to(amqp_proto['host'], amqp_proto['port']) do |port|
-    hc = LabRat::AggregateHealthChecker.new
-    amqp_gateway_proto = ssh_gateway_proto(amqp_proto, port)
-    hc.check_amqp(amqp_gateway_proto)
-  end
-
-  expect(result).to_not be_empty
-  expect(result[:exception]).to be_nil
-  expect(result[:queue].name).to match('amq.gen')
+def check_that_amqp_connection_data_is_present_in(service_key_data)
+  check_connection_data(service_key_data, 'amqp', 5672)
 end
 
-def provides_direct_stomp_connectivity(service_key_data)
-  stomp_proto = service_key_data['protocols']['stomp'].dup
-
-  result = ssh_gateway.with_port_forwarded_to(stomp_proto['host'], stomp_proto['port']) do |port|
-    hc = LabRat::AggregateHealthChecker.new
-    stomp_gateway_proto = ssh_gateway_proto(stomp_proto, port)
-    hc.check_stomp(stomp_gateway_proto)
-  end
-
-  expect(result).to_not be_empty
-  expect(result[:exception]).to be_nil
-  expect(result[:payload]).to match('stomp')
+def check_that_stomp_connection_data_is_present_in(service_key_data)
+  check_connection_data(service_key_data, 'stomp', 61613)
 end
 
-def ssh_gateway_proto(proto, port)
-  gw_proto = proto.dup
-  gw_proto['uri'].gsub! proto['host'], 'localhost'
-  gw_proto['uri'].gsub! proto['port'].to_s, port.to_s
-  gw_proto['uris'] = [gw_proto['uri']]
-  gw_proto['host'] = 'localhost'
-  gw_proto['hosts'] = [gw_proto['host']]
-  gw_proto['port'] = port
-  gw_proto
+def check_connection_data(service_key_data, protocol, port)
+  expect(service_key_data).to have_key('protocols')
+  expect(service_key_data['protocols']).to have_key(protocol)
+  expect(service_key_data['protocols'][protocol]).to have_key('uri')
+  expect(service_key_data['protocols'][protocol]['uri']).to start_with("#{protocol}://")
+  expect(service_key_data['protocols'][protocol]).to have_key('host')
+  expect(service_key_data['protocols'][protocol]['host']).not_to be_empty
+  expect(service_key_data['protocols'][protocol]).to have_key('port')
+  expect(service_key_data['protocols'][protocol]['port']).to eq(port)
+  expect(service_key_data['protocols'][protocol]).to have_key('username')
+  expect(service_key_data['protocols'][protocol]['username']).not_to be_empty
+  expect(service_key_data['protocols'][protocol]).to have_key('password')
+  expect(service_key_data['protocols'][protocol]['password']).not_to be_empty
+  expect(service_key_data['protocols'][protocol]).to have_key('vhost')
+  expect(service_key_data['protocols'][protocol]['vhost']).not_to be_empty
 end
 
 def provides_mirrored_queue_policy_as_a_default(app)
