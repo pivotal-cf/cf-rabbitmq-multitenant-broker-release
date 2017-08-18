@@ -291,33 +291,19 @@ def check_connection_data(service_key_data, protocol, port)
 end
 
 def provides_mirrored_queue_policy_as_a_default(app)
-  credentials = cf.app_vcap_services(app.name)
-  service_protocols = credentials[service_name].first['credentials']['protocols']
+  vcap_services = cf.app_vcap_services(app.name)
+  credentials = vcap_services[service_name].first['credentials']
+  http_api_uris = credentials['http_api_uris']
+  vhost = credentials['vhost']
 
-  management_credentials_key = service_protocols.keys.detect { |k| k =~ /^management/ }
-  management_credentials = service_protocols[management_credentials_key]
-
-  ssh_gateway.with_port_forwarded_to(management_credentials['host'], management_credentials['port']) do |port|
-    endpoint = "http://localhost:#{port}"
-
-    client = RabbitMQ::HTTP::Client.new(endpoint,
-                                        username: management_credentials['username'],
-                                        password: management_credentials['password'],
-                                        ssl: {
-                                          verify: false
-                                        })
-
-    amqp_vhost_key = service_protocols.keys.detect { |k| k =~ /^amqp/ }
-    vhost = service_protocols[amqp_vhost_key]['vhost']
-
-    policy = client.list_policies(vhost).find do |policy|
-      policy['name'] == 'operator_set_policy'
-    end
-
-    expect(policy).to_not be_nil
-    expect(policy['pattern']).to eq('.*')
-    expect(policy['apply-to']).to eq('all')
-    expect(policy['definition']).to eq('ha-mode' => 'exactly', 'ha-params' => 2, 'ha-sync-mode' => 'automatic')
-    expect(policy['priority']).to eq(50)
+  client = RabbitMQ::HTTP::Client.new(http_api_uris.first, ssl: { verify: false })
+  policy = client.list_policies(vhost).find do |policy|
+    policy['name'] == 'operator_set_policy'
   end
+
+  expect(policy).to_not be_nil
+  expect(policy['pattern']).to eq('.*')
+  expect(policy['apply-to']).to eq('all')
+  expect(policy['definition']).to eq('ha-mode' => 'exactly', 'ha-params' => 2, 'ha-sync-mode' => 'automatic')
+  expect(policy['priority']).to eq(50)
 end
