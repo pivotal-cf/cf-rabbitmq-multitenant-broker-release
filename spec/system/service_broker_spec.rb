@@ -156,20 +156,6 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
         expect(cf.list_service_keys(@service_instance)).to_not include(@service_key)
       end
     end
-
-    it 'is not possible to use the amqp credentials anymore', :creates_service_key do
-      cf.provision_and_create_service_key(service) do |service_instance, service_key, service_key_data|
-        @service_instance = service_instance
-        @service_key = service_key
-        @service_key_data = service_key_data
-
-        cf.delete_service_key(@service_instance, @service_key)
-
-        expect{
-          check_that_amqp_connection_data_is_present_in(@service_key_data)
-        }.to raise_error(/Authentication with RabbitMQ failed./)
-      end
-    end
   end
 
   context 'when broker is configured' do
