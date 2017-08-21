@@ -43,7 +43,7 @@ RSpec.describe 'Logging a Cloud Foundry service broker' do
   let(:rmq_broker_stderr_log) { ssh_gateway.execute_on(rmq_broker_host, "cat /var/vcap/sys/log/rabbitmq-broker/startup_stderr.log") }
 
   describe 'provisions a service' do
-    it 'and writes the operation into the stdout logs', :creates_service_key do
+    xit 'and writes the operation into the stdout logs', :creates_service_key do
       cf.provision_and_create_service_key(service) do |_, _, service_key_data|
         service_instance_id = service_key_data['vhost']
         expect(rmq_broker_stdout_log).to include "Asked to provision a service: #{service_instance_id}"

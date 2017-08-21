@@ -19,6 +19,10 @@
 ;; Implementation
 ;;
 
+(defn log-info
+  [message & args]
+  (log/infof message args))
+
 (defn ^{:private true} log-exception
   [^Exception e]
   (log/errorf "Caught an exception during boot: %s (%s)" (.getMessage e) (.getClass e)) e)
@@ -118,7 +122,7 @@
   ;;  * plan_id
   ;;  * organization_guid
   ;;  * space_guid
-  (log/infof "Asked to provision a service: %s" (:id params))
+  (log-info "Asked to provision a service: %s" (:id params))
   (if-let [^String id (:id params)]
     (try
       (if (rs/vhost-exists? id)
