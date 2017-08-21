@@ -23,6 +23,10 @@
   [message & args]
   (log/infof message args))
 
+(defn log-error
+  [message & args]
+  (log/errorf message args))
+
 (defn ^{:private true} log-exception
   [^Exception e]
   (log/errorf "Caught an exception during boot: %s (%s)" (.getMessage e) (.getClass e)) e)
@@ -145,7 +149,7 @@
               (throw e)))
           (created {:dashboard_url (rs/dashboard-url mu mp)})))
     (catch Exception e
-      (log/errorf "Failed to provision a service: %s" id)
+      (log-error "Failed to provision a service: %s" id)
       (.printStackTrace e)
       (log-exception e)))
     (conflict)))
