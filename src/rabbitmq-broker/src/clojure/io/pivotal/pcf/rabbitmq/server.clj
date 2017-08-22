@@ -11,6 +11,7 @@
             [cheshire.core :as json]
             [ring.middleware.json :refer [wrap-json-response]]
             [ring.middleware.basic-authentication :refer [wrap-basic-authentication]]
+            [clojure.string :as string]
             [langohr.http :as hc])
   (:import java.io.File
            java.lang.management.ManagementFactory))
@@ -18,14 +19,6 @@
 ;;
 ;; Implementation
 ;;
-
-(defn log-info
-  [message & args]
-  (log/infof message args))
-
-(defn log-error
-  [message & args]
-  (log/errorf message args))
 
 (defn ^{:private true} log-exception
   [^Exception e]
@@ -126,7 +119,7 @@
   ;;  * plan_id
   ;;  * organization_guid
   ;;  * space_guid
-  (log-info "Asked to provision a service: %s" (:id params))
+  (log/infof "Asked to provision a service: %s" (:id params))
   (if-let [^String id (:id params)]
     (try
       (if (rs/vhost-exists? id)
@@ -149,7 +142,7 @@
               (throw e)))
           (created {:dashboard_url (rs/dashboard-url mu mp)})))
     (catch Exception e
-      (log-error "Failed to provision a service: %s" id)
+      (log/errorf "Failed to provision a service: %s" id)
       (.printStackTrace e)
       (log-exception e)))
     (conflict)))
