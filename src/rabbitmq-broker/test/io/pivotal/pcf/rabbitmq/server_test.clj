@@ -18,7 +18,7 @@
 
 (defn NoOp
   [& args]
-  (print "NoOp got called with args: " args))
+  ())
 
 (defn ThrowException
   [vhost]
@@ -35,8 +35,20 @@
       (io/delete-file logfile true)
       (server/create-service {:params {:id "my service"}})
       (is (.contains (get-logs) "Asked to provision a service: my service"))))
-  (testing "should log error when rabbitmq is down"
+  (testing "should log error when rabbitmq is down during service creation"
     (with-redefs [rs/vhost-exists? ThrowException]
       (io/delete-file logfile true)
       (server/create-service {:params {:id "my service"}})
       (is (.contains (get-logs) "Failed to provision a service: my service")))))
+
+(deftest delete-service
+  (testing "should log on service deletion"
+    (with-redefs [rs/vhost-exists? NoOp]
+      (io/delete-file logfile true)
+      (server/delete-service {:params {:id "my service"}})
+      (is (.contains (get-logs) "Asked to deprovision a service: my service"))))
+  (testing "should log error when rabbitmq is down during service deletion"
+    (with-redefs [rs/vhost-exists? ThrowException]
+      (io/delete-file logfile true)
+      (server/delete-service {:params {:id "my service"}})
+      (is (.contains (get-logs) "Failed to deprovision a service: my service")))))
