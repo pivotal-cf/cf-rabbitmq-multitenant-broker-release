@@ -18,8 +18,11 @@ BOSH_LITE_STEMCELL_NAME="bosh-warden-boshlite-ubuntu-trusty-go_agent"
 BOSH_LITE_STEMCELL_VERSION="$(yq .stemcells[0].version $BOSH_MANIFEST)"
 BOSH_LITE_STEMCELL_URL="https://bosh.io/d/stemcells/$BOSH_LITE_STEMCELL_NAME?v=$BOSH_LITE_STEMCELL_VERSION"
 
+BOSH_CMD=boshgo
 
-BOSH_CMD="boshgo --environment=$BOSH_LITE_URL --ca-cert=$WORKSPACE/bosh-lite/ca/certs/ca.crt"
+export BOSH_ENVIRONMENT=$BOSH_LITE_URL
+export BOSH_CA_CERT=$WORKSPACE/bosh-lite/ca/certs/ca.crt
+export BOSH_NON_INTERACTIVE=true
 
 main() {
   upload_stemcell
@@ -39,7 +42,14 @@ main() {
 }
 
 upload_stemcell() {
-  $BOSH_CMD upload-stemcell "$BOSH_LITE_STEMCELL_URL"
+  stemcell_already_exists=$("$BOSH_CMD" --json stemcells | jq ".Tables[].Rows[] | select(.version == "$BOSH_LITE_STEMCELL_VERSION")")
+
+  if ! [ -z "$stemcell_already_exists" ];
+  then
+    $BOSH_CMD upload-stemcell "$BOSH_LITE_STEMCELL_URL"
+  else
+    echo "Stemcell $BOSH_LITE_STEMCELL_VERSION already present. Moving on."
+  fi
 }
 
 download_blobs() {
@@ -79,7 +89,7 @@ update_cloud_config() {
 }
 
 deploy() {
-  $BOSH_CMD -n deploy --var=stemcell-version=${BOSH_LITE_STEMCELL_VERSION} --no-redact -d cf-rabbitmq-multitenant-broker "${BOSH_MANIFEST/#\~/$HOME}"
+  $BOSH_CMD deploy --var=stemcell-version=${BOSH_LITE_STEMCELL_VERSION} --no-redact -d cf-rabbitmq-multitenant-broker "${BOSH_MANIFEST/#\~/$HOME}"
 }
 
 target_cf() {
