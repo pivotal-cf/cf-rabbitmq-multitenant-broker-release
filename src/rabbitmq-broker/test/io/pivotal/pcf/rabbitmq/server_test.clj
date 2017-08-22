@@ -63,3 +63,15 @@
       (io/delete-file logfile true)
       (server/bind-service {:params {:instance_id "my service" :id "user id"}})
       (is (.contains (get-logs) "Failed to bind a service: my service")))))
+
+
+(deftest unbind-service
+  (testing "should log on service unbinding"
+    (io/delete-file logfile true)
+    (server/unbind-service {:params {:instance_id "my service"}})
+    (is (.contains (get-logs) "Asked to unbind a service: my service")))
+  (testing "should log error when rabbitmq is down on service unbinding"
+    (with-redefs [rs/close-connections-from ThrowException]
+    (io/delete-file logfile true)
+    (server/unbind-service {:params {:instance_id "my service" :id "user id"}})
+    (is (.contains (get-logs) "Failed to unbind a service: my service")))))
