@@ -52,3 +52,14 @@
       (io/delete-file logfile true)
       (server/delete-service {:params {:id "my service"}})
       (is (.contains (get-logs) "Failed to deprovision a service: my service")))))
+
+(deftest bind-service
+  (testing "should log on service binding"
+    (io/delete-file logfile true)
+    (server/bind-service {:params {:instance_id "my service"}})
+    (is (.contains (get-logs) "Asked to bind a service: my service")))
+  (testing "should log error when rabbitmq is down on service binding"
+    (with-redefs [rs/vhost-exists? ThrowException]
+      (io/delete-file logfile true)
+      (server/bind-service {:params {:instance_id "my service" :id "user id"}})
+      (is (.contains (get-logs) "Failed to bind a service: my service")))))
