@@ -42,7 +42,7 @@ main() {
 }
 
 upload_stemcell() {
-  stemcell_already_exists=$("$BOSH_CMD" --json stemcells | jq ".Tables[].Rows[] | select(.version == "$BOSH_LITE_STEMCELL_VERSION")")
+  stemcell_already_exists=$("$BOSH_CMD" --json stemcells | jq ".Tables[].Rows[] | select(.version == \""$BOSH_LITE_STEMCELL_VERSION"\")")
 
   if [ -z "$stemcell_already_exists" ];
   then
