@@ -1,4 +1,6 @@
 ---
 name: cf-cli
+metadata:
+  version: '6.26.0'
 files:
   - cf-cli/cf-cli_6.26.0_linux_x86-64.tgz
