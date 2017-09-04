@@ -1,7 +1,7 @@
 ---
 name: java
 metadata:
-  version: 1.8.0_121
+  version: 8u144
 files:
-- java/jre-1.8.0_121.tar.gz
+- java/jre-8u144-linux-x64.tar.gz
 dependencies: []
