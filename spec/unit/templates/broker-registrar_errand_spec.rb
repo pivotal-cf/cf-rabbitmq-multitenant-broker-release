@@ -30,7 +30,7 @@ RSpec.describe 'broker-registrar errand template', template: true do
 		end
 
     it 'enables access to the service broker for all orgs' do
-			expect(output).to include 'cf enable-service-access $SERVICE_NAME'
+			expect(output).to include 'cf enable-service-access "$SERVICE_NAME"'
 		end
 	end
 
@@ -40,8 +40,8 @@ RSpec.describe 'broker-registrar errand template', template: true do
 		end
 
     it 'enables access to the service broker for the specified orgs only' do
-			expect(output).to include 'cf enable-service-access $SERVICE_NAME -o org1'
-			expect(output).to include 'cf enable-service-access $SERVICE_NAME -o org2'
+			expect(output).to include 'cf enable-service-access "$SERVICE_NAME" -o org1'
+			expect(output).to include 'cf enable-service-access "$SERVICE_NAME" -o org2'
 		end
 	end
 end

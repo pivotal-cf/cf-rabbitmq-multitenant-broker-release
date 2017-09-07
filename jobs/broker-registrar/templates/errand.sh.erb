@@ -19,17 +19,18 @@ SERVICE_NAME='<%= p("broker.service.name") %>'
 
 cf --version
 <% if p("cf.skip_ssl_validation") %>
-cf api --skip-ssl-validation $CF_API_URL
+cf api --skip-ssl-validation "$CF_API_URL"
 <% else %>
-cf api $CF_API_URL
+cf api "$CF_API_URL"
 <% end %>
-cf auth $CF_ADMIN_USERNAME $CF_ADMIN_PASSWORD
-cf create-service-broker $BROKER_NAME $BROKER_USERNAME $BROKER_PASSWORD $BROKER_URL || cf update-service-broker $BROKER_NAME $BROKER_USERNAME $BROKER_PASSWORD $BROKER_URL
+cf auth "$CF_ADMIN_USERNAME" "$CF_ADMIN_PASSWORD"
+cf create-service-broker "$BROKER_NAME" "$BROKER_USERNAME" "$BROKER_PASSWORD" "$BROKER_URL" \
+  || cf update-service-broker "$BROKER_NAME" "$BROKER_USERNAME" "$BROKER_PASSWORD" "$BROKER_URL"
 
 <% if p("broker-registrar.orgs").empty? %>
-  cf enable-service-access $SERVICE_NAME
+  cf enable-service-access "$SERVICE_NAME"
 <% else %>
   <% p("broker-registrar.orgs").each do |org| %>
-    cf enable-service-access $SERVICE_NAME -o <%= org %>
+    cf enable-service-access "$SERVICE_NAME" -o <%= org %>
   <% end %>
 <% end %>
