@@ -9,6 +9,8 @@ builds:
     version: 6.0.0
   a9270eac-2ea5-439b-5726-248ba774bcbc:
     version: 2.0.0
+  d0d17cca-00db-468c-4adb-e45c996ec41d:
+    version: 6.0.2
   ee87144e-50ec-4d09-709b-d7276d5fe248:
     version: 5.0.0
   efadf524-549f-4a6f-6d07-fdea20541ecb:

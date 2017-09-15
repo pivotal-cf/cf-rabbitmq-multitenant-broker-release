@@ -1,0 +1,56 @@
+name: cf-rabbitmq-multitenant-broker
+version: 6.0.2
+commit_hash: d419069
+uncommitted_changes: false
+jobs:
+- name: broker-deregistrar
+  version: e050b6c63226400aac92daaafe7c6b95b05ab65a26b0df077d52afe9a47f8175
+  fingerprint: e050b6c63226400aac92daaafe7c6b95b05ab65a26b0df077d52afe9a47f8175
+  sha1: sha256:9c1b44064e84bd209a250bc90f655c1f32f861e6825350439270781d99e0e88e
+- name: broker-registrar
+  version: 66b4ab853424b948d2df5269228a31a6a3d1b57e40cef4c0ab1c1598b6c9532e
+  fingerprint: 66b4ab853424b948d2df5269228a31a6a3d1b57e40cef4c0ab1c1598b6c9532e
+  sha1: sha256:445494a95c7849ee608d053eccee334883ec0c495550c3f4d31cfcd98a5277d9
+- name: rabbitmq-broker
+  version: 3e07b10de50f5a4e1a0bf3e44b1d40079a657bd014f1d23388753555aac503b1
+  fingerprint: 3e07b10de50f5a4e1a0bf3e44b1d40079a657bd014f1d23388753555aac503b1
+  sha1: sha256:c5a058b74fa2c85b0d1ac677f3328a3a79a68489176ac266a05d38bcb031fd53
+- name: smoke-tests
+  version: 41ea8434ae07aa3851b238b04b23c44b2c6ba452e00e01ef8548c260f8b5bf40
+  fingerprint: 41ea8434ae07aa3851b238b04b23c44b2c6ba452e00e01ef8548c260f8b5bf40
+  sha1: sha256:e8e4db106c31ed9eb75bc932932eb0137f1791aeecfbc2b17fd37f7706cbc2e2
+packages:
+- name: cf-cli
+  version: 96cfe9ae35c76c345f4af9951c766ff4fca6cb801baad9b7a944239eeba4080d
+  fingerprint: 96cfe9ae35c76c345f4af9951c766ff4fca6cb801baad9b7a944239eeba4080d
+  sha1: sha256:f884422554ca42ae3a89606dbb84d7735f129742c8a9918f47ce80f43fe10810
+  dependencies: []
+- name: cf-rabbitmq-smoke-tests
+  version: 3c64c5a2341f7e4c73bb8b9c20b2a4a8e79512b454e397d79ab0734f577d1eb6
+  fingerprint: 3c64c5a2341f7e4c73bb8b9c20b2a4a8e79512b454e397d79ab0734f577d1eb6
+  sha1: sha256:4ba9bbc4110006c67800f480859ed29e00d486d2b7a1da9884df02a7ab67a382
+  dependencies: []
+- name: golang
+  version: b5e7c4aa4704de9981a1383192f6db628a461e08caf29f4a4179d547b0c4c4ea
+  fingerprint: b5e7c4aa4704de9981a1383192f6db628a461e08caf29f4a4179d547b0c4c4ea
+  sha1: sha256:729a73e0a0ae1eedfdf83587403b6d06fa0f064e5499b390da32b9b07173d888
+  dependencies: []
+- name: java
+  version: eeb0ed3ca74dad3efde917aa015f307cbd1156ab67baca15d11e46fd2199ec0e
+  fingerprint: eeb0ed3ca74dad3efde917aa015f307cbd1156ab67baca15d11e46fd2199ec0e
+  sha1: sha256:ea5a61872438f02c49be136e529d106be8b74fd5080231fdfce7c55f1ed24ed9
+  dependencies: []
+- name: rabbitmq-broker
+  version: 305318bb6f2f4f808b7f480c833f1673faed5bb570ca7ceda58be9a73a04ca0d
+  fingerprint: 305318bb6f2f4f808b7f480c833f1673faed5bb570ca7ceda58be9a73a04ca0d
+  sha1: sha256:c0ad5a6b0013dd3ab291e0d82f6c97425e633882cffc2e33b92da3dcbcded82c
+  dependencies: []
+- name: rabbitmq-common
+  version: c7b701f8368c5f7d76569d43187eeed4bb32513e071a4cd3964bf62f04cc2dbb
+  fingerprint: c7b701f8368c5f7d76569d43187eeed4bb32513e071a4cd3964bf62f04cc2dbb
+  sha1: sha256:b181d6d9e40d8169324ac44d7d987cf8ad3c7e7adab2e2bfc419ee1d7bb9d149
+  dependencies: []
+license:
+  version: ff0a8f909b305dd529d196566c2b66ee771d05722db115b112c68bb23718ec54
+  fingerprint: ff0a8f909b305dd529d196566c2b66ee771d05722db115b112c68bb23718ec54
+  sha1: sha256:74f122a856b5d81e1afdf57d4189ee5a1bb2ea6b14af3c6daa5daf0b471b3970
