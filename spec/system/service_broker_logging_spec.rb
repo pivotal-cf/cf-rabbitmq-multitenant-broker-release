@@ -4,7 +4,7 @@ require 'httparty'
 
 require File.expand_path('../../../assets/rabbit-labrat/lib/lab_rat/aggregate_health_checker.rb', __FILE__)
 
-RSpec.describe 'Logging a Cloud Foundry service broker' do
+RSpec.describe 'Logging CF service broker is well wired up' do
   SYSLOG_TEST_SERVER_URL = 'http://10.244.16.126:8080'
 
   let(:service_name) { environment.bosh_manifest.property('rabbitmq-broker.service.name') }
