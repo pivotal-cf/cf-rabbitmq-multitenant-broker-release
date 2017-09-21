@@ -20,6 +20,18 @@
               port: ((syslog-port))
             http:
               port: 8080
+      - name: route_registrar
+        release: routing
+        consumes:
+          nats: {from: nats, deployment: cf}
+        properties:
+          route_registrar:
+            routes:
+            - name: go-syslogd-http
+              port: 8080
+              registration_interval: 20s
+              uris:
+              - go-syslogd.((bosh-hostname))
     azs:
     - eu-west-1a
     instances: 1
