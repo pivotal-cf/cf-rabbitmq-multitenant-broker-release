@@ -9,6 +9,16 @@ set -o pipefail
 
 [[ -z "${DEBUG:-""}" ]] || set -x
 
+export BOSH_ENVIRONMENT="https://192.168.50.6:25555"
+export BOSH_CLIENT="admin"
+
+export BOSH_CLIENT_SECRET
+BOSH_CLIENT_SECRET="$(boshgo int ~/deployments/vbox/creds.yml --path /admin_password)"
+
+export BOSH_CA_CERT
+BOSH_CA_CERT="$(boshgo int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"
+
+
 main() {
   local bosh_uuid
   bosh_uuid=$(get_local_bosh_lite_uuid)
@@ -17,8 +27,7 @@ main() {
 }
 
 get_local_bosh_lite_uuid() {
-  boshgo --environment=https://192.168.50.4:25555 \
-    --ca-cert="$WORKSPACE/bosh-lite/ca/certs/ca.crt" \
+  boshgo  \
     environment --json | jq  -r .Tables[].Rows[].uuid
 }
 
@@ -28,8 +37,11 @@ do_interpolate() {
 
   boshgo interpolate \
     --var-errs \
+    --var-errs-unused \
     --vars-file="$RELEASE_REPO/manifests/lite-vars-file-with-server.yml" \
     --ops-file="$RELEASE_REPO/manifests/change-vcap-password.yml" \
+    --ops-file="$RELEASE_REPO/manifests/add-go-syslogd.yml" \
+    --ops-file="$RELEASE_REPO/manifests/add-syslog-migration.yml" \
     --var=director-uuid="$bosh_uuid" \
   "$RELEASE_REPO/manifests/cf-rabbitmq-broker-with-server-template.yml" \
   > "$new_manifest"

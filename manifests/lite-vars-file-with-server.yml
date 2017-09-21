@@ -21,4 +21,4 @@ rabbitmq-management-password: admin
 rabbitmq-management-username: admin
 stemcell-version: 3363.29
 syslog-port: 8081
-syslog-address: 10.244.16.126
+syslog-host: 10.244.16.126
