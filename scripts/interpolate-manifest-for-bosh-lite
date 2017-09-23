@@ -11,13 +11,11 @@ set -o pipefail
 
 export BOSH_ENVIRONMENT="https://192.168.50.6:25555"
 export BOSH_CLIENT="admin"
-
-export BOSH_CLIENT_SECRET
-BOSH_CLIENT_SECRET="$(boshgo int ~/deployments/vbox/creds.yml --path /admin_password)"
-
+export BOSH_CLIENT_SECRET="admin"
 export BOSH_CA_CERT
 BOSH_CA_CERT="$(boshgo int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"
 
+BOSH_MANIFEST="${1:-$RELEASE_REPO/manifests/cf-rabbitmq-broker.yml}"
 
 main() {
   local bosh_uuid
@@ -27,13 +25,13 @@ main() {
 }
 
 get_local_bosh_lite_uuid() {
-  boshgo  \
+  bosh \
     environment --json | jq  -r .Tables[].Rows[].uuid
 }
 
 do_interpolate() {
   local bosh_uuid=${1:?"Expexted bosh uuid"}
-  local new_manifest="$RELEASE_REPO/manifests/cf-rabbitmq-broker.yml"
+  local new_manifest="$BOSH_MANIFEST"
 
   boshgo interpolate \
     --var-errs \
@@ -46,7 +44,7 @@ do_interpolate() {
   "$RELEASE_REPO/manifests/cf-rabbitmq-broker-with-server-template.yml" \
   > "$new_manifest"
 
-  echo "New manifest generated in $new_manifest"
+  echo "$new_manifest"
 }
 
 main "$@"
