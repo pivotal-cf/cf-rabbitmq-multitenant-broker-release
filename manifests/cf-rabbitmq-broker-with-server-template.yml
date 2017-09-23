@@ -3,12 +3,14 @@ name: ((deployment-name))
 director_uuid: ((director-uuid))
 
 releases:
-- name: cf-rabbitmq
-  version: latest
 - name: cf-rabbitmq-multitenant-broker
   version: latest
+- name: cf-rabbitmq
+  version: latest
+  url: https://bosh.io/d/github.com/pivotal-cf/cf-rabbitmq-release
 - name: routing
   version: 0.152.0
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.152.0
 
 stemcells:
 - alias: trusty

@@ -3,6 +3,7 @@
   value:
     name: syslog-migration
     version: 8 # changed by the pipeline
+    url: https://github.com/pivotal-cf/syslog-migration-release/releases/download/v8/syslog-migration-8.tgz
 
 - type: replace
   path: /properties/rabbitmq-haproxy/do-not-configure-syslog?
