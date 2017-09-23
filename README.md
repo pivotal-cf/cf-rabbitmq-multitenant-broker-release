@@ -34,3 +34,19 @@ Use `rspec` to run a specific test:
 ### Unit Tests
 
 To run only unit tests locally, run: `./scripts/unit-tests`. Unit tests do not require the release to be deployed.
+
+## Troubleshooting
+
+### An error occurred while installing capybara-webkit (macOS)
+```bash
+An error occurred while installing capybara-webkit (1.11.1), and Bundler cannot continue.
+Make sure that `gem install capybara-webkit -v '1.11.1'` succeeds before bundling.
+```
+
+Some of the tests in this repository use `prof`, which depends on `capybara`.
+The error occurs when Xcode is not installed, and `capybara` needs Xcode to get installed. More details [here](https://github.com/thoughtbot/capybara-webkit/issues/813)
+
+#### To solve the problem:
+- Go to the App Store and install Xcode
+- run `sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer`
+- run `sudo xcodebuild -license`
