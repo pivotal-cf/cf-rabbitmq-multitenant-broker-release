@@ -18,7 +18,7 @@
       syslog:
         forward_files: false
         migration:
-          message_format: job_index_id
+          message_format: rfc5424
         address: ((syslog-host))
         port: ((syslog-port))
         transport: tcp
@@ -64,7 +64,7 @@
       syslog:
         forward_files: false
         migration:
-          message_format: job_index_id
+          message_format: rfc5424
         address: ((syslog-host))
         port: ((syslog-port))
         transport: tcp
@@ -96,7 +96,7 @@
       syslog:
         forward_files: false
         migration:
-          message_format: job_index_id
+          message_format: rfc5424
         address: ((syslog-host))
         port: ((syslog-port))
         transport: tcp
