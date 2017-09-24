@@ -2,6 +2,9 @@
 
 MY_DIR="$(dirname "$0")"
 
-cd "${MY_DIR}/.."
+cd "${MY_DIR}/.." || exit
+
+BOSH_MANIFEST=${BOSH_MANIFEST:-$(./scripts/interpolate-manifest-for-bosh-lite)}
+
 bundle install
 bundle exec rspec spec/system --fail-fast

@@ -1,0 +1,91 @@
+---
+- type: replace
+  path: /releases/name=cf-rabbitmq?
+  value:
+    name: cf-rabbitmq
+    version: ((cf-rabbitmq-version))
+    url: https://bosh.io/d/github.com/pivotal-cf/cf-rabbitmq-release?v=((cf-rabbitmq-version))
+    sha1: ((cf-rabbitmq-sha1))
+
+- type: replace
+  path: /releases/name=routing
+  value:
+    name: routing
+    version: ((cf-routing-version))
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=((cf-routing-version))
+    sha1: (cf-routing-sha1))
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: rmq
+    instances: 3
+    jobs:
+    - name: rabbitmq-server
+      release: cf-rabbitmq
+      properties:
+        rabbitmq-server:
+          restart_statsdb_cron_schedule: "42 */4 * * *"
+          plugins:
+          - rabbitmq_management
+          - rabbitmq_mqtt
+          - rabbitmq_stomp
+          ports:
+          - 5672
+          - 5671
+          - 1883
+          - 8883
+          - 61613
+          - 61614
+          - 15672
+          - 15674
+          administrators:
+            management:
+              username: ((rabbitmq-management-username))
+              password: ((rabbitmq-management-password))
+            broker:
+              username: ((rabbitmq-broker-username))
+              password: ((rabbitmq-broker-password))
+          cookie: "rabbit-cluster:aws"
+          cluster_partition_handling: ((cluster-partition-handling-strategy))
+    vm_type: r3.xlarge
+    stemcell: trusty
+    persistent_disk_type: 100GB
+    networks:
+    - name: services
+    azs:
+    - eu-west-1a
+    - eu-west-1b
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: haproxy
+    instances: ((haproxy-instances))
+    jobs:
+    - name: rabbitmq-haproxy
+      release: cf-rabbitmq
+      properties:
+        rabbitmq-haproxy:
+          stats:
+            username: ((haproxy-stats-username))
+            password: ((haproxy-stats-password))
+    - name: route_registrar
+      release: routing
+      consumes:
+        nats: {from: nats, deployment: cf}
+      properties:
+        route_registrar:
+          routes:
+          - name: ((rabbitmq-management-domain))
+            port: 15672
+            registration_interval: 20s
+            uris:
+            - ((rabbitmq-management-domain)).((bosh-hostname))
+    vm_type: m3.medium
+    stemcell: trusty
+    networks:
+    - name: services
+    azs:
+    - eu-west-1a
+    - eu-west-1b

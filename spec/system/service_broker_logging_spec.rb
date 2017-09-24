@@ -7,7 +7,7 @@ require File.expand_path('../../../assets/rabbit-labrat/lib/lab_rat/aggregate_he
 RSpec.describe 'Logging CF service broker is well wired up' do
   SYSLOG_TEST_SERVER_URL = ENV.fetch('SYSLOG_TEST_SERVER_URL', 'http://go-syslogd.bosh-lite.com')
 
-  let(:service_name) { environment.bosh_manifest.property('rabbitmq-broker.service.name') }
+  let(:service_name) {'p-rabbitmq'}
   let(:service) { Prof::MarketplaceService.new(name: service_name, plan: 'standard') }
 
   describe 'provisions a service' do

@@ -22,7 +22,7 @@ require 'httparty'
 require File.expand_path('../../../assets/rabbit-labrat/lib/lab_rat/aggregate_health_checker.rb', __FILE__)
 
 RSpec.describe 'Using a Cloud Foundry service broker' do
-  let(:service_name) { environment.bosh_manifest.property('rabbitmq-broker.service.name') }
+  let(:service_name) { 'p-rabbitmq' }
 
   let(:service) do
     Prof::MarketplaceService.new(
@@ -36,24 +36,37 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
   end
 
   let(:rmq_server_admin_broker_username) do
-    environment.bosh_manifest.property('rabbitmq-server.administrators.broker.username')
+    rabbitmq_server_instance_group = manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'rmq' }.first
+    rabbitmq_server_job =  rabbitmq_server_instance_group['jobs'].select{ |job| job['name'] == 'rabbitmq-server'}.first
+    rabbitmq_server_job['properties']['administrators']['broker']['username']
   end
 
   let(:rmq_server_admin_broker_password) do
-    environment.bosh_manifest.property('rabbitmq-server.administrators.broker.password')
+    rabbitmq_server_instance_group = manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'rmq' }.first
+    rabbitmq_server_job =  rabbitmq_server_instance_group['jobs'].select{ |job| job['name'] == 'rabbitmq-server'}.first
+    rabbitmq_server_job['properties']['administrators']['broker']['password']
   end
 
   let(:rmq_broker_username) do
-    environment.bosh_manifest.property('broker.username')
+    rabbitmq_broker_registrar_instance_group = manifest()['instance_groups'].select{ |instance_group| instance_group['name'] == 'broker-registrar' }.first
+    rabbitmq_broker_registrar_job =  rabbitmq_broker_registrar_instance_group['jobs'].select{ |job| job['name'] == 'broker-registrar'}.first
+    rabbitmq_broker_registrar_properties = rabbitmq_broker_registrar_job['properties']['broker']
+    rabbitmq_broker_registrar_properties[ 'username' ]
   end
 
   let(:rmq_broker_password) do
-    environment.bosh_manifest.property('broker.password')
+    rabbitmq_broker_registrar_instance_group = manifest()['instance_groups'].select{ |instance_group| instance_group['name'] == 'broker-registrar' }.first
+    rabbitmq_broker_registrar_job =  rabbitmq_broker_registrar_instance_group['jobs'].select{ |job| job['name'] == 'broker-registrar'}.first
+    rabbitmq_broker_registrar_properties = rabbitmq_broker_registrar_job['properties']['broker']
+    rabbitmq_broker_registrar_properties[ 'password' ]
   end
 
   let(:rmq_broker_host) do
-    protocol = environment.bosh_manifest.property('broker.protocol')
-    host = environment.bosh_manifest.property('broker.host')
+    rabbitmq_broker_registrar_instance_group = manifest()['instance_groups'].select{ |instance_group| instance_group['name'] == 'broker-registrar' }.first
+    rabbitmq_broker_registrar_job =  rabbitmq_broker_registrar_instance_group['jobs'].select{ |job| job['name'] == 'broker-registrar'}.first
+    rabbitmq_broker_registrar_properties = rabbitmq_broker_registrar_job['properties']['broker']
+    protocol = rabbitmq_broker_registrar_properties[ 'protocol' ]
+    host = rabbitmq_broker_registrar_properties[ 'host' ]
     URI.parse("#{protocol}://#{host}")
   end
 
@@ -92,7 +105,9 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
   context 'when stomp plugin is disabled'  do
     before(:context) do
       modify_and_deploy_manifest do |manifest|
-        manifest['properties']['rabbitmq-server']['plugins'] = ['rabbitmq_management','rabbitmq_mqtt']
+        rabbitmq_server_instance_group = manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'rmq' }.first
+        rabbitmq_server_job =  rabbitmq_server_instance_group['jobs'].select{ |job| job['name'] == 'rabbitmq-server'}.first
+        service_properties = rabbitmq_server_job['properties']['rabbitmq-server']['plugins'] = ['rabbitmq_management','rabbitmq_mqtt']
       end
     end
 
@@ -102,11 +117,8 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
 
     it 'provides only amqp and mqtt connectivity', :pushes_cf_app do
       cf.push_app_and_bind_with_service(test_app, service) do |app, _|
-
         provides_amqp_connectivity(app)
-
         provides_mqtt_connectivity(app)
-
         provides_no_stomp_connectivity(app)
       end
     end
@@ -115,7 +127,9 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
   context 'when broker is configured with HA policy' do
     before(:context) do
       modify_and_deploy_manifest do |manifest|
-        manifest['properties']['rabbitmq-broker']['rabbitmq']['operator_set_policy'] = {
+        rabbitmq_broker_instance_group = manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'rmq-broker' }.first
+        rabbitmq_broker_job =  rabbitmq_broker_instance_group['jobs'].select{ |job| job['name'] == 'rabbitmq-broker'}.first
+        service_properties = rabbitmq_broker_job['properties']['rabbitmq-broker']['rabbitmq']['operator_set_policy'] = {
           'enabled' => true,
           'policy_name' => "operator_set_policy",
           'policy_definition' => "{\"ha-mode\":\"exactly\",\"ha-params\":2,\"ha-sync-mode\":\"automatic\"}",
@@ -165,7 +179,9 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
 
       before(:all) do
         modify_and_deploy_manifest do |manifest|
-          service_properties = manifest['properties']['rabbitmq-broker']['service']
+          rabbitmq_broker_instance_group = manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'rmq-broker' }.first
+          rabbitmq_broker_job =  rabbitmq_broker_instance_group['jobs'].select{ |job| job['name'] == 'rabbitmq-broker'}.first
+          service_properties = rabbitmq_broker_job['properties']['rabbitmq-broker']['service']
           service_properties['name'] = "service-name"
           service_properties['display_name'] = "apps-manager-test-name"
           service_properties['offering_description'] = "Some description of our service"
@@ -181,7 +197,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
         bosh_director.deploy(environment.bosh_manifest.path)
       end
 
-      describe 'the catalog' do
+      describe 'the catalog', :focus => true do
         it 'has the correct name' do
           expect(service_info['name']).to eq("service-name")
         end

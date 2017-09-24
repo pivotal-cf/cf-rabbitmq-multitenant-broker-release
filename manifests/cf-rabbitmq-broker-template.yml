@@ -8,7 +8,9 @@ releases:
 - name: cf-rabbitmq-test
   version: latest
 - name: routing
-  version: 0.152.0
+  version: ((cf-routing-version))
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=((cf-routing-version))
+  sha1: (cf-routing-sha1))
 
 stemcells:
 - alias: trusty
@@ -21,6 +23,33 @@ instance_groups:
   jobs:
   - name: rabbitmq-broker
     release: cf-rabbitmq-multitenant-broker
+    properties:
+      cf:
+        domain: ((bosh-hostname))
+      rabbitmq-broker:
+        route: ((rabbitmq-broker-domain))
+        cc_endpoint: http://api.((bosh-hostname))
+        service:
+          username: ((multitenant-rabbitmq-broker-username))
+          password: ((multitenant-rabbitmq-broker-password))
+          name: ((product-name))
+          uuid: ((rabbitmq-broker-uuid))
+          plan_uuid: ((rabbitmq-broker-plan-uuid))
+        logging:
+          level: debug
+          print_stack_traces: false
+        rabbitmq:
+          hosts: ((rabbitmq-hosts))
+          operator_set_policy:
+            enabled: true
+            policy_name: "operator_set_policy"
+            policy_definition: "{\"ha-mode\":\"exactly\",\"ha-params\":2,\"ha-sync-mode\":\"automatic\"}"
+            policy_priority: 50
+          management_domain: ((rabbitmq-management-domain)).((bosh-hostname))
+          ssl: true
+          administrator:
+            username: ((rabbitmq-broker-username))
+            password: ((rabbitmq-broker-password))
   - name: route_registrar
     release: routing
     consumes:
@@ -44,6 +73,19 @@ instance_groups:
   jobs:
   - name: broker-registrar
     release: cf-rabbitmq-multitenant-broker
+    properties:
+      cf:
+        api_url: https://api.((bosh-hostname))
+        admin_username: ((cf-admin-username))
+        admin_password: ((cf-admin-password))
+      broker:
+        service:
+          name: ((product-name))
+        name: ((product-name))
+        protocol: ((rabbitmq-broker-protocol))
+        host: ((rabbitmq-broker-domain)).((bosh-hostname))
+        username: ((multitenant-rabbitmq-broker-username))
+        password: ((multitenant-rabbitmq-broker-password))
   instances: 1
   lifecycle: errand
   vm_type: t2.micro
@@ -57,6 +99,15 @@ instance_groups:
   jobs:
   - name: broker-deregistrar
     release: cf-rabbitmq-multitenant-broker
+    properties:
+      cf:
+        api_url: https://api.((bosh-hostname))
+        admin_username: ((cf-admin-username))
+        admin_password: ((cf-admin-password))
+      broker:
+        name: ((product-name))
+        service:
+          name: ((product-name))
   instances: 1
   lifecycle: errand
   vm_type: t2.micro
@@ -70,6 +121,14 @@ instance_groups:
   jobs:
   - name: smoke-tests
     release: cf-rabbitmq-multitenant-broker
+    properties:
+      cf:
+        api_url: https://api.((bosh-hostname))
+        domain: ((bosh-hostname))
+        admin_username: ((cf-admin-username))
+        admin_password: ((cf-admin-password))
+      broker:
+        name: ((product-name))
   instances: 1
   lifecycle: errand
   vm_type: m3.medium
@@ -78,46 +137,6 @@ instance_groups:
   - eu-west-1a
   networks:
   - name: services
-
-properties:
-  # for broker and route registrars
-  cf:
-    admin_username: ((cf-admin-username))
-    admin_password: ((cf-admin-password))
-    api_url: https://api.((bosh-hostname))
-    domain: ((bosh-hostname))
-  broker:
-    host: ((rabbitmq-broker-domain)).((bosh-hostname))
-    protocol: ((rabbitmq-broker-protocol))
-    name: ((product-name))
-    username: ((multitenant-rabbitmq-broker-username))
-    password: ((multitenant-rabbitmq-broker-password))
-    service:
-      name: ((product-name))
-  rabbitmq-broker:
-    route: ((rabbitmq-broker-domain))
-    cc_endpoint: http://api.((bosh-hostname))
-    service:
-      username: ((multitenant-rabbitmq-broker-username))
-      password: ((multitenant-rabbitmq-broker-password))
-      name: ((product-name))
-      uuid: ((rabbitmq-broker-uuid))
-      plan_uuid: ((rabbitmq-broker-plan-uuid))
-    logging:
-      level: debug
-      print_stack_traces: false
-    rabbitmq:
-      hosts: ((rabbitmq-hosts))
-      operator_set_policy:
-        enabled: true
-        policy_name: "operator_set_policy"
-        policy_definition: "{\"ha-mode\":\"exactly\",\"ha-params\":2,\"ha-sync-mode\":\"automatic\"}"
-        policy_priority: 50
-      management_domain: ((rabbitmq-management-domain)).((bosh-hostname))
-      ssl: true
-      administrator:
-        username: ((rabbitmq-broker-username))
-        password: ((rabbitmq-broker-password))
 
 update:
   canaries: 1

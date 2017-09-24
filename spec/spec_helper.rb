@@ -58,9 +58,11 @@ def test_app
   @test_app ||= Prof::TestApp.new(path: File.expand_path('../../assets/rabbit-labrat', __FILE__))
 end
 
-def modify_and_deploy_manifest
-  manifest = YAML.load_file(environment.bosh_manifest.path)
+def manifest
+  @manifest ||= YAML.load_file(environment.bosh_manifest.path)
+end
 
+def modify_and_deploy_manifest
   yield manifest
 
   deploy_manifest(manifest)
