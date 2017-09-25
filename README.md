@@ -5,7 +5,11 @@ for Cloud Foundry. It's deployable by BOSH in the usual way.
 
 ## Dependencies
 
+In order to test this release locally you will need:
+
 - [bundler](http://bundler.io/)
+- [BOSH CLI v2](https://bosh.io/docs/cli-v2.html#install)
+- [BOSH Lite](https://bosh.io/docs/bosh-lite)
 
 ## Install
 
