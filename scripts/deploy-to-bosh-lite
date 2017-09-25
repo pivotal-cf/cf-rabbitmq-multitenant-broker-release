@@ -30,6 +30,7 @@ main() {
 
   deploy "$manifest"
   register_multitenant_broker
+  run_smoke_tests
 }
 
 interpolate-manifest-for-bosh-lite() {
@@ -82,6 +83,10 @@ deploy() {
 
 register_multitenant_broker() {
   $BOSH_CMD run-errand broker-registrar
+}
+
+run_smoke_tests() {
+  $BOSH_CMD run-errand smoke-tests
 }
 
 main
