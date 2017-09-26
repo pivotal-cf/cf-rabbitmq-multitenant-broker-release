@@ -5,8 +5,6 @@ director_uuid: ((director-uuid))
 releases:
 - name: cf-rabbitmq-multitenant-broker
   version: latest
-- name: cf-rabbitmq-test
-  version: latest
 - name: routing
   version: 0.152.0
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.152.0

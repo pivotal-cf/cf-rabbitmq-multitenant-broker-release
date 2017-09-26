@@ -26,7 +26,6 @@ main() {
   update_src_dependencies
 
   create_dev_release && upload_dev_release
-  upload_cf_rabbitmq_test_release
 
   deploy "$manifest"
   register_multitenant_broker
@@ -63,14 +62,6 @@ create_dev_release() {
 
 upload_dev_release() {
   $BOSH_CMD upload-release
-}
-
-upload_cf_rabbitmq_test_release() {
-  (
-    cd "$WORKSPACE"/cf-rabbitmq-test-release
-    $BOSH_CMD create-release --force
-    $BOSH_CMD upload-release
-  )
 }
 
 update_cloud_config() {
