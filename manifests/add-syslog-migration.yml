@@ -2,9 +2,9 @@
   path: /releases/name=syslog-migration?
   value:
     name: syslog-migration
-    version: ((syslog-migration-version)) # changed by the pipeline
-    url: https://github.com/pivotal-cf/syslog-migration-release/releases/download/v((syslog-migration-version))/syslog-migration-((syslog-migration-version)).tgz
-    sha1: ((syslog-migration-sha1))
+    version: 8 # changed by the pipeline
+    url: https://github.com/pivotal-cf/syslog-migration-release/releases/download/v8/syslog-migration-8.tgz
+    sha1: 76e11475b31724598a77bacfca65fd7f92f8308e
 
 - type: replace
   path: /instance_groups/name=haproxy/jobs/name=rabbitmq-haproxy/properties/rabbitmq-haproxy/do-not-configure-syslog?

@@ -3,17 +3,9 @@
   path: /releases/name=cf-rabbitmq?
   value:
     name: cf-rabbitmq
-    version: ((cf-rabbitmq-version))
-    url: https://bosh.io/d/github.com/pivotal-cf/cf-rabbitmq-release?v=((cf-rabbitmq-version))
-    sha1: ((cf-rabbitmq-sha1))
-
-- type: replace
-  path: /releases/name=routing
-  value:
-    name: routing
-    version: ((cf-routing-version))
-    url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=((cf-routing-version))
-    sha1: (cf-routing-sha1))
+    version: 232.0.0
+    url: https://bosh.io/d/github.com/pivotal-cf/cf-rabbitmq-release?v=232.0.0
+    sha1: 7225d4a5beeca634ddc85c661eb804172982f73c
 
 - type: replace
   path: /instance_groups/-

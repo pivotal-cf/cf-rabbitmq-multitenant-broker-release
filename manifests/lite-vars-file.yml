@@ -22,20 +22,9 @@ rabbitmq-hosts: USING BOSH LINKS
 
 syslog-port: 8081
 syslog-host: 10.244.16.126
-syslog-migration-version: 8
-syslog-migration-sha1: 76e11475b31724598a77bacfca65fd7f92f8308e
 
 cf-admin-password: admin
 cf-admin-username: admin
-
-cf-rabbitmq-version: 232.0.0
-cf-rabbitmq-sha1: 7225d4a5beeca634ddc85c661eb804172982f73c
-
-cf-routing-version: 0.152.0
-cf-routing-sha1: ea67ad087880fc0e492b6cce27fa2a25f977b691
-
-os-conf-version: 16
-os-conf-sha1: 8eeb72421ec94f2f9aedc50554b899d383e1d9a2
 
 cluster-partition-handling-strategy: autoheal
 

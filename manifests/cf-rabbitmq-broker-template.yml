@@ -8,9 +8,9 @@ releases:
 - name: cf-rabbitmq-test
   version: latest
 - name: routing
-  version: ((cf-routing-version))
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=((cf-routing-version))
-  sha1: (cf-routing-sha1))
+  version: 0.152.0
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.152.0
+  sha1: ea67ad087880fc0e492b6cce27fa2a25f977b691
 
 stemcells:
 - alias: trusty
