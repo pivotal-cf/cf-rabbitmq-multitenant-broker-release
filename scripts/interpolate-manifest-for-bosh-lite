@@ -30,7 +30,7 @@ get_local_bosh_lite_uuid() {
 }
 
 do_interpolate() {
-  local bosh_uuid=${1:?"Expexted bosh uuid"}
+  local bosh_uuid=${1:?"Expected BOSH UUID"}
   local new_manifest="$BOSH_MANIFEST"
 
   boshgo interpolate \
