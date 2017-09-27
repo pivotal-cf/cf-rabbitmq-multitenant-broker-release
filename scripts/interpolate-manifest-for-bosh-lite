@@ -9,11 +9,11 @@ set -o pipefail
 
 [[ -z "${DEBUG:-""}" ]] || set -x
 
-export BOSH_ENVIRONMENT="https://192.168.50.6:25555"
-export BOSH_CLIENT="admin"
-export BOSH_CLIENT_SECRET="admin"
+export BOSH_ENVIRONMENT=${BOSH_ENVIRONMENT:-"https://192.168.50.6:25555"}
+export BOSH_CLIENT=${BOSH_CLIENT:-"admin"}
+export BOSH_CLIENT_SECRET=${BOSH_CLIENT_SECRET:-"admin"}
 export BOSH_CA_CERT
-BOSH_CA_CERT="$(boshgo int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"
+BOSH_CA_CERT=${BOSH_CA_CERT:-"$(boshgo int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"}
 
 BOSH_MANIFEST="${1:-$RELEASE_PATH/manifests/cf-rabbitmq-broker.yml}"
 
