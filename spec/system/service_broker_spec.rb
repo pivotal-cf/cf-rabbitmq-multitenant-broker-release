@@ -197,7 +197,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
         bosh_director.deploy(environment.bosh_manifest.path)
       end
 
-      describe 'the catalog', :focus => true do
+      describe 'the catalog' do
         it 'has the correct name' do
           expect(service_info['name']).to eq("service-name")
         end
