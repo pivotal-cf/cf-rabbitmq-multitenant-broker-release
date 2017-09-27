@@ -1,0 +1,30 @@
+- type: replace
+  path: /releases/name=cf-rabbitmq-test?
+  value:
+    name: cf-rabbitmq-test
+    version: latest
+
+- type: replace
+  path: /instance_groups/name=rmq-broker/jobs/-
+  value:
+    name: syslog-configuration-test
+    release: cf-rabbitmq-test
+    properties:
+      syslog-configuration-test:
+        watched-log-files:
+        - "/var/vcap/sys/log/rabbitmq-broker/startup_stdout.log"
+        - "/var/vcap/sys/log/rabbitmq-broker/startup_stderr.log"
+        - "/var/vcap/sys/log/route_registrar/route_registrar.log"
+        - "/var/vcap/sys/log/route_registrar/route_registrar.err.log"
+
+- type: replace
+  path: /instance_groups/name=rmq-broker/jobs/-
+  value:
+    name: permissions-test
+    release: cf-rabbitmq-test
+    properties:
+      permissions-test:
+        directories:
+        - "/var/vcap/jobs/rabbitmq-broker/packages/rabbitmq-broker"
+        - "/var/vcap/jobs/rabbitmq-broker/packages/rabbitmq-common"
+        - "/var/vcap/sys/log"

@@ -39,6 +39,7 @@ do_interpolate() {
     --ops-file="$RELEASE_REPO/manifests/change-vcap-password.yml" \
     --ops-file="$RELEASE_REPO/manifests/add-go-syslogd.yml" \
     --ops-file="$RELEASE_REPO/manifests/add-syslog-migration.yml" \
+    --ops-file="$RELEASE_REPO/manifests/add-embedded-tests.yml" \
     --vars-file="$RELEASE_REPO/manifests/lite-vars-file.yml" \
     --var=director-uuid="$bosh_uuid" \
   "$RELEASE_REPO/manifests/cf-rabbitmq-broker-template.yml" \
