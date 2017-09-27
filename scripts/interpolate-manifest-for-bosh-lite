@@ -5,7 +5,7 @@ set -u
 set -o pipefail
 
 : "${WORKSPACE:="$HOME/workspace"}"
-: "${RELEASE_REPO:="$WORKSPACE/cf-rabbitmq-multitenant-broker-release"}"
+: "${RELEASE_PATH:="$WORKSPACE/cf-rabbitmq-multitenant-broker-release"}"
 
 [[ -z "${DEBUG:-""}" ]] || set -x
 
@@ -15,7 +15,7 @@ export BOSH_CLIENT_SECRET="admin"
 export BOSH_CA_CERT
 BOSH_CA_CERT="$(boshgo int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"
 
-BOSH_MANIFEST="${1:-$RELEASE_REPO/manifests/cf-rabbitmq-broker.yml}"
+BOSH_MANIFEST="${1:-$RELEASE_PATH/manifests/cf-rabbitmq-broker.yml}"
 
 main() {
   local bosh_uuid
@@ -35,14 +35,14 @@ do_interpolate() {
 
   boshgo interpolate \
     --var-errs \
-    --ops-file="$RELEASE_REPO/manifests/add-cf-rabbitmq.yml" \
-    --ops-file="$RELEASE_REPO/manifests/change-vcap-password.yml" \
-    --ops-file="$RELEASE_REPO/manifests/add-go-syslogd.yml" \
-    --ops-file="$RELEASE_REPO/manifests/add-syslog-migration.yml" \
-    --ops-file="$RELEASE_REPO/manifests/add-embedded-tests.yml" \
-    --vars-file="$RELEASE_REPO/manifests/lite-vars-file.yml" \
+    --ops-file="$RELEASE_PATH/manifests/add-cf-rabbitmq.yml" \
+    --ops-file="$RELEASE_PATH/manifests/change-vcap-password.yml" \
+    --ops-file="$RELEASE_PATH/manifests/add-go-syslogd.yml" \
+    --ops-file="$RELEASE_PATH/manifests/add-syslog-migration.yml" \
+    --ops-file="$RELEASE_PATH/manifests/add-embedded-tests.yml" \
+    --vars-file="$RELEASE_PATH/manifests/lite-vars-file.yml" \
     --var=director-uuid="$bosh_uuid" \
-  "$RELEASE_REPO/manifests/cf-rabbitmq-broker-template.yml" \
+  "$RELEASE_PATH/manifests/cf-rabbitmq-broker-template.yml" \
   > "$new_manifest"
 
   echo "$new_manifest"
