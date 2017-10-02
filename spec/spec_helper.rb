@@ -22,10 +22,10 @@ def environment
                      options[:cloud_foundry_password] = ENV.fetch('CF_PASSWORD', 'admin')
                      options[:cloud_foundry_api_url]  = ENV.fetch('CF_API', 'api.bosh-lite.com')
 
-                     options[:bosh_target]          = ENV.fetch('BOSH_TARGET', '192.168.50.6')
+                     options[:bosh_target]          = ENV.fetch('BOSH_TARGET', 'https://192.168.50.6:25555')
                      options[:bosh_username]        = ENV['BOSH_USERNAME']
                      options[:bosh_password]        = ENV['BOSH_PASSWORD']
-                     options[:ssh_gateway_host]     = URI.parse(ENV['BOSH_TARGET']).host if ENV.key?('BOSH_TARGET')
+                     options[:ssh_gateway_host]     = URI.parse(options[:bosh_target]).host
 
                      options[:ssh_gateway_username] = ENV.fetch('BOSH_SSH_USERNAME', 'vcap') if ENV.key?('BOSH_TARGET')
 
@@ -63,9 +63,11 @@ def manifest
 end
 
 def modify_and_deploy_manifest
-  yield manifest
+  current_manifest = manifest
 
-  deploy_manifest(manifest)
+  yield current_manifest
+
+  deploy_manifest(current_manifest)
 end
 
 def deploy_manifest(manifest)
