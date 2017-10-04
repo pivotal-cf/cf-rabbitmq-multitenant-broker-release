@@ -40,14 +40,14 @@
               password: ((rabbitmq-broker-password))
           cookie: "rabbit-cluster:aws"
           cluster_partition_handling: ((cluster-partition-handling-strategy))
-    vm_type: r3.xlarge
+    vm_type: n1-highmem-4
     stemcell: trusty
     persistent_disk_type: 100GB
     networks:
-    - name: services
+    - name: default
     azs:
-    - eu-west-1a
-    - eu-west-1b
+    - z1
+    - z2
 
 - type: replace
   path: /instance_groups/-
@@ -74,10 +74,10 @@
             registration_interval: 20s
             uris:
             - ((rabbitmq-management-domain)).((bosh-hostname))
-    vm_type: m3.medium
+    vm_type: n1-standard-1
     stemcell: trusty
     networks:
-    - name: services
+    - name: default
     azs:
-    - eu-west-1a
-    - eu-west-1b
+    - z1
+    - z2

@@ -60,12 +60,12 @@ instance_groups:
           registration_interval: 20s
           uris:
           - ((rabbitmq-broker-domain)).((bosh-hostname))
-  vm_type: m3.medium
+  vm_type: n1-standard-1
   stemcell: trusty
   azs:
-  - eu-west-1a
+  - z1
   networks:
-  - name: services
+  - name: default
 
 - name: broker-registrar
   jobs:
@@ -86,12 +86,12 @@ instance_groups:
         password: ((multitenant-rabbitmq-broker-password))
   instances: 1
   lifecycle: errand
-  vm_type: t2.micro
+  vm_type: g1-small
   stemcell: trusty
   azs:
-  - eu-west-1a
+  - z1
   networks:
-  - name: services
+  - name: default
 
 - name: broker-deregistrar
   jobs:
@@ -108,12 +108,12 @@ instance_groups:
           name: ((product-name))
   instances: 1
   lifecycle: errand
-  vm_type: t2.micro
+  vm_type: g1-small
   stemcell: trusty
   azs:
-  - eu-west-1a
+  - z1
   networks:
-  - name: services
+  - name: default
 
 - name: smoke-tests
   jobs:
@@ -129,12 +129,12 @@ instance_groups:
         name: ((product-name))
   instances: 1
   lifecycle: errand
-  vm_type: m3.medium
+  vm_type: g1-small
   stemcell: trusty
   azs:
-  - eu-west-1a
+  - z1
   networks:
-  - name: services
+  - name: default
 
 update:
   canaries: 1
