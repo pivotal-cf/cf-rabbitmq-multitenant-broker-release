@@ -33,11 +33,11 @@
               uris:
               - go-syslogd.((bosh-hostname))
     azs:
-    - eu-west-1a
+    - z1
     instances: 1
     networks:
-    - name: services
+    - name: default
       static_ips:
       - ((syslog-host))
     stemcell: trusty
-    vm_type: m3.medium
+    vm_type: n1-standard-1
