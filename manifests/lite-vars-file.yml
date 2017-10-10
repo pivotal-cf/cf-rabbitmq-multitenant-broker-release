@@ -17,7 +17,7 @@ rabbitmq-broker-plan-uuid: 22F0B28C-B886-4123-B01B-95E54D3DE6DA
 rabbitmq-broker-protocol: http
 rabbitmq-broker-username: broker
 rabbitmq-broker-uuid: 568725FD-AD46-44CA-9853-621416E983A4
-rabbitmq-management-domain: pivotal-rabbitmq
+rabbitmq-management-hostname: pivotal-rabbitmq
 rabbitmq-hosts: USING BOSH LINKS
 
 syslog-port: 8081

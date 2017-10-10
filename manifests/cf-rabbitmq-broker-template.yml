@@ -43,7 +43,7 @@ instance_groups:
             policy_name: "operator_set_policy"
             policy_definition: "{\"ha-mode\":\"exactly\",\"ha-params\":2,\"ha-sync-mode\":\"automatic\"}"
             policy_priority: 50
-          management_domain: ((rabbitmq-management-domain)).((bosh-domain))
+          management_domain: ((rabbitmq-management-hostname)).((bosh-domain))
           ssl: true
           administrator:
             username: ((rabbitmq-broker-username))
