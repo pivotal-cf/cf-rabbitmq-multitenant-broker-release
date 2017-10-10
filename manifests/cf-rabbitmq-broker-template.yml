@@ -25,7 +25,7 @@ instance_groups:
       cf:
         domain: ((bosh-domain))
       rabbitmq-broker:
-        route: ((rabbitmq-broker-domain))
+        route: ((rabbitmq-broker-hostname))
         cc_endpoint: http://api.((bosh-domain))
         service:
           username: ((multitenant-rabbitmq-broker-username))
@@ -55,11 +55,11 @@ instance_groups:
     properties:
       route_registrar:
         routes:
-        - name: ((rabbitmq-broker-domain))
+        - name: ((rabbitmq-broker-hostname))
           port: 4567
           registration_interval: 20s
           uris:
-          - ((rabbitmq-broker-domain)).((bosh-domain))
+          - ((rabbitmq-broker-hostname)).((bosh-domain))
   vm_type: n1-standard-1
   stemcell: trusty
   azs:
@@ -81,7 +81,7 @@ instance_groups:
           name: ((product-name))
         name: ((product-name))
         protocol: ((rabbitmq-broker-protocol))
-        host: ((rabbitmq-broker-domain)).((bosh-domain))
+        host: ((rabbitmq-broker-hostname)).((bosh-domain))
         username: ((multitenant-rabbitmq-broker-username))
         password: ((multitenant-rabbitmq-broker-password))
   instances: 1

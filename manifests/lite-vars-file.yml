@@ -11,7 +11,7 @@ product-name: p-rabbitmq
 
 rabbitmq-management-password: admin
 rabbitmq-management-username: admin
-rabbitmq-broker-domain: rabbitmq-multitenant-broker
+rabbitmq-broker-hostname: rabbitmq-multitenant-broker
 rabbitmq-broker-password: broker
 rabbitmq-broker-plan-uuid: 22F0B28C-B886-4123-B01B-95E54D3DE6DA
 rabbitmq-broker-protocol: http
