@@ -31,7 +31,7 @@
               port: 8080
               registration_interval: 20s
               uris:
-              - go-syslogd.((bosh-hostname))
+              - go-syslogd.((bosh-domain))
     azs:
     - z1
     instances: 1
