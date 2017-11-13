@@ -208,7 +208,7 @@
       (if (and vh u)
         (let [xs (rs/close-connections-from u)]
           (rs/delete-user u)
-          (log/infof "Deleted use %s" u)
+          (log/infof "Deleted user %s" u)
           (log/infof "Forcing connections from %s to close" u)
           (rs/close-connections-from u)
           (log/infof "Force-closed %d connections" (count xs))
