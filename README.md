@@ -37,7 +37,7 @@ Use `rspec` to run a specific test:
 
 ### Unit Tests
 
-To run only unit tests locally, run: `./scripts/unit-tests`. Unit tests do not require the release to be deployed.
+To run only unit tests locally, run: `./scripts/run-unit-tests`. Unit tests do not require the release to be deployed.
 
 ## Troubleshooting
 
