@@ -5,7 +5,6 @@ service:
   # credentials CC uses to authenticate with the broker
   username: "p1-rabbit"
   password: "367@8G24#e:3pTVwD.ng,YMJKds9<X"
-  url: http://10.244.9.14:4567
   name: "p-rabbitmq"
   uuid: 00000000-0000-0000-0000-000000000000
   display_name: "WhiteRabbitMQ"

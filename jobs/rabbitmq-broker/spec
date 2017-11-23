@@ -13,8 +13,6 @@ properties:
   rabbitmq-broker.route:
     default: "pivotal-rabbitmq-broker"
     description: "Hostname at which broker will be accessed"
-  rabbitmq-broker.ip:
-    description: "Broker IP"
   rabbitmq-broker.cc_endpoint:
     description: "URL for CC"
   rabbitmq-broker.rabbitmq.hosts:
@@ -36,8 +34,6 @@ properties:
   rabbitmq-broker.logging.print_stack_traces:
     default: false
     description: "Should boot exception handlers print full stack traces?"
-  rabbitmq-broker.service.url:
-    description: "The URL to the service gateway"
   rabbitmq-broker.service.username:
     description: "Username used by Cloud Controller for authentication"
   rabbitmq-broker.service.password:
