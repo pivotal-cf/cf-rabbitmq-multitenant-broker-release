@@ -46,10 +46,10 @@ properties:
     default: "RabbitMQ"
   rabbitmq-broker.service.offering_description:
     description: "Service offering description"
-    default: "RabbitMQ is a robust and scalable high-performance multi-protocol messaging broker."
+    default: "RabbitMQ service to provide shared instances of this high-performance multi-protocol messaging broker."
   rabbitmq-broker.service.long_description:
     description: "Service offering long description"
-    default: "RabbitMQ is a robust and scalable high-performance multi-protocol messaging broker."
+    default: "RabbitMQ service to provide shared instances of this high-performance multi-protocol messaging broker."
   rabbitmq-broker.service.uuid:
     description: "UUID of the service"
     default: "163b47c6-a2f3-43b1-97f7-b83b37ec8ad3"
