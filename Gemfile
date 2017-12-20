@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'bosh_cli'
 gem 'rake'
 gem 'rabbitmq_http_api_client'
 gem 'bosh-template'
