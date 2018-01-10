@@ -8,6 +8,8 @@ set -x
 
 export PATH=$PATH:/var/vcap/packages/cf-cli/bin
 
+export CF_DIAL_TIMEOUT=11
+
 cf --version
 
 <% if p("cf.skip_ssl_validation") %>

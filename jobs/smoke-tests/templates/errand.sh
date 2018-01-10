@@ -14,6 +14,8 @@ export REPO_DIR=${GOPATH}/src/${REPO_NAME}
 
 export CONFIG_PATH=/var/vcap/jobs/smoke-tests/config.json
 
+export CF_DIAL_TIMEOUT=11
+
 pushd ${REPO_DIR}
  ./bin/test
 popd

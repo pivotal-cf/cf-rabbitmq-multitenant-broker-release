@@ -17,6 +17,8 @@ BROKER_USERNAME='<%= p("broker.username") %>'
 BROKER_PASSWORD='<%= p("broker.password") %>'
 SERVICE_NAME='<%= p("broker.service.name") %>'
 
+export CF_DIAL_TIMEOUT=11
+
 cf --version
 <% if p("cf.skip_ssl_validation") %>
 cf api --skip-ssl-validation "$CF_API_URL"
