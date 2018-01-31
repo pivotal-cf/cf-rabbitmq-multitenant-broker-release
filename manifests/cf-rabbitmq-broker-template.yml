@@ -33,6 +33,7 @@ instance_groups:
           name: ((product-name))
           uuid: ((rabbitmq-broker-uuid))
           plan_uuid: ((rabbitmq-broker-plan-uuid))
+          shareable: true
         logging:
           level: debug
           print_stack_traces: false
