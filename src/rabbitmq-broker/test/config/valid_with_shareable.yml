@@ -14,7 +14,7 @@ service:
   documentation_url: https://example.com
   support_url: https://support.example.com
   icon_image: image_icon_base64
-  shareable: false
+  shareable: true
 logging:
   level: debug
   print_stack_traces: true

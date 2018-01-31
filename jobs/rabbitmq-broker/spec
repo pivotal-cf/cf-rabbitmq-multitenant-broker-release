@@ -68,6 +68,9 @@ properties:
   rabbitmq-broker.service.support_url:
     description: "URL for the provider support"
     default: "https://support.pivotal.io"
+  rabbitmq-broker.service.shareable:
+    description: "Is service shareable?"
+    default: false
   rabbitmq-broker.rabbitmq.operator_set_policy.enabled:
     description: "Enable policy set by the operator"
     default: false

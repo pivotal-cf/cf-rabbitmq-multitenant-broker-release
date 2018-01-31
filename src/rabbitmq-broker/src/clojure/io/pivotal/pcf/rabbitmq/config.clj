@@ -99,6 +99,7 @@
         img-url       (string/join "," ["data:image/png;base64" (get-in m [:service :icon_image])])
         provider-name (get-in m [:service :provider_display_name])
         documentation-url (get-in m [:service :documentation_url])
+        shareable (get-in m [:service :shareable])
         support-url (get-in m [:service :support_url])
         ]
     {:id          service-uuid
@@ -115,6 +116,7 @@
                                           "imageUrl" img-url}
                    "providerDisplayName" provider-name
                    "documentationUrl"    documentation-url
+                   "shareable"           shareable
                    "supportUrl"          support-url }
      :plans       [{:id plan-uuid
                     :name "standard"

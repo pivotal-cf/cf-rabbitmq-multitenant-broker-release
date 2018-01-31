@@ -104,6 +104,18 @@
         info (cfg/service-info m)]
     (is (= "https://support.example.com" (get-in info [:metadata "supportUrl"])))))
 
+(deftest test-shareable
+  (testing "when shareable enabled"
+    (let [m (load-config "config/valid_with_shareable.yml")
+          info (cfg/service-info m)]
+      (is (= true (get-in info [:metadata "shareable"])))))
+
+  (testing "when shareable disabled"
+    (let [m (load-config "config/valid.yml")
+          info (cfg/service-info m)]
+      (is (= false (get-in info [:metadata "shareable"])))))
+  )
+
 (deftest test-image-url
   (let [m (load-config "config/valid.yml")
         info (cfg/service-info m)]
