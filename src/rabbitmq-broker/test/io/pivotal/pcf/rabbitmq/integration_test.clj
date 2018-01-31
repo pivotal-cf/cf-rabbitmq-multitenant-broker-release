@@ -110,7 +110,7 @@
       (let [res (th/get "v2/catalog")
             s1  (-> res :services first)
             metadata (get s1 :metadata)]
-        (is (= true  (get metadata :shareable)))
+        (is (= false  (get metadata :shareable)))
         ))))
 
 (deftest test-create-service-with-operater-set-policy
