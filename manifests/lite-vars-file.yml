@@ -27,6 +27,7 @@ cf-admin-password: admin
 cf-admin-username: admin
 
 cluster-partition-handling-strategy: autoheal
+disk_alarm_threshold: "{mem_relative,0.4}"
 
 haproxy-instances: 1
 haproxy-stats-password: admin
