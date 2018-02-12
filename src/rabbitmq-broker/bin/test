@@ -15,8 +15,8 @@ chown rabbitmq:rabbitmq $RABBITMQ_ERLANG_COOKIE_PATH
 echo "About to start rabbitmq"
 
 service rabbitmq-server start
-rabbitmq-plugins enable rabbitmq_management 
+rabbitmq-plugins enable rabbitmq_management
 
 echo "About to run lein test"
 
-LEIN_ROOT=1 tools/leiningen/lein test
+lein test
