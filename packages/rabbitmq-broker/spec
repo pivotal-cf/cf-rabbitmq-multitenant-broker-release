@@ -6,4 +6,3 @@ files:
 - rabbitmq-broker/config/*
 - rabbitmq-broker/src/**/*
 - rabbitmq-broker/project.clj
-- rabbitmq-broker/tools/**/*
