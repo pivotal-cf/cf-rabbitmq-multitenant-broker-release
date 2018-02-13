@@ -45,6 +45,8 @@ instance_groups:
             policy_definition: "{\"ha-mode\":\"exactly\",\"ha-params\":2,\"ha-sync-mode\":\"automatic\"}"
             policy_priority: 50
           management_domain: ((rabbitmq-management-hostname)).((bosh-domain))
+          management:
+            username: ((rabbitmq-management-username))
           administrator:
             username: ((rabbitmq-broker-username))
             password: ((rabbitmq-broker-password))

@@ -19,10 +19,12 @@ properties:
     description: "RabbitMQ Hosts"
   rabbitmq-broker.rabbitmq.dns_host:
     description: "External load balancer host"
+  rabbitmq-broker.rabbitmq.management.username:
+    description: "The username used by the operator to access an admin account of the Rabbit servers"
   rabbitmq-broker.rabbitmq.administrator.username:
-    description: "The username used to access an admin account of the Rabbit servers"
+    description: "The username used by the broker to access an admin account of the Rabbit servers"
   rabbitmq-broker.rabbitmq.administrator.password:
-    description: "The password used to access an admin account of the Rabbit servers"
+    description: "The password used by the broker to access an admin account of the Rabbit servers"
   rabbitmq-broker.rabbitmq.ssl:
     default: false
     description: "Set to true if RabbitMQ cluster is configured to use TLS/SSL"
