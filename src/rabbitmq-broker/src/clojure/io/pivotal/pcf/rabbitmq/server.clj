@@ -133,7 +133,9 @@
             (rs/grant-permissions mu id)
             (log/infof "Created special user for dashboard access: %s" mu)
             (rs/grant-broker-administrator-permissions id)
-            (log/infof "Granted system administrator access to vhost %s" id)
+            (log/infof "Granted broker administrator access to vhost %s" id)
+            (if-not (nil? (cfg/rabbitmq-management-username)) (rs/grant-permissions (cfg/rabbitmq-management-username) id))
+            (log/infof "Granted management administrator access to vhost %s" id)
             (if (cfg/operator-set-policy-enabled?) (rs/add-operator-set-policy id))
             (catch Exception e
               (rs/delete-vhost id)

@@ -133,6 +133,10 @@
   (let [m (load-config "config/valid.yml")]
     (is (= (set (cfg/rabbitmq-administrator-uris m)) #{"http://127.0.0.1:15672" "http://127.0.0.2:15672"}))))
 
+(deftest test-rabbitmq-management-username
+  (let [m (load-config "config/valid.yml")]
+    (is (= (cfg/rabbitmq-management-username m) "admin"))))
+
 (deftest test-rabbitmq-regular-user-tags
   (let [m (load-config "config/valid.yml")]
     (is (= (cfg/regular-user-tags m) "policymaker,management"))))

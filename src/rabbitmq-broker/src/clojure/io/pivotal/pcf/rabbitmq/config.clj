@@ -190,6 +190,12 @@
   ([m]
      (if (using-tls? m) "amqps" "amqp")))
 
+(defn rabbitmq-management-username
+  ([]
+     (rabbitmq-management-username final-config))
+  ([m]
+     (get-in m [:rabbitmq :management :username])))
+
 (defn rabbitmq-administrator
   ([]
      (rabbitmq-administrator final-config))
