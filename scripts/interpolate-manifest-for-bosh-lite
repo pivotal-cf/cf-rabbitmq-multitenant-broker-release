@@ -13,7 +13,7 @@ export BOSH_ENVIRONMENT=${BOSH_ENVIRONMENT:-"https://192.168.50.6:25555"}
 export BOSH_CLIENT=${BOSH_CLIENT:-"admin"}
 export BOSH_CLIENT_SECRET=${BOSH_CLIENT_SECRET:-"admin"}
 export BOSH_CA_CERT
-BOSH_CA_CERT=${BOSH_CA_CERT:-"$(boshgo int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"}
+BOSH_CA_CERT=${BOSH_CA_CERT:-"$(bosh int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"}
 
 BOSH_MANIFEST="${1:-$RELEASE_PATH/manifests/cf-rabbitmq-broker.yml}"
 
@@ -33,7 +33,7 @@ do_interpolate() {
   local bosh_uuid=${1:?"Expected BOSH UUID"}
   local new_manifest="$BOSH_MANIFEST"
 
-  boshgo interpolate \
+  bosh interpolate \
     --var-errs \
     --ops-file="$RELEASE_PATH/manifests/add-cf-rabbitmq.yml" \
     --ops-file="$RELEASE_PATH/manifests/change-vcap-password.yml" \
