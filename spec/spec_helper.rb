@@ -1,7 +1,6 @@
 require 'prof/external_spec/spec_helper'
 require 'prof/environment/cloud_foundry'
 require 'prof/environment_manager'
-require 'prof/ssh_gateway'
 require 'yaml'
 require 'pry'
 require 'rspec/retry'
@@ -37,12 +36,76 @@ def environment
                    end
 end
 
-def bosh_director
-  @bosh_director ||= environment.bosh_director
+BOSH_CLI = ENV.fetch("BOSH_CLI", 'bosh')
+
+class Bosh2
+  def initialize(bosh_cli = 'bosh', deployment = 'cf-rabbitmq-multitenant-broker')
+    @bosh_cli = "#{bosh_cli} -n -d #{deployment}"
+
+    version = `#{@bosh_cli} --version`
+    raise 'BOSH CLI >= v2 required' unless version.start_with?('version 2.')
+  end
+
+  def ssh(instance, command)
+    command_escaped = Shellwords.escape(command)
+    output = `#{@bosh_cli} ssh --gw-private-key #{key_path} #{instance} -r --json -c #{command_escaped}`
+    JSON.parse(output)
+  end
+
+  def indexed_instance(instance, index)
+    output = `#{@bosh_cli} instances | grep #{instance} | cut -f1`
+    output.split(' ')[index]
+  end
+
+  def deploy(manifest)
+    Tempfile.open('manifest.yml') do |manifest_file|
+      manifest_file.write(manifest.to_yaml)
+      manifest_file.flush
+      output = ""
+      exit_code = ::Open3.popen3("#{@bosh_cli} deploy #{manifest_file.path}") do |stdin, stdout, stderr, wait_thr|
+        output << stdout.read
+        wait_thr.value
+      end
+      abort "Deployment failed\n#{output}" unless exit_code == 0
+    end
+  end
+
+  def key_path
+    ssh_key_file = ENV.fetch('INSTANCE_SSH_KEY_FILE')
+    raise 'please set environment variable INSTANCE_SSH_KEY_FILE' if ssh_key_file.nil? || ssh_key_file.empty?
+    ssh_key_file
+  end
+
+  def redeploy
+    deployed_manifest = manifest
+    yield deployed_manifest
+    deploy deployed_manifest
+  end
+
+  def manifest
+    manifest = `#{@bosh_cli} manifest`
+    YAML.load(manifest)
+  end
+
+  def start(instance)
+    `#{@bosh_cli} start #{instance}`
+  end
+
+  def stop(instance)
+    `#{@bosh_cli} stop #{instance}`
+  end
+end
+
+def bosh
+  @bosh ||= Bosh2.new(BOSH_CLI)
+end
+
+def test_manifest
+  YAML.load_file(ENV.fetch('BOSH_MANIFEST'))
 end
 
 def environment_manager
-  cf_environment = OpenStruct.new(:cloud_foundry => cf, :bosh_director => bosh_director)
+  cf_environment = OpenStruct.new(:cloud_foundry => cf)
   Prof::EnvironmentManager.new(cf_environment)
 end
 
@@ -50,66 +113,8 @@ def cf
   @cf ||= environment.cloud_foundry
 end
 
-def ssh_gateway
-  @ssh_gateway ||= environment.ssh_gateway
-end
-
 def test_app
   @test_app ||= Prof::TestApp.new(path: File.expand_path('../../assets/rabbit-labrat', __FILE__))
-end
-
-def manifest
-  @manifest ||= YAML.load_file(environment.bosh_manifest.path)
-end
-
-def modify_and_deploy_manifest
-  current_manifest = manifest
-
-  yield current_manifest
-
-  deploy_manifest(current_manifest)
-end
-
-def deploy_manifest(manifest)
-  Tempfile.open('manifest.yml') do |manifest_file|
-    manifest_file.write(manifest.to_yaml)
-    manifest_file.flush
-    bosh_director.deploy(manifest_file.path)
-  end
-end
-
-def doppler_address
-  @doppler_address ||= cf.info["doppler_logging_endpoint"]
-end
-
-def get_uuid(content)
-  uuid_regex = /(\w{8}(-\w{4}){3}-\w{12}?)/
-  uuid_regex.match(content)[0]
-end
-
-def get_service_instance_uuid(content)
-  uuid_regex = /service_instances\/(\w{8}(-\w{4}){3}-\w{12}?)\/service_bindings/
-  uuid_regex.match(content)[1]
-end
-
-def stop_connections_to_job(options = {})
-  job_hosts = options.fetch(:hosts)
-  protocol = options.fetch(:protocol, 'tcp')
-  port = options.fetch(:port, 80)
-
-  job_hosts.each do |job_host|
-    ssh_gateway.execute_on(job_host, "iptables -w -A INPUT -p #{protocol} --destination-port #{port} -j DROP", :root => true)
-  end
-
-  yield
-ensure
-  job_hosts.each do |job_host|
-    ssh_gateway.execute_on(job_host, "iptables -w -D INPUT -p #{protocol} --destination-port #{port} -j DROP", :root => true)
-  end
-end
-
-def wait_for(job:, status:)
-  ssh_gateway.execute_on(@haproxy_z1_host, "while ! ( monit summary | grep #{job} | grep \'#{status}\' > /dev/null); do true; done", :root => true)
 end
 
 module ExcludeHelper

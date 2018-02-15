@@ -6,7 +6,7 @@ set -e
 
 WORKSPACE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)" #taken from https://github.com/cloudfoundry/bosh-lite/blob/master/bin/provision_cf#L7
 
-BOSH_CMD=bosh
+BOSH_CLI="${BOSH_CLI:-/usr/local/bin/bosh}"
 
 export BOSH_ENVIRONMENT="${1:-https://192.168.50.6:25555}"
 export BOSH_NON_INTERACTIVE=false
@@ -14,7 +14,7 @@ export BOSH_CLIENT=admin
 export BOSH_CLIENT_SECRET=admin
 export BOSH_DEPLOYMENT=cf-rabbitmq-multitenant-broker
 export BOSH_CA_CERT
-BOSH_CA_CERT="$($BOSH_CMD int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"
+BOSH_CA_CERT="$($BOSH_CLI int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"
 
 main() {
   local manifest
@@ -45,11 +45,11 @@ upload_stemcell() {
   BOSH_LITE_STEMCELL_VERSION="$(yq .stemcells[0].version "$manifest")"
   BOSH_LITE_STEMCELL_URL="https://bosh.io/d/stemcells/$BOSH_LITE_STEMCELL_NAME?v=$BOSH_LITE_STEMCELL_VERSION"
 
-  $BOSH_CMD upload-stemcell "$BOSH_LITE_STEMCELL_URL" --name "$BOSH_LITE_STEMCELL_NAME" --version "$BOSH_LITE_STEMCELL_VERSION"
+  $BOSH_CLI upload-stemcell "$BOSH_LITE_STEMCELL_URL" --name "$BOSH_LITE_STEMCELL_NAME" --version "$BOSH_LITE_STEMCELL_VERSION"
 }
 
 download_blobs() {
-  $BOSH_CMD sync-blobs
+  $BOSH_CLI sync-blobs
 }
 
 update_src_dependencies() {
@@ -57,28 +57,28 @@ update_src_dependencies() {
 }
 
 create_dev_release() {
-  $BOSH_CMD create-release --force
+  $BOSH_CLI create-release --force
 }
 
 upload_dev_release() {
-  $BOSH_CMD upload-release
+  $BOSH_CLI upload-release
 }
 
 update_cloud_config() {
-  $BOSH_CMD update-cloud-config "$BOSH_CLOUD_CONFIG"
+  $BOSH_CLI update-cloud-config "$BOSH_CLOUD_CONFIG"
 }
 
 deploy() {
   local manifest="$1"
-  $BOSH_CMD deploy --no-redact "$manifest"
+  $BOSH_CLI deploy --no-redact "$manifest"
 }
 
 register_multitenant_broker() {
-  $BOSH_CMD run-errand broker-registrar
+  $BOSH_CLI run-errand broker-registrar
 }
 
 run_smoke_tests() {
-  $BOSH_CMD run-errand smoke-tests
+  $BOSH_CLI run-errand smoke-tests
 }
 
 main

@@ -1,10 +1,24 @@
 #!/usr/bin/env bash
 
+BOSH_CLI="${BOSH_CLI:-/usr/local/bin/bosh}"
+export BOSH_CLI
+
 MY_DIR="$(dirname "$0")"
 
 cd "${MY_DIR}/.." || exit
 
 BOSH_MANIFEST=${BOSH_MANIFEST:-$(./scripts/interpolate-manifest-for-bosh-lite)}
+
+BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT:-vbox}"
+BOSH_CLIENT="${BOSH_CLIENT:-admin}"
+BOSH_CLIENT_SECRET="${BOSH_CLIENT_SECRET:-admin}"
+BOSH_CA_CERT=${BOSH_CA_CERT:-"$($BOSH_CLI int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"}
+
+export BOSH_ENVIRONMENT
+export BOSH_CLIENT
+export BOSH_CLIENT_SECRET
+export BOSH_CA_CERT
+export BOSH_MANIFEST
 
 bundle install
 bundle exec rspec spec/system --fail-fast

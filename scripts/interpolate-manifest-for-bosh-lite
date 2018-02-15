@@ -4,6 +4,7 @@ set -e
 set -u
 set -o pipefail
 
+: "${BOSH_CLI:=bosh}"
 : "${WORKSPACE:="$HOME/workspace"}"
 : "${RELEASE_PATH:="$WORKSPACE/cf-rabbitmq-multitenant-broker-release"}"
 
@@ -13,10 +14,10 @@ export BOSH_ENVIRONMENT=${BOSH_ENVIRONMENT:-"https://192.168.50.6:25555"}
 export BOSH_CLIENT=${BOSH_CLIENT:-"admin"}
 export BOSH_CLIENT_SECRET=${BOSH_CLIENT_SECRET:-"admin"}
 export BOSH_CA_CERT
-BOSH_CA_CERT=${BOSH_CA_CERT:-"$(bosh int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"}
+BOSH_CA_CERT=${BOSH_CA_CERT:-"$($BOSH_CLI int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"}
 
 BOSH_MANIFEST="${1:-$RELEASE_PATH/manifests/cf-rabbitmq-broker.yml}"
-
+export BOSH_MANIFEST
 main() {
   local bosh_uuid
   bosh_uuid=$(get_local_bosh_lite_uuid)
@@ -25,7 +26,7 @@ main() {
 }
 
 get_local_bosh_lite_uuid() {
-  bosh \
+  $BOSH_CLI \
     environment --json | jq  -r .Tables[].Rows[].uuid
 }
 
@@ -33,7 +34,7 @@ do_interpolate() {
   local bosh_uuid=${1:?"Expected BOSH UUID"}
   local new_manifest="$BOSH_MANIFEST"
 
-  bosh interpolate \
+  $BOSH_CLI interpolate \
     --var-errs \
     --ops-file="$RELEASE_PATH/manifests/add-cf-rabbitmq.yml" \
     --ops-file="$RELEASE_PATH/manifests/change-vcap-password.yml" \

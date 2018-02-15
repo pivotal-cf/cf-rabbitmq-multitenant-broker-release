@@ -6,8 +6,6 @@ require 'tempfile'
 require 'net/https'
 require 'uri'
 
-require 'hula'
-require 'hula/bosh_manifest'
 require 'prof/marketplace_service'
 require 'prof/service_instance'
 require 'prof/cloud_foundry'
@@ -31,10 +29,6 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
     )
   end
 
-  let(:rmq_host) do
-    bosh_director.ips_for_job("rmq", environment.bosh_manifest.deployment_name)[0]
-  end
-
   let(:rmq_server_admin_broker_username) do
     rabbitmq_server_instance_group = manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'rmq' }.first
     rabbitmq_server_job =  rabbitmq_server_instance_group['jobs'].select{ |job| job['name'] == 'rabbitmq-server'}.first
@@ -48,21 +42,21 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
   end
 
   let(:rmq_broker_username) do
-    rabbitmq_broker_registrar_instance_group = manifest()['instance_groups'].select{ |instance_group| instance_group['name'] == 'broker-registrar' }.first
+    rabbitmq_broker_registrar_instance_group = test_manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'broker-registrar' }.first
     rabbitmq_broker_registrar_job =  rabbitmq_broker_registrar_instance_group['jobs'].select{ |job| job['name'] == 'broker-registrar'}.first
     rabbitmq_broker_registrar_properties = rabbitmq_broker_registrar_job['properties']['broker']
     rabbitmq_broker_registrar_properties[ 'username' ]
   end
 
   let(:rmq_broker_password) do
-    rabbitmq_broker_registrar_instance_group = manifest()['instance_groups'].select{ |instance_group| instance_group['name'] == 'broker-registrar' }.first
+    rabbitmq_broker_registrar_instance_group = test_manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'broker-registrar' }.first
     rabbitmq_broker_registrar_job =  rabbitmq_broker_registrar_instance_group['jobs'].select{ |job| job['name'] == 'broker-registrar'}.first
     rabbitmq_broker_registrar_properties = rabbitmq_broker_registrar_job['properties']['broker']
     rabbitmq_broker_registrar_properties[ 'password' ]
   end
 
   let(:rmq_broker_host) do
-    rabbitmq_broker_registrar_instance_group = manifest()['instance_groups'].select{ |instance_group| instance_group['name'] == 'broker-registrar' }.first
+    rabbitmq_broker_registrar_instance_group = test_manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'broker-registrar' }.first
     rabbitmq_broker_registrar_job =  rabbitmq_broker_registrar_instance_group['jobs'].select{ |job| job['name'] == 'broker-registrar'}.first
     rabbitmq_broker_registrar_properties = rabbitmq_broker_registrar_job['properties']['broker']
     protocol = rabbitmq_broker_registrar_properties[ 'protocol' ]
@@ -104,7 +98,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
 
   context 'when stomp plugin is disabled'  do
     before(:context) do
-      modify_and_deploy_manifest do |manifest|
+      bosh.redeploy do |manifest|
         rabbitmq_server_instance_group = manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'rmq' }.first
         rabbitmq_server_job =  rabbitmq_server_instance_group['jobs'].select{ |job| job['name'] == 'rabbitmq-server'}.first
         service_properties = rabbitmq_server_job['properties']['rabbitmq-server']['plugins'] = ['rabbitmq_management','rabbitmq_mqtt']
@@ -112,7 +106,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
     end
 
     after(:context) do
-      bosh_director.deploy(environment.bosh_manifest.path)
+      bosh.deploy(test_manifest)
     end
 
     it 'provides only amqp and mqtt connectivity', :pushes_cf_app do
@@ -126,7 +120,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
 
   context 'when broker is configured with HA policy' do
     before(:context) do
-      modify_and_deploy_manifest do |manifest|
+      bosh.redeploy do |manifest|
         rabbitmq_broker_instance_group = manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'rmq-broker' }.first
         rabbitmq_broker_job =  rabbitmq_broker_instance_group['jobs'].select{ |job| job['name'] == 'rabbitmq-broker'}.first
         service_properties = rabbitmq_broker_job['properties']['rabbitmq-broker']['rabbitmq']['operator_set_policy'] = {
@@ -139,7 +133,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
     end
 
     after(:context) do
-      bosh_director.deploy(environment.bosh_manifest.path)
+      bosh.deploy(test_manifest)
     end
 
     it 'sets queue policy to each created service instance', :pushes_cf_app do
@@ -178,7 +172,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
       let(:broker_catalog_metadata) { service_info['metadata'] }
 
       before(:all) do
-        modify_and_deploy_manifest do |manifest|
+        bosh.redeploy do |manifest|
           rabbitmq_broker_instance_group = manifest['instance_groups'].select{ |instance_group| instance_group['name'] == 'rmq-broker' }.first
           rabbitmq_broker_job =  rabbitmq_broker_instance_group['jobs'].select{ |job| job['name'] == 'rabbitmq-broker'}.first
           service_properties = rabbitmq_broker_job['properties']['rabbitmq-broker']['service']
@@ -194,7 +188,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
       end
 
       after(:all) do
-        bosh_director.deploy(environment.bosh_manifest.path)
+        bosh.deploy(test_manifest)
       end
 
       describe 'the catalog' do
