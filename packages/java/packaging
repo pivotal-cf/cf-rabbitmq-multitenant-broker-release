@@ -8,4 +8,4 @@ archive="java/jre-${JAVA_VERSION}_linux-x64_bin.tar.gz"
 echo "Extracting archive..."
 tar xzf $archive
 
-cp -R jre${JAVA_VERSION}/* ${BOSH_INSTALL_TARGET}
+cp -R jre-${JAVA_VERSION}/* ${BOSH_INSTALL_TARGET}
