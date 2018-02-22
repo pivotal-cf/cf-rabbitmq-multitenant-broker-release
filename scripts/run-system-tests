@@ -14,6 +14,19 @@ BOSH_CLIENT="${BOSH_CLIENT:-admin}"
 BOSH_CLIENT_SECRET="${BOSH_CLIENT_SECRET:-admin}"
 BOSH_CA_CERT=${BOSH_CA_CERT:-"$($BOSH_CLI int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"}
 
+
+if [[ -n $JUMPBOX_SSH_KEY ]] && [[ -n $JUMPBOX_URL ]]
+then
+  JUMPBOX_SSH_KEY_FILE="$(mktemp -t jumpbox-ssh-key.XXX)"
+
+  echo "$JUMPBOX_SSH_KEY" > "$JUMPBOX_SSH_KEY_FILE"
+  chmod 0600 "$JUMPBOX_SSH_KEY_FILE"
+
+  ssh -f -N -o StrictHostKeyChecking=no -o ServerAliveInterval=300 -D 55555 jumpbox@"$JUMPBOX_URL" -i "$JUMPBOX_SSH_KEY_FILE" -M -S /tmp/jumpbox-tunnel.sock
+
+  export BOSH_ALL_PROXY=socks5://localhost:55555
+fi
+
 export BOSH_ENVIRONMENT
 export BOSH_CLIENT
 export BOSH_CLIENT_SECRET

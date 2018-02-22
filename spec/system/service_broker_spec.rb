@@ -21,7 +21,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
   end
 
   def service_name
-    'p-rabbitmq-aleal'
+    'p-rabbitmq'
   end
 
   def app_name
@@ -137,19 +137,19 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
 
     describe 'the catalog' do
       let(:rmq_broker_username) do
-        rabbitmq_broker_registrar_instance_group = test_manifest['instance_groups'].select { |instance_group| instance_group['name'] == 'broker-registrar' }.first
+        rabbitmq_broker_registrar_instance_group = test_manifest['instance_groups'].select { |instance_group| instance_group['name'] == 'rmq-broker' }.first
         rabbitmq_broker_registrar_job = rabbitmq_broker_registrar_instance_group['jobs'].select { |job| job['name'] == 'broker-registrar' }.first
         rabbitmq_broker_registrar_properties = rabbitmq_broker_registrar_job['properties']['broker']
         rabbitmq_broker_registrar_properties['username']
       end
       let(:rmq_broker_password) do
-        rabbitmq_broker_registrar_instance_group = test_manifest['instance_groups'].select { |instance_group| instance_group['name'] == 'broker-registrar' }.first
+        rabbitmq_broker_registrar_instance_group = test_manifest['instance_groups'].select { |instance_group| instance_group['name'] == 'rmq-broker' }.first
         rabbitmq_broker_registrar_job = rabbitmq_broker_registrar_instance_group['jobs'].select { |job| job['name'] == 'broker-registrar' }.first
         rabbitmq_broker_registrar_properties = rabbitmq_broker_registrar_job['properties']['broker']
         rabbitmq_broker_registrar_properties['password']
       end
       let(:rmq_broker_host) do
-        rabbitmq_broker_registrar_instance_group = test_manifest['instance_groups'].select { |instance_group| instance_group['name'] == 'broker-registrar' }.first
+        rabbitmq_broker_registrar_instance_group = test_manifest['instance_groups'].select { |instance_group| instance_group['name'] == 'rmq-broker' }.first
         rabbitmq_broker_registrar_job = rabbitmq_broker_registrar_instance_group['jobs'].select { |job| job['name'] == 'broker-registrar' }.first
         rabbitmq_broker_registrar_properties = rabbitmq_broker_registrar_job['properties']['broker']
         protocol = rabbitmq_broker_registrar_properties['protocol']

@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'bosh-template'
-gem 'bosh_cli'
 gem 'bunny'
 gem 'capybara-webkit', '~> 1.11.0'
 gem 'httparty'
