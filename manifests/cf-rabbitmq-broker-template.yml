@@ -62,15 +62,6 @@ instance_groups:
           registration_interval: 20s
           uris:
           - ((rabbitmq-broker-hostname)).((bosh-domain))
-  vm_type: n1-standard-1
-  stemcell: trusty
-  azs:
-  - z1
-  networks:
-  - name: default
-
-- name: broker-registrar
-  jobs:
   - name: broker-registrar
     release: cf-rabbitmq-multitenant-broker
     properties:
@@ -86,17 +77,6 @@ instance_groups:
         host: ((rabbitmq-broker-hostname)).((bosh-domain))
         username: ((multitenant-rabbitmq-broker-username))
         password: ((multitenant-rabbitmq-broker-password))
-  instances: 1
-  lifecycle: errand
-  vm_type: g1-small
-  stemcell: trusty
-  azs:
-  - z1
-  networks:
-  - name: default
-
-- name: broker-deregistrar
-  jobs:
   - name: broker-deregistrar
     release: cf-rabbitmq-multitenant-broker
     properties:
@@ -108,17 +88,6 @@ instance_groups:
         name: ((product-name))
         service:
           name: ((product-name))
-  instances: 1
-  lifecycle: errand
-  vm_type: g1-small
-  stemcell: trusty
-  azs:
-  - z1
-  networks:
-  - name: default
-
-- name: smoke-tests
-  jobs:
   - name: smoke-tests
     release: cf-rabbitmq-multitenant-broker
     properties:
@@ -129,9 +98,7 @@ instance_groups:
         admin_password: ((cf-admin-password))
       broker:
         name: ((product-name))
-  instances: 1
-  lifecycle: errand
-  vm_type: g1-small
+  vm_type: n1-standard-1
   stemcell: trusty
   azs:
   - z1
