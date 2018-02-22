@@ -1,12 +1,11 @@
 # abort script on any command that exit with a non zero value
 set -e
 
-JAVA_VERSION="8u144"
-FOLDER_VERSION="1.8.0_144"
+JAVA_VERSION="9.0.4"
 
 archive="java/jre-${JAVA_VERSION}-linux-x64.tar.gz"
 
 echo "Extracting archive..."
 tar xzf $archive
 
-cp -R jre${FOLDER_VERSION}/* ${BOSH_INSTALL_TARGET}
+cp -R jre${JAVA_VERSION}/* ${BOSH_INSTALL_TARGET}

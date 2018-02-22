@@ -1,7 +1,7 @@
 ---
 name: java
 metadata:
-  version: 8u144
+  version: 9.0.4
 files:
-- java/jre-8u144-linux-x64.tar.gz
+- java/jre-9.0.4_linux-x64_bin.tar.gz
 dependencies: []
