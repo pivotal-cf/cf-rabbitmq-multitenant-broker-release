@@ -6,10 +6,6 @@ require 'tempfile'
 require 'net/https'
 require 'uri'
 
-require 'prof/marketplace_service'
-require 'prof/service_instance'
-require 'prof/cloud_foundry'
-require 'prof/test_app'
 require 'rabbitmq/http/client'
 
 require 'mqtt'
