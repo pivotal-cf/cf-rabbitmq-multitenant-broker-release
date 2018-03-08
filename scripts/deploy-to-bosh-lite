@@ -8,13 +8,13 @@ WORKSPACE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)" #taken from htt
 
 BOSH_CLI="${BOSH_CLI:-/usr/local/bin/bosh}"
 
-export BOSH_ENVIRONMENT="${1:-https://192.168.50.6:25555}"
-export BOSH_NON_INTERACTIVE=false
-export BOSH_CLIENT=admin
-export BOSH_CLIENT_SECRET=admin
-export BOSH_DEPLOYMENT=cf-rabbitmq-multitenant-broker
-export BOSH_CA_CERT
-BOSH_CA_CERT="$($BOSH_CLI int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"
+
+export BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT:-https://192.168.50.6:25555}"
+export BOSH_NON_INTERACTIVE="${BOSH_NON_INTERACTIVE:-false}"
+export BOSH_CLIENT="${BOSH_CLIENT:-admin}"
+export BOSH_CLIENT_SECRET="${BOSH_CLIENT_SECRET:-admin}"
+export BOSH_CA_CERT="${BOSH_CA_CERT:-"$(bosh int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"}"
+export BOSH_DEPLOYMENT="${BOSH_DEPLOYMENT:-cf-rabbitmq-multitenant-broker}"
 
 main() {
   local manifest
@@ -41,11 +41,11 @@ interpolate-manifest-for-bosh-lite() {
 
 upload_stemcell() {
   local manifest="$1"
-  BOSH_LITE_STEMCELL_NAME="bosh-warden-boshlite-ubuntu-trusty-go_agent"
-  BOSH_LITE_STEMCELL_VERSION="$(yq .stemcells[0].version "$manifest")"
-  BOSH_LITE_STEMCELL_URL="https://bosh.io/d/stemcells/$BOSH_LITE_STEMCELL_NAME?v=$BOSH_LITE_STEMCELL_VERSION"
+  BOSH_STEMCELL_NAME="${BOSH_STEMCELL:-bosh-warden-boshlite-ubuntu-trusty-go_agent}"
+  BOSH_STEMCELL_VERSION="$(yq .stemcells[0].version "$manifest")"
+  BOSH_STEMCELL_URL="https://bosh.io/d/stemcells/$BOSH_STEMCELL_NAME?v=$BOSH_STEMCELL_VERSION"
 
-  $BOSH_CLI upload-stemcell "$BOSH_LITE_STEMCELL_URL" --name "$BOSH_LITE_STEMCELL_NAME" --version "$BOSH_LITE_STEMCELL_VERSION"
+  $BOSH_CLI upload-stemcell "$BOSH_STEMCELL_URL" --name "$BOSH_STEMCELL_NAME" --version "$BOSH_STEMCELL_VERSION"
 }
 
 download_blobs() {
