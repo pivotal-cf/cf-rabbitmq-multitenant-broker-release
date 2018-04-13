@@ -17,5 +17,8 @@ export CONFIG_PATH=/var/vcap/jobs/smoke-tests/config.json
 export CF_DIAL_TIMEOUT=11
 
 pushd ${REPO_DIR}
- ./bin/test
+  go install -v github.com/onsi/ginkgo/ginkgo
+  echo "Running smoke tests"
+  make test
 popd
+
