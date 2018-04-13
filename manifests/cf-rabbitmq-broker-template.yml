@@ -98,6 +98,8 @@ instance_groups:
         admin_password: ((cf-admin-password))
       broker:
         name: ((product-name))
+      smoke_tests:
+        org: system
   vm_type: n1-standard-1
   stemcell: trusty
   azs:
