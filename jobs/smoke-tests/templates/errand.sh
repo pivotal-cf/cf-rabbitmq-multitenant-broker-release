@@ -19,6 +19,6 @@ export CF_DIAL_TIMEOUT=11
 pushd ${REPO_DIR}
   go install -v github.com/onsi/ginkgo/ginkgo
   echo "Running smoke tests"
-  make test
+  ginkgo -v --trace -randomizeSuites=true -randomizeAllSpecs=true -keepGoing=true -failOnPending tests
 popd
 
