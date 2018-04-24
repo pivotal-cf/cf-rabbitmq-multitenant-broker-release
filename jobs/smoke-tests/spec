@@ -32,4 +32,4 @@ properties:
     default: ""
   smoke_tests.timeout_scale:
     description: Timeout scale to be used by the smoke tests errand
-    default: 3.0
+    default: 30.0
