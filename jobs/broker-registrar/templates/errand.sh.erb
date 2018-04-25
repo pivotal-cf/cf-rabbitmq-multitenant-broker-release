@@ -9,12 +9,16 @@ set -x
 export PATH=$PATH:/var/vcap/packages/cf-cli/bin
 
 CF_API_URL='<%= p("cf.api_url") %>'
+
+set +x
 CF_ADMIN_USERNAME='<%= p("cf.admin_username") %>'
 CF_ADMIN_PASSWORD='<%= p("cf.admin_password") %>'
-BROKER_NAME='<%= p("broker.name") %>'
-BROKER_URL='<%= p("broker.protocol") %>://<%= p("broker.host") %>'
 BROKER_USERNAME='<%= p("broker.username") %>'
 BROKER_PASSWORD='<%= p("broker.password") %>'
+set -x
+
+BROKER_NAME='<%= p("broker.name") %>'
+BROKER_URL='<%= p("broker.protocol") %>://<%= p("broker.host") %>'
 SERVICE_NAME='<%= p("broker.service.name") %>'
 
 export CF_DIAL_TIMEOUT=11
