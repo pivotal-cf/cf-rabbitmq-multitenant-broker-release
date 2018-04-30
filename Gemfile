@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'bosh-template'
 gem 'bunny'
-gem 'capybara-webkit', '~> 1.11.0'
 gem 'httparty'
 gem 'mqtt'
 gem 'papertrail'

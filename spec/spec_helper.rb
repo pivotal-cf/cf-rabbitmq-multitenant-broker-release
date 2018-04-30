@@ -202,10 +202,6 @@ def test_manifest
   YAML.load_file(ENV.fetch('BOSH_MANIFEST'))
 end
 
-def test_app
-  @test_app ||= Prof::TestApp.new(path: File.expand_path('../../assets/rabbit-labrat', __FILE__))
-end
-
 def test_app_path
   File.expand_path('../../assets/rabbit-labrat', __FILE__)
 end
