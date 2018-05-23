@@ -3,10 +3,10 @@ cf-cli/cf-cli_6.36.2_linux_x86-64.tgz:
   size: 5978922
   object_id: bd421d03-3377-4e29-5a2b-72bc0e0fe908
   sha: sha256:21692bcc2cc2089e995dd15d0ce8d6f53c8801ced9e19f264d4a7d6aadd06aa4
-golang/go1.10.2.linux-amd64.tar.gz:
-  size: 132481801
-  object_id: ca066060-546b-455a-70e0-dbe57584373f
-  sha: sha256:4b677d698c65370afa33757b6954ade60347aaca310ea92a63ed717d7cb0c2ff
+golang/go1.9.6.linux-amd64.tar.gz:
+  size: 118279574
+  object_id: bea88bcf-ac13-4622-61cd-0919485b89eb
+  sha: sha256:d1eb07f99ac06906225ac2b296503f06cc257b472e7d7817b8f822fe3766ebfe
 java/jre-9.0.4_linux-x64_bin.tar.gz:
   size: 87045353
   object_id: 8c5c8083-7317-4f26-48f0-fa3a2413cd4a
