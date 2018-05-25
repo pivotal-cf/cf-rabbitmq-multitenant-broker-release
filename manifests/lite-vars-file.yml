@@ -1,6 +1,6 @@
 deployment-name: cf-rabbitmq-multitenant-broker
 
-stemcell-version: 3363.29
+stemcell-version: 3586.7
 
 bosh-domain: bosh-lite.com
 
