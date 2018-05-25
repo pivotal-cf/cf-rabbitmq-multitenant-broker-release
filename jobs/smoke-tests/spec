@@ -3,7 +3,6 @@ name: smoke-tests
 packages:
 - golang
 - cf-rabbitmq-smoke-tests
-- cf-cli
 templates:
   config.json.erb: config.json
   errand.sh: bin/run
