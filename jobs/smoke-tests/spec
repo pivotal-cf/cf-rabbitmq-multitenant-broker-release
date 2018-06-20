@@ -32,3 +32,6 @@ properties:
   smoke_tests.timeout_scale:
     description: Timeout scale to be used by the smoke tests errand
     default: 30.0
+  tls_support:
+    description: TLS configuration for  service instances (disabled, optional or enforced)
+    default: disabled
