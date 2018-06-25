@@ -1,7 +1,8 @@
-golang/go1.9.6.linux-amd64.tar.gz:
-  size: 118279574
-  object_id: bea88bcf-ac13-4622-61cd-0919485b89eb
-  sha: sha256:d1eb07f99ac06906225ac2b296503f06cc257b472e7d7817b8f822fe3766ebfe
+---
+golang/go1.10.3.linux-amd64.tar.gz:
+  size: 132489256
+  object_id: 7d6ceb8a-66a6-4c07-7122-f33220e2f928
+  sha: sha256:fa1b0e45d3b647c252f51f5e1204aba049cde4af177ef9f2181f43004f901035
 java/jre-9.0.4_linux-x64_bin.tar.gz:
   size: 87045353
   object_id: 8c5c8083-7317-4f26-48f0-fa3a2413cd4a
