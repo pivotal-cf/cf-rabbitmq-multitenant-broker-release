@@ -4,6 +4,7 @@
   value:
     name: cf-rabbitmq
     version: latest
+    url: "https://bosh.io/d/github.com/pivotal-cf/cf-rabbitmq-release"
 
 - type: replace
   path: /instance_groups/-
