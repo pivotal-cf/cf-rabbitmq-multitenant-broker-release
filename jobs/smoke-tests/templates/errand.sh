@@ -7,7 +7,7 @@ set -e
 
 export PATH=$PATH:/var/vcap/packages/golang/bin
 export GOPATH=/var/vcap/packages/cf-rabbitmq-smoke-tests
-export GOROOT=/var/vcap/packages/golang
+export GOROOT=/var/vcap/packages/cf-rabbitmq-multitenant-broker-golang
 export PATH=/var/vcap/packages/cf-cli-6-linux/bin:$GOPATH/bin:$GOROOT/bin:$PATH
 
 export REPO_NAME=github.com/pivotal-cf/cf-rabbitmq-smoke-tests
