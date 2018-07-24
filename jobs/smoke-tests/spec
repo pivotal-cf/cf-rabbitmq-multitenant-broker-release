@@ -1,7 +1,7 @@
 ---
 name: smoke-tests
 packages:
-- golang
+- cf-rabbitmq-multitenant-broker-golang
 - cf-rabbitmq-smoke-tests
 templates:
   config.json.erb: config.json
