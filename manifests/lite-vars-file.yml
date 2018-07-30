@@ -2,7 +2,7 @@ deployment-name: cf-rabbitmq-multitenant-broker
 
 stemcell-version: 3586.16
 
-bosh-domain: bosh-lite.com
+system-domain: bosh-lite.com
 
 multitenant-rabbitmq-broker-password: broker
 multitenant-rabbitmq-broker-username: broker

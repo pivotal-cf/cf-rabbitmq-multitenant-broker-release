@@ -27,10 +27,10 @@ instance_groups:
     release: cf-rabbitmq-multitenant-broker
     properties:
       cf:
-        domain: ((bosh-domain))
+        domain: ((system-domain))
       rabbitmq-broker:
         route: ((rabbitmq-broker-hostname))
-        cc_endpoint: http://api.((bosh-domain))
+        cc_endpoint: http://api.((system-domain))
         service:
           username: ((multitenant-rabbitmq-broker-username))
           password: ((multitenant-rabbitmq-broker-password))
@@ -48,7 +48,7 @@ instance_groups:
             policy_name: "operator_set_policy"
             policy_definition: "{\"ha-mode\":\"exactly\",\"ha-params\":2,\"ha-sync-mode\":\"automatic\"}"
             policy_priority: 50
-          management_domain: ((rabbitmq-management-hostname)).((bosh-domain))
+          management_domain: ((rabbitmq-management-hostname)).((system-domain))
           management:
             username: ((rabbitmq-management-username))
           administrator:
@@ -65,12 +65,12 @@ instance_groups:
           port: 4567
           registration_interval: 20s
           uris:
-          - ((rabbitmq-broker-hostname)).((bosh-domain))
+          - ((rabbitmq-broker-hostname)).((system-domain))
   - name: broker-registrar
     release: cf-rabbitmq-multitenant-broker
     properties:
       cf:
-        api_url: https://api.((bosh-domain))
+        api_url: https://api.((system-domain))
         admin_username: ((cf-admin-username))
         admin_password: ((cf-admin-password))
       broker:
@@ -78,14 +78,14 @@ instance_groups:
           name: ((product-name))
         name: ((product-name))
         protocol: ((rabbitmq-broker-protocol))
-        host: ((rabbitmq-broker-hostname)).((bosh-domain))
+        host: ((rabbitmq-broker-hostname)).((system-domain))
         username: ((multitenant-rabbitmq-broker-username))
         password: ((multitenant-rabbitmq-broker-password))
   - name: broker-deregistrar
     release: cf-rabbitmq-multitenant-broker
     properties:
       cf:
-        api_url: https://api.((bosh-domain))
+        api_url: https://api.((system-domain))
         admin_username: ((cf-admin-username))
         admin_password: ((cf-admin-password))
       broker:
@@ -96,8 +96,8 @@ instance_groups:
     release: cf-rabbitmq-multitenant-broker
     properties:
       cf:
-        api_url: https://api.((bosh-domain))
-        domain: ((bosh-domain))
+        api_url: https://api.((system-domain))
+        domain: ((system-domain))
         admin_username: ((cf-admin-username))
         admin_password: ((cf-admin-password))
       broker:
