@@ -17,9 +17,11 @@ export CONFIG_PATH=/var/vcap/jobs/smoke-tests/config.json
 
 export CF_DIAL_TIMEOUT=11
 
+export SMOKE_TESTS_TIMEOUT=1h
+
 pushd ${REPO_DIR}
   echo "Running smoke tests"
   go install -v github.com/onsi/ginkgo/ginkgo
-  ginkgo -v --trace -randomizeSuites=true -randomizeAllSpecs=true -keepGoing=true -failOnPending tests
+  ginkgo -v --trace -randomizeSuites=true -randomizeAllSpecs=true -keepGoing=true --timeout="$SMOKE_TESTS_TIMEOUT" -failOnPending tests
 popd
 
