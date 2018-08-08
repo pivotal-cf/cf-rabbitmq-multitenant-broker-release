@@ -11,7 +11,7 @@ releases:
 - name: cf-cli
   version: latest
   url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release
-- name: cf-rabbitmq-smoke-tests-release
+- name: cf-rabbitmq-smoke-tests
   version: latest
 
 stemcells:
@@ -95,7 +95,7 @@ instance_groups:
         service:
           name: ((product-name))
   - name: smoke-tests
-    release: cf-rabbitmq-smoke-tests-release
+    release: cf-rabbitmq-smoke-tests
     properties:
       cf:
         api_url: https://api.((system-domain))
