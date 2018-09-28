@@ -38,5 +38,7 @@ export BOSH_CLIENT_SECRET
 export BOSH_CA_CERT
 export BOSH_MANIFEST
 
+export CF_DIAL_TIMEOUT=30
+
 bundle install
 bundle exec rspec spec/system --fail-fast
