@@ -1,8 +1,8 @@
 ---
-golang/go1.10.3.linux-amd64.tar.gz:
-  size: 132489256
-  object_id: 7d6ceb8a-66a6-4c07-7122-f33220e2f928
-  sha: sha256:fa1b0e45d3b647c252f51f5e1204aba049cde4af177ef9f2181f43004f901035
+cf-rabbitmq-multitenant-broker-golang/go1.11.1.linux-amd64.tar.gz:
+  size: 127205934
+  object_id: 44296f1f-3c49-47e2-4854-90a07c2221dc
+  sha: sha256:2871270d8ff0c8c69f161aaae42f9f28739855ff5c5204752a8d92a1c9f63993
 java/jre-9.0.4_linux-x64_bin.tar.gz:
   size: 87045353
   object_id: 8c5c8083-7317-4f26-48f0-fa3a2413cd4a
