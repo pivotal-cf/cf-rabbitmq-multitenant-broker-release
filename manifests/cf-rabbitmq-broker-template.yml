@@ -13,11 +13,21 @@ releases:
   url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release
 - name: cf-rabbitmq-smoke-tests
   version: latest
+- name: bpm
+  version: 0.13.0
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.13.0
+  sha1: 4b6ebfdaa467c04855528172b099e565d679e0f5
 
 stemcells:
 - alias: trusty
   os: ubuntu-trusty
   version: ((stemcell-version))
+
+addons:
+  name: bpm
+  jobs:
+    - name: bpm
+      release: bpm
 
 instance_groups:
 - name: rmq-broker
