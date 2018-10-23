@@ -1,6 +1,5 @@
 ---
 name: ((deployment-name))
-director_uuid: ((director-uuid))
 
 releases:
 - name: cf-rabbitmq-multitenant-broker
@@ -9,6 +8,11 @@ releases:
   version: 0.152.0
   url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.152.0
   sha1: ea67ad087880fc0e492b6cce27fa2a25f977b691
+- name: cf-cli
+  version: latest
+  url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release
+- name: cf-rabbitmq-smoke-tests
+  version: latest
 
 stemcells:
 - alias: trusty
@@ -19,14 +23,16 @@ instance_groups:
 - name: rmq-broker
   instances: 1
   jobs:
+  - name: cf-cli-6-linux
+    release: cf-cli
   - name: rabbitmq-broker
     release: cf-rabbitmq-multitenant-broker
     properties:
       cf:
-        domain: ((bosh-domain))
+        domain: ((system-domain))
       rabbitmq-broker:
         route: ((rabbitmq-broker-hostname))
-        cc_endpoint: http://api.((bosh-domain))
+        cc_endpoint: http://api.((system-domain))
         service:
           username: ((multitenant-rabbitmq-broker-username))
           password: ((multitenant-rabbitmq-broker-password))
@@ -44,7 +50,7 @@ instance_groups:
             policy_name: "operator_set_policy"
             policy_definition: "{\"ha-mode\":\"exactly\",\"ha-params\":2,\"ha-sync-mode\":\"automatic\"}"
             policy_priority: 50
-          management_domain: ((rabbitmq-management-hostname)).((bosh-domain))
+          management_domain: ((rabbitmq-management-hostname)).((system-domain))
           management:
             username: ((rabbitmq-management-username))
           administrator:
@@ -61,12 +67,12 @@ instance_groups:
           port: 4567
           registration_interval: 20s
           uris:
-          - ((rabbitmq-broker-hostname)).((bosh-domain))
+          - ((rabbitmq-broker-hostname)).((system-domain))
   - name: broker-registrar
     release: cf-rabbitmq-multitenant-broker
     properties:
       cf:
-        api_url: https://api.((bosh-domain))
+        api_url: https://api.((system-domain))
         admin_username: ((cf-admin-username))
         admin_password: ((cf-admin-password))
       broker:
@@ -74,14 +80,14 @@ instance_groups:
           name: ((product-name))
         name: ((product-name))
         protocol: ((rabbitmq-broker-protocol))
-        host: ((rabbitmq-broker-hostname)).((bosh-domain))
+        host: ((rabbitmq-broker-hostname)).((system-domain))
         username: ((multitenant-rabbitmq-broker-username))
         password: ((multitenant-rabbitmq-broker-password))
   - name: broker-deregistrar
     release: cf-rabbitmq-multitenant-broker
     properties:
       cf:
-        api_url: https://api.((bosh-domain))
+        api_url: https://api.((system-domain))
         admin_username: ((cf-admin-username))
         admin_password: ((cf-admin-password))
       broker:
@@ -89,11 +95,11 @@ instance_groups:
         service:
           name: ((product-name))
   - name: smoke-tests
-    release: cf-rabbitmq-multitenant-broker
+    release: cf-rabbitmq-smoke-tests
     properties:
       cf:
-        api_url: https://api.((bosh-domain))
-        domain: ((bosh-domain))
+        api_url: https://api.((system-domain))
+        domain: ((system-domain))
         admin_username: ((cf-admin-username))
         admin_password: ((cf-admin-password))
       broker:

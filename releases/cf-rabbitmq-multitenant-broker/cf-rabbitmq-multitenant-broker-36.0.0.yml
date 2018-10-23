@@ -1,0 +1,42 @@
+name: cf-rabbitmq-multitenant-broker
+version: 36.0.0
+commit_hash: "6847545"
+uncommitted_changes: false
+jobs:
+- name: broker-deregistrar
+  version: ae06fee31625d982625642a6a1d5d50fb05ab1b3f6366863f1629aa84dd623bc
+  fingerprint: ae06fee31625d982625642a6a1d5d50fb05ab1b3f6366863f1629aa84dd623bc
+  sha1: sha256:600df0a6cda36702d1b498610a346bc0e173d4bc07b117f6b91067676bc7f96d
+- name: broker-registrar
+  version: 1c6eabb04d5c98be32bd6fbeae486494f0bd95fd3f0f151d4d6f8ff454d1ce9a
+  fingerprint: 1c6eabb04d5c98be32bd6fbeae486494f0bd95fd3f0f151d4d6f8ff454d1ce9a
+  sha1: sha256:463fb35d03e3a0d44dfcc3db43cc48ed9e0f12f95c41c4bac92cb96cf21f7d22
+- name: rabbitmq-broker
+  version: e6d126697f67f04c71a973ec99fff200d41396d3f341a13e12481aac685af778
+  fingerprint: e6d126697f67f04c71a973ec99fff200d41396d3f341a13e12481aac685af778
+  sha1: sha256:6f823109a681059d28be4c9f2c5ae2162047bcf50e9f2ea8d831b15ed5c67074
+packages:
+- name: cf-rabbitmq-multitenant-broker-golang
+  version: 168f34a1a57ac2048d32a65e0b92bb620448eff14b10b63a083b7b38f7925e27
+  fingerprint: 168f34a1a57ac2048d32a65e0b92bb620448eff14b10b63a083b7b38f7925e27
+  sha1: sha256:77b30b6d41a4d44dbd2384dbc2a6d3dcf2b3152b3334507773311079a86189c7
+  dependencies: []
+- name: java
+  version: 4383094cd7936c48a2ff66834f914044c23d20b19cb6be0da94ca41b0f3c3502
+  fingerprint: 4383094cd7936c48a2ff66834f914044c23d20b19cb6be0da94ca41b0f3c3502
+  sha1: sha256:85f08f9cc9552559eb92eb0b31480e307cda04cd41f02d7c3179363cb1f10b6a
+  dependencies: []
+- name: rabbitmq-broker
+  version: 34de05d9b767e57c8b6b67eab74caa1295d0ab6751fa275018e2e8711563ed23
+  fingerprint: 34de05d9b767e57c8b6b67eab74caa1295d0ab6751fa275018e2e8711563ed23
+  sha1: sha256:ff91bf0c7c58e042445bec55f94683d2de4fb6148323917e1cf310946a23e5dc
+  dependencies: []
+- name: rabbitmq-common
+  version: c7b701f8368c5f7d76569d43187eeed4bb32513e071a4cd3964bf62f04cc2dbb
+  fingerprint: c7b701f8368c5f7d76569d43187eeed4bb32513e071a4cd3964bf62f04cc2dbb
+  sha1: sha256:b181d6d9e40d8169324ac44d7d987cf8ad3c7e7adab2e2bfc419ee1d7bb9d149
+  dependencies: []
+license:
+  version: b4740f86c352379435cbacb22afa730c723bb12317c12b9ea8b77907226c88bc
+  fingerprint: b4740f86c352379435cbacb22afa730c723bb12317c12b9ea8b77907226c88bc
+  sha1: sha256:3b0b05935c1b495e18e2fe8c6e9258e5b9f6bfb9a71684fd266af8a7bd96e088

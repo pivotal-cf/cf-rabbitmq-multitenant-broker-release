@@ -1,7 +1,5 @@
 ---
 name: broker-registrar
-packages:
-- cf-cli
 templates:
   errand.sh.erb: bin/run
   change-permissions.sh.erb: bin/change-permissions

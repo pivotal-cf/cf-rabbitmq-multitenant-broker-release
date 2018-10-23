@@ -15,7 +15,15 @@ class Bosh2
     @bosh_cli = "#{bosh_cli} -n -d #{deployment}"
 
     version = `#{@bosh_cli} --version`
-    raise 'BOSH CLI >= v2 required' unless version.start_with?('version 2.')
+    begin
+      major_version = version.match('version (\d+)\..*')[1].to_i
+    rescue NoMethodError
+      $stderr.print 'Could not parse bosh-cli version ' + version + "\n"
+      raise
+    end
+
+    raise 'BOSH CLI >= v2 required' unless major_version > 1
+
   end
 
   def ssh(instance, command)
@@ -200,10 +208,6 @@ end
 
 def test_manifest
   YAML.load_file(ENV.fetch('BOSH_MANIFEST'))
-end
-
-def test_app
-  @test_app ||= Prof::TestApp.new(path: File.expand_path('../../assets/rabbit-labrat', __FILE__))
 end
 
 def test_app_path

@@ -4,6 +4,7 @@
   value:
     name: cf-rabbitmq
     version: latest
+    url: "https://bosh.io/d/github.com/pivotal-cf/cf-rabbitmq-release"
 
 - type: replace
   path: /instance_groups/-
@@ -72,7 +73,7 @@
             port: 15672
             registration_interval: 20s
             uris:
-            - ((rabbitmq-management-hostname)).((bosh-domain))
+            - ((rabbitmq-management-hostname)).((system-domain))
     vm_type: n1-standard-1
     stemcell: trusty
     networks:

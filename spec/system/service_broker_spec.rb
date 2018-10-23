@@ -204,7 +204,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
 end
 
 def get(url)
-  HTTParty.get(url, verify: false, timeout: 2)
+  HTTParty.get(url, verify: false, timeout: 10)
 end
 
 def provides_amqp_connectivity(app)
