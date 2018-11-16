@@ -121,7 +121,7 @@
                                        (let [res         (th/put (format "v2/service_instances/%s" id))
                                              ^String dbu (:dashboard_url res)]
                                          (is dbu)
-                                         (is (.startsWith dbu (format "https://pivotal-rabbitmq.127.0.0.1/#/login/mu-%s" id))))
+                                         (is (.startsWith dbu "https://pivotal-rabbitmq.127.0.0.1/#/login")))
                                        (is (rs/vhost-exists? id))
                                        (is (some (fn [x] (re-matches (re-pattern (format "mu-%s.*" id)) x)) (map (fn [x] (:name x)) (rs/list-users))))
                                        (th/has-policy? id (cfg/operator-set-policy-name))))))
@@ -167,7 +167,7 @@
                                        (let [res         (th/put (format "v2/service_instances/%s" id))
                                              ^String dbu (:dashboard_url res)]
                                          (is dbu)
-                                         (is (.startsWith dbu (format "https://pivotal-rabbitmq.127.0.0.1/#/login/mu-%s" id))))
+                                         (is (.startsWith dbu "https://pivotal-rabbitmq.127.0.0.1/#/login")))
                                        (is (rs/vhost-exists? id))
                                        (is (th/has-no-policy? id (cfg/operator-set-policy-name)))))))
   (testing "with provided service id that IS taken"
@@ -188,11 +188,10 @@
   (testing "with provided service id that IS valid"
     (let [id (.toLowerCase ^String (str (UUID/randomUUID)))]
       (with-server-running
-        (let [res (th/put (format "v2/service_instances/%s" id))
-              mu (second (re-matches #".*(mu-.*?)/.*" (:dashboard_url res)))]
+        (let [res (th/put (format "v2/service_instances/%s" id))]
           (th/delete (format "v2/service_instances/%s" id))
           (is (not (rs/vhost-exists? id)))
-          (is (not (rs/user-exists? mu)))))))
+          (is (not (rs/user-with-prefix-exists? (format "mu-%s" id))))))))
   (testing "with provided service id that is NOT valid"
     (let [id (.toLowerCase ^String (str (UUID/randomUUID)))]
       (try

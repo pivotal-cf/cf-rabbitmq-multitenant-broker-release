@@ -56,6 +56,10 @@
   []
   (hc/list-users))
 
+(defn user-with-prefix-exists?
+  [^String prefix]
+  (some (fn [x] (re-matches (re-pattern (format "%s.*" prefix)) x)) (map (fn [x] (:name x)) (list-users))))
+
 (defn close-connections-from
   [^String name]
   (hc/close-connections-from name))
