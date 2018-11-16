@@ -142,7 +142,7 @@
               (log/errorf "Failed to provision a service: %s" id)
               (rs/delete-user mu)
               (throw e)))
-          (created {:dashboard_url (rs/dashboard-url mu mp)})))
+          (created {:dashboard_url (rs/dashboard-url)})))
     (catch Exception e
       (log/errorf "Failed to provision a service: %s" id)
       (.printStackTrace e)
