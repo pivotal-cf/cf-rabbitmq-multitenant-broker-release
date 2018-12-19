@@ -1,7 +1,7 @@
 ---
 name: java
 metadata:
-  version: 9.0.4
+  version: 11.0.1_13
 files:
-- java/jre-9.0.4_linux-x64_bin.tar.gz
+- java/openjdk-11.0.1_13.tar.gz
 dependencies: []

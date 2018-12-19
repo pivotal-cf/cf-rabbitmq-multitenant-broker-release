@@ -1,11 +1,12 @@
 # abort script on any command that exit with a non zero value
 set -e
 
-JAVA_VERSION="9.0.4"
+JAVA_VERSION="11.0.1_13"
 
-archive="java/jre-${JAVA_VERSION}_linux-x64_bin.tar.gz"
+archive="java/openjdk-${JAVA_VERSION}.tar.gz"
 
 echo "Extracting archive..."
-tar xzf $archive
+mkdir openjdk-${JAVA_VERSION}/
+tar xzf $archive -C openjdk-${JAVA_VERSION}/
 
-cp -R jre-${JAVA_VERSION}/* ${BOSH_INSTALL_TARGET}
+cp -R openjdk-${JAVA_VERSION}/* ${BOSH_INSTALL_TARGET}

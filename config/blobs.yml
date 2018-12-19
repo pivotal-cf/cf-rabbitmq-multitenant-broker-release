@@ -1,9 +1,8 @@
----
 cf-rabbitmq-multitenant-broker-golang/go1.11.2.linux-amd64.tar.gz:
   size: 126520483
   object_id: b0110872-456e-4c5d-4a6a-49a5edf12646
   sha: sha256:1dfe664fa3d8ad714bbd15a36627992effd150ddabd7523931f077b3926d736d
-java/jre-9.0.4_linux-x64_bin.tar.gz:
-  size: 87045353
-  object_id: 8c5c8083-7317-4f26-48f0-fa3a2413cd4a
-  sha: f509d93e83dc779c7ec9126ad1bb284762087545
+java/openjdk-11.0.1_13.tar.gz:
+  size: 41059204
+  object_id: 7b7c829e-7ac4-4e58-6b4f-cd47e4737410
+  sha: 40bc7eb7cc64602e8409d4738e072be61273eb91
