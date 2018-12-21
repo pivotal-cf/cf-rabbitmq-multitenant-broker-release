@@ -15,8 +15,8 @@ releases:
   version: latest
 
 stemcells:
-- alias: trusty
-  os: ubuntu-trusty
+- alias: xenial
+  os: ubuntu-xenial
   version: ((stemcell-version))
 
 instance_groups:
@@ -107,7 +107,7 @@ instance_groups:
       smoke_tests:
         org: system
   vm_type: n1-standard-1
-  stemcell: trusty
+  stemcell: xenial
   azs:
   - z1
   networks:

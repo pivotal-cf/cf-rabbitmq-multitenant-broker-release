@@ -39,5 +39,5 @@
     - name: default
       static_ips:
       - ((syslog-host))
-    stemcell: trusty
+    stemcell: xenial
     vm_type: n1-standard-1
