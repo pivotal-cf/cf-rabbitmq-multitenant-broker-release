@@ -32,6 +32,8 @@
               registration_interval: 20s
               uris:
               - go-syslogd.((system-domain))
+      - name: bpm
+        release: bpm
     azs:
     - z1
     instances: 1

@@ -74,6 +74,8 @@
             registration_interval: 20s
             uris:
             - ((rabbitmq-management-hostname)).((system-domain))
+    - name: bpm
+      release: bpm
     vm_type: n1-standard-1
     stemcell: xenial
     networks:
