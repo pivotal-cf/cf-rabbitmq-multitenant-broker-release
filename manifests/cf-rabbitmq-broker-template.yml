@@ -5,13 +5,12 @@ releases:
 - name: cf-rabbitmq-multitenant-broker
   version: latest
 - name: routing
-  version: 0.152.0
-  url: https://bosh.io/d/github.com/cloudfoundry-incubator/cf-routing-release?v=0.152.0
-  sha1: ea67ad087880fc0e492b6cce27fa2a25f977b691
+  version: latest
 - name: cf-cli
   version: latest
-  url: https://bosh.io/d/github.com/bosh-packages/cf-cli-release
 - name: cf-rabbitmq-smoke-tests
+  version: latest
+- name: bpm
   version: latest
 
 stemcells:
@@ -68,6 +67,8 @@ instance_groups:
           registration_interval: 20s
           uris:
           - ((rabbitmq-broker-hostname)).((system-domain))
+  - name: bpm
+    release: bpm
   - name: broker-registrar
     release: cf-rabbitmq-multitenant-broker
     properties:
