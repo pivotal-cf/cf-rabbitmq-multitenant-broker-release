@@ -1,3 +1,5 @@
+# Note, using `pre_packaging` scripts is now deprecated.  This script is run as part of `bosh create-release`.
+
 set -e -x
 
 cd "${BUILD_DIR}/rabbitmq-broker"
