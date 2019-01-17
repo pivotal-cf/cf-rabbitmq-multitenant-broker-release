@@ -139,7 +139,7 @@
                                          (is (th/has-no-policy? "existing-vhost" (cfg/operator-set-policy-name))))))))
 
 (defn make-it-fail [f x]
-  (throw "Injected failure for testing"))
+  (throw (Exception. "Injected failure for testing")))
 
 
 (deftest test-create-service-with-invalid-policy
