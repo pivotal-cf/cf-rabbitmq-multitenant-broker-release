@@ -1,7 +1,7 @@
 ---
 name: java
 metadata:
-  version: 11.0.2_07
+  version: 11.0.2_09
 files:
-- java/openjdk-11.0.2_07.tar.gz
+- java/openjdk-11.0.2_09.tar.gz
 dependencies: []

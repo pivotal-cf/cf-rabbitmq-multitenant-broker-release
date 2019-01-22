@@ -1,7 +1,7 @@
 # abort script on any command that exit with a non zero value
 set -e
 
-JAVA_VERSION="11.0.2_07"
+JAVA_VERSION="11.0.2_09"
 
 archive="java/openjdk-${JAVA_VERSION}.tar.gz"
 
