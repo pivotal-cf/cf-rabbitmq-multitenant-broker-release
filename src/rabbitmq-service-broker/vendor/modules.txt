@@ -1,0 +1,10 @@
+# code.cloudfoundry.org/lager v2.0.0+incompatible
+code.cloudfoundry.org/lager
+# github.com/gorilla/mux v1.7.0
+github.com/gorilla/mux
+# github.com/pivotal-cf/brokerapi v4.2.1+incompatible
+github.com/pivotal-cf/brokerapi
+github.com/pivotal-cf/brokerapi/auth
+github.com/pivotal-cf/brokerapi/middlewares/originating_identity_header
+# github.com/pkg/errors v0.8.1
+github.com/pkg/errors

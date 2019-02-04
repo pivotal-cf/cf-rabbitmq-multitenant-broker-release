@@ -1,0 +1,5 @@
+check process rabbitmq-service-broker
+  with pidfile  "/var/vcap/sys/run/rabbitmq-service-broker/pid"
+  start program "/var/vcap/jobs/rabbitmq-service-broker/bin/rabbitmq_service_broker_ctl start"
+  stop  program "/var/vcap/jobs/rabbitmq-service-broker/bin/rabbitmq_service_broker_ctl stop"
+  group vcap

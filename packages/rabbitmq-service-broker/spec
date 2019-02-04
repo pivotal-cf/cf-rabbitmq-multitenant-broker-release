@@ -1,0 +1,8 @@
+---
+name: rabbitmq-service-broker
+
+dependencies:
+- cf-rabbitmq-multitenant-broker-golang
+
+files:
+- rabbitmq-service-broker/**/*

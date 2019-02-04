@@ -1,0 +1,31 @@
+#!/bin/bash -e
+
+[ -z "$DEBUG" ] || set -x
+
+BROKER_JOB_DIR=/var/vcap/jobs/rabbitmq-service-broker/packages/rabbitmq-service-broker
+COMMON_JOB_DIR=/var/vcap/jobs/rabbitmq-service-broker/packages/rabbitmq-common
+ROOT_LOG_DIR=/var/vcap/sys/log
+INIT_LOG_DIR=/var/vcap/sys/log/rabbitmq-service-broker
+
+ensure_dir() {
+    _dir=$1
+    mkdir -p "${_dir}"
+    chown -LR vcap:vcap "${_dir}"
+    chmod 750 "${_dir}"
+}
+
+remove_old_syslog_config() {
+  rm -f /etc/rsyslog.d/00-syslog_forwarder.conf
+  rm -f /etc/rsyslog.d/broker_syslog.conf
+}
+
+main() {
+  remove_old_syslog_config
+
+  ensure_dir "${BROKER_JOB_DIR}"
+  ensure_dir "${COMMON_JOB_DIR}"
+  ensure_dir "${ROOT_LOG_DIR}"
+  ensure_dir "${INIT_LOG_DIR}"
+}
+
+main

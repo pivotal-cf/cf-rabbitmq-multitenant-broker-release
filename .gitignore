@@ -17,3 +17,5 @@ blobs
 .blobs
 manifests/cf-rabbitmq-broker.yml
 rspec.xml
+/bin
+/pkg

@@ -1,0 +1,33 @@
+---
+name: rabbitmq-service-broker
+
+packages:
+- rabbitmq-service-broker
+- rabbitmq-common
+
+properties:
+  rabbitmq-service-broker.registration_interval:
+    default: "20s"
+    description: "How often the registrar should send messages to the router"
+  rabbitmq-service-broker.route:
+    default: "pivotal-rabbitmq-service-broker"
+    description: "Hostname at which broker will be accessed"
+  rabbitmq-service-broker.logging.level:
+    default: "info"
+    description: "Logging level"
+  rabbitmq-service-broker.logging.print_stack_traces:
+    default: false
+    description: "Should boot exception handlers print full stack traces?"
+
+templates:
+  broker_config.yml.erb:    config/rabbitmq_service_broker.yml
+  broker_ctl.erb: bin/rabbitmq_service_broker_ctl
+  pre-start.erb: bin/pre-start
+
+provides:
+- name: rabbitmq-service-broker
+  type: rabbitmq-service-broker
+
+consumes:
+- name: rabbitmq-service-broker
+  type: rabbitmq-service-broker

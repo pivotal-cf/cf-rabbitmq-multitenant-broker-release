@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+
+#
+# rabbitmq_broker RabbitMQ service broker
+#
+
+set -eu
+
+NAME=rabbitmq_service_broker
+BROKER=/var/vcap/packages/rabbitmq-service-broker/bin/rabbitmq-service-broker
+DESC="RabbitMQ service broker in Go"
+USER=vcap
+
+JOB_DIR=/var/vcap/jobs/rabbitmq-service-broker
+CONFIG=$JOB_DIR/config/rabbitmq_service_broker.yml
+INIT_LOG_DIR=/var/vcap/sys/log/rabbitmq-service-broker
+
+PID_FILE=/var/vcap/sys/run/rabbitmq-service-broker/pid
+TIMESTAMP=/bin/date
+
+source /var/vcap/packages/rabbitmq-common/utils.sh
+
+test -x "${BROKER}"
+test -f "${CONFIG}"
+
+source /var/vcap/packages/rabbitmq-common/ensure_dir_with_permissions
+
+ensure_dirs_with_permissions() {
+    ensure_dir_with_permissions "$(dirname "${PID_FILE}")"
+}
+
+start_broker() {
+    pid_guard "$PID_FILE" "RabbitMQ Service Broker in Go"
+    ensure_dirs_with_permissions
+
+    echo "$("${TIMESTAMP}"): Starting RabbitMQ service broker" >> "${INIT_LOG_DIR}/startup_stdout.log"
+
+    echo $$ > $PID_FILE
+    exec chpst -0 -u vcap:vcap "${BROKER}" "${CONFIG}" \
+        1>> "${INIT_LOG_DIR}/startup_stdout.log" \
+        2>> "${INIT_LOG_DIR}/startup_stderr.log"
+}
+
+stop_broker() {
+    echo "Stopping broker"
+    local pid
+    pid="$(cat "$PID_FILE")"
+    if (kill -9 "$pid")
+    then
+        echo "Killed PID $pid"
+    else
+        echo "Failed to kill PID $pid"
+    fi
+
+    if (pkill -9 -f "$BROKER")
+    then
+        echo "Killed other processes with path: $BROKER"
+    else
+        echo "No other processes with path: $BROKER"
+    fi
+
+    rm -f "$PID_FILE"
+}
+
+# RETVAL = 0 if running, != 0 if stopped
+status_broker() {
+    if [ ! -f "${PID_FILE}" ]; then
+        exit 1
+    fi
+
+    if pid_is_running "${PID_FILE}"; then
+        exit 0
+    fi
+
+    exit 3
+}
+
+restart_broker() {
+    stop_broker
+    start_broker
+}
+
+case "$1" in
+    start)
+        echo -n "Starting ${DESC}: "
+        start_broker
+        ;;
+    stop)
+        echo -n "Stopping ${DESC}: "
+        stop_broker
+        ;;
+    status)
+        status_broker
+        ;;
+    force-reload|reload|restart)
+        echo -n "Restarting ${DESC}: "
+        restart_broker
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
+        exit 1
+        ;;
+esac
