@@ -10,4 +10,7 @@ help:  ## list Makefile targets
 ###### Tools ###############################################################
 
 go-vet: ## runs go vet in source code
-				go vet `go list ./... | grep -v vendor`
+	go vet `go list ./... | grep -v vendor`
+
+run: ## starts the broker for testing
+	go run -mod=vendor cmd/rabbitmq-service-broker/main.go
