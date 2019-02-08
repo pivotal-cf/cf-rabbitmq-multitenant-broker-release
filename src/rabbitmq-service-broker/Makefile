@@ -19,4 +19,4 @@ integration_tests: ## runs integration tests in Docker (for development)
 	docker run --rm -v "${PWD}:/rabbitmq-service-broker" cflondonservices/london-services-ci-rabbitmq /rabbitmq-service-broker/ci/run_integration_tests.sh
 
 unit_tests:
-	GOFLAGS='-mod=vedor' ginkgo -r --skipPackage=integrationtests
+	GOFLAGS='-mod=vendor' ginkgo -r --skipPackage=integrationtests
