@@ -3,16 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"path/filepath"
 
 	"rabbitmq-service-broker/broker"
 
 	"code.cloudfoundry.org/lager"
 	"github.com/pivotal-cf/brokerapi"
-	yaml "gopkg.in/yaml.v2"
 )
 
 const port = 8901
@@ -26,16 +23,11 @@ func init() {
 func main() {
 	flag.Parse()
 
-	brokerLogger := lager.NewLogger("rabbitmq-multitenant-broker")
+	logger := lager.NewLogger("rabbitmq-multitenant-go-broker")
 
-	configBytes, err := ioutil.ReadFile(filepath.FromSlash(configPath))
+	config, err := broker.ReadConfig(configPath)
 	if err != nil {
-		brokerLogger.Fatal("read-config", err)
-	}
-
-	config := broker.Config{}
-	if err = yaml.Unmarshal(configBytes, &config); err != nil {
-		brokerLogger.Fatal("config-unmarshal", err)
+		logger.Fatal("read-config", err)
 	}
 
 	broker := broker.New(config)
@@ -44,7 +36,7 @@ func main() {
 		Password: config.ServiceConfig.Password,
 	}
 
-	brokerAPI := brokerapi.New(broker, brokerLogger, credentials)
+	brokerAPI := brokerapi.New(broker, logger, credentials)
 	http.Handle("/", brokerAPI)
 	fmt.Printf("RabbitMQ Service Broker listening on port %d\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))

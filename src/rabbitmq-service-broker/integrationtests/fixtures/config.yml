@@ -30,3 +30,8 @@ rabbitmq:
   administrator:
     username: guest
     password: guest
+  operator_set_policy:
+    enabled: true
+    policy_name: operator_set_policy
+    policy_definition: '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'
+    policy_priority: 50

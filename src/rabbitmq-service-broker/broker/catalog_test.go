@@ -13,7 +13,7 @@ import (
 
 var _ = Describe("Service Broker", func() {
 	It("returns a valid catalog", func() {
-		cfg := broker.Config{
+		cfg := &broker.Config{
 			ServiceConfig: broker.ServiceConfig{
 				UUID:                "00000000-0000-0000-0000-000000000000",
 				Name:                "p-rabbitmq",
