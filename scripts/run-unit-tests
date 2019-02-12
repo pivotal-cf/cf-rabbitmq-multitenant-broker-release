@@ -5,6 +5,7 @@ set -e
 main() {
   install_dependencies
   run_unit_tests
+  run_service_broker_tests
 }
 
 install_dependencies() {
@@ -13,6 +14,12 @@ install_dependencies() {
 
 run_unit_tests() {
   bundle exec rake spec:unit
+}
+
+run_service_broker_tests() {
+  pushd src/rabbitmq-service-broker
+    make ci_tests
+  popd
 }
 
 main

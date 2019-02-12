@@ -19,14 +19,6 @@ const (
 )
 
 var _ = Describe("/v2/catalog", func() {
-	When("no credentials are provided", func() {
-		It("fails with HTTP 401", func() {
-			response, err := http.Get(url)
-			Expect(err).NotTo(HaveOccurred())
-			Expect(response.StatusCode).To(Equal(http.StatusUnauthorized))
-		})
-	})
-
 	When("credentials are provided and they are correct", func() {
 		It("succeeds with HTTP 200 and returns a valid catalog", func() {
 			response, body := doRequest(http.MethodGet, url, nil)
@@ -36,7 +28,6 @@ var _ = Describe("/v2/catalog", func() {
 			Expect(json.Unmarshal(body, &catalog)).To(Succeed())
 
 			Expect(catalog["services"]).To(HaveLen(1))
-			// match against the expectation
 			Expect(catalog["services"][0]).To(Equal(brokerapi.Service{
 				ID:          "00000000-0000-0000-0000-000000000000",
 				Name:        "p-rabbitmq",
@@ -57,14 +48,14 @@ var _ = Describe("/v2/catalog", func() {
 
 func doRequest(method, url string, body io.Reader) (*http.Response, []byte) {
 	req, err := http.NewRequest(method, url, body)
-	Expect(err).ToNot(HaveOccurred())
+	Expect(err).NotTo(HaveOccurred())
 
 	req.SetBasicAuth(username, password)
 	req.Header.Set("X-Broker-API-Version", "2.14")
 
 	req.Close = true
 	resp, err := http.DefaultClient.Do(req)
-	Expect(err).ToNot(HaveOccurred())
+	Expect(err).NotTo(HaveOccurred())
 
 	bodyContent, err := ioutil.ReadAll(resp.Body)
 	Expect(err).NotTo(HaveOccurred())

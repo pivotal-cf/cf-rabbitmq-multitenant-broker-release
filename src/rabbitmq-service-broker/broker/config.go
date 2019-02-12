@@ -13,6 +13,7 @@ type Config struct {
 	ServiceConfig  ServiceConfig  `yaml:"service"`
 	RabbitmqConfig RabbitmqConfig `yaml:"rabbitmq"`
 }
+
 type ServiceConfig struct {
 	UUID                string `yaml:"uuid"`
 	Name                string `yaml:"name"`
@@ -27,6 +28,7 @@ type ServiceConfig struct {
 	DocumentationUrl    string `yaml:"documentation_url"`
 	SupportUrl          string `yaml:"support_url"`
 }
+
 type RabbitmqConfig struct {
 	Hosts            []string            `yaml:"hosts"`
 	DnsHost          string              `yaml:"dns_host"`
@@ -34,10 +36,12 @@ type RabbitmqConfig struct {
 	Administrator    RabbitmqCredentials `yaml:"administrator"`
 	Policy           RabbitmqPolicy      `yaml:"operator_set_policy"`
 }
+
 type RabbitmqCredentials struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 }
+
 type RabbitmqPolicy struct {
 	Enabled           bool                   `yaml:"enabled"`
 	Name              string                 `yaml:"policy_name"`
@@ -46,29 +50,29 @@ type RabbitmqPolicy struct {
 	Definition        map[string]interface{} `yaml:"definition"`
 }
 
-func ReadConfig(path string) (*Config, error) {
+func ReadConfig(path string) (Config, error) {
 	configBytes, err := ioutil.ReadFile(filepath.FromSlash(path))
 	if err != nil {
-		return nil, err
+		return Config{}, err
 	}
 
 	config := Config{}
 	if err = yaml.Unmarshal(configBytes, &config); err != nil {
-		return nil, err
+		return Config{}, err
 	}
 
-	if err := ValidateConfig(&config); err != nil {
-		return nil, err
+	if err := ValidateConfig(config); err != nil {
+		return Config{}, err
 	}
 
 	if err := json.Unmarshal([]byte(config.RabbitmqConfig.Policy.EncodedDefinition), &config.RabbitmqConfig.Policy.Definition); err != nil {
-		return nil, err
+		return Config{}, err
 	}
 
-	return &config, nil
+	return config, nil
 }
 
-func ValidateConfig(config *Config) error {
+func ValidateConfig(config Config) error {
 	if config.ServiceConfig.UUID == "" {
 		return fmt.Errorf("uuid is not set")
 	}

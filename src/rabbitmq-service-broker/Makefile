@@ -20,3 +20,6 @@ integration_tests: ## runs integration tests in Docker (for development)
 
 unit_tests:
 	GOFLAGS='-mod=vendor' ginkgo -r --skipPackage=integrationtests
+
+ci_tests: unit_tests
+	./ci/run_integration_tests.sh

@@ -8,10 +8,10 @@ import (
 )
 
 type RabbitMQServiceBroker struct {
-	Config *Config
+	Config Config
 }
 
-func New(cfg *Config) brokerapi.ServiceBroker {
+func New(cfg Config) brokerapi.ServiceBroker {
 	return RabbitMQServiceBroker{
 		Config: cfg,
 	}
