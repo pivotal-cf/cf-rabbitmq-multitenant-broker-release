@@ -36,7 +36,7 @@ start_broker() {
     echo "$("${TIMESTAMP}"): Starting RabbitMQ service broker" >> "${INIT_LOG_DIR}/startup_stdout.log"
 
     echo $$ > $PID_FILE
-    exec chpst -0 -u vcap:vcap "${BROKER}" "${CONFIG}" \
+    exec chpst -0 -u vcap:vcap "${BROKER}" -configPath "${CONFIG}" \
         1>> "${INIT_LOG_DIR}/startup_stdout.log" \
         2>> "${INIT_LOG_DIR}/startup_stderr.log"
 }
