@@ -2,7 +2,7 @@
 
 set -ex
 
-RABBITMQ_BROKER_DIR="$(dirname "$0")/.."
+RABBITMQ_BROKER_DIR="$(dirname "$0")/../.."
 
 if [[ ! -d $RABBITMQ_BROKER_DIR ]]
 then
@@ -11,6 +11,6 @@ then
 fi
 
 pushd "$RABBITMQ_BROKER_DIR"
-  docker run -v "${PWD}:/tmp/rabbitmq-broker" \
-           cflondonservices/london-services-ci-rabbitmq /tmp/rabbitmq-broker/bin/test
+  docker run --rm -v "${PWD}:/tmp/rabbitmq-broker" \
+           cflondonservices/london-services-ci-rabbitmq /tmp/rabbitmq-broker/rabbitmq-broker/bin/test
 popd

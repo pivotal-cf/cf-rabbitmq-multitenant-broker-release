@@ -12,9 +12,12 @@
             [ring.middleware.json :refer [wrap-json-response]]
             [ring.middleware.basic-authentication :refer [wrap-basic-authentication]]
             [clojure.string :as string]
+            [clj-http.client :as httpc]
             [langohr.http :as hc])
+  (:use [slingshot.slingshot :only [throw+ try+]])
   (:import java.io.File
-           java.lang.management.ManagementFactory))
+           java.lang.management.ManagementFactory)
+  )
 
 ;;
 ;; Implementation
@@ -45,18 +48,6 @@
   (let [xs #{shutdown}]
     (reset! (beckon/signal-atom "INT")  xs)
     (reset! (beckon/signal-atom "TERM") xs)))
-
-(def catalog {:services [{:name "p-rabbitmq"
-                          :provider "pivotal"
-                          :display_name "RabbitMQ"
-                          :offering_description "RabbitMQ messaging broker"
-                          :tags ["rabbitmq" "rabbit" "messaging" "message-queue" "amqp" "mqtt" "stomp"]}]})
-
-(defn init-catalog!
-  [config]
-  (let [svs (cfg/service-info config)]
-    (alter-var-root #'catalog (constantly {:services [svs]}))
-    config))
 
 (defn init-rabbitmq-connection!
   [config]
@@ -108,9 +99,21 @@
 ;; Routes
 ;;
 
-(defn show-catalog
+;; TODO:
+;; 1. Forward the body
+;; 2. Forward request method (or create different function for GET, PUT, etc)
+(defn forward-request
   [req]
-  (response catalog))
+  (let [headers (get req :headers)
+        endpoint (get req :uri)
+        body (get req :body)
+        method (get req :request-method)]
+    (try+
+      (httpc/get (format "http://localhost:8901%s" endpoint) {:headers (assoc headers :X-Broker-API-Version "2.14")})
+    (catch Object e
+      (log/infof "forward-request failed for: %s, %s" endpoint headers)
+      e
+    ))))
 
 (defn create-service
   [{:keys [params] :as req}]
@@ -231,7 +234,7 @@
   (ok "2.0"))
 
 (defroutes broker-v2-routes
-  (GET    "/v2/catalog"               req show-catalog)
+  (GET    "/v2/catalog"               req forward-request)
   (PUT    "/v2/service_instances/:id" req create-service)
   (DELETE "/v2/service_instances/:id" req delete-service)
   (PUT    "/v2/service_instances/:instance_id/service_bindings/:id" req bind-service)
@@ -257,8 +260,6 @@
   (initialize-logger config)
   (announce-start config)
   (install-signal-traps)
-  (init-catalog! config)
-  (log/infof "Initialized service catalog")
   (cfg/init! config)
   (log/infof "Finalized own configuration")
   (log-if-using-tls config)

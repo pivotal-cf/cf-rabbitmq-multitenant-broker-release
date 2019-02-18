@@ -13,7 +13,7 @@ go-vet: ## runs go vet in source code
 	go vet `go list ./... | grep -v vendor`
 
 run: ## starts the broker for testing
-	go run -mod=vendor main.go
+	go run -mod=vendor main.go -configPath ${config_path}
 
 integration_tests: ## runs integration tests in Docker (for development)
 	docker run --rm -v "${PWD}:/rabbitmq-service-broker" cflondonservices/london-services-ci-rabbitmq /rabbitmq-service-broker/ci/run_integration_tests.sh

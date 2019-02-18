@@ -1,7 +1,6 @@
 package broker
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
@@ -27,6 +26,7 @@ type ServiceConfig struct {
 	ProviderDisplayName string `yaml:"provider_display_name"`
 	DocumentationUrl    string `yaml:"documentation_url"`
 	SupportUrl          string `yaml:"support_url"`
+	Shareable           bool   `yaml:"shareable"`
 }
 
 type RabbitmqConfig struct {
@@ -43,11 +43,10 @@ type RabbitmqCredentials struct {
 }
 
 type RabbitmqPolicy struct {
-	Enabled           bool                   `yaml:"enabled"`
-	Name              string                 `yaml:"policy_name"`
-	Priority          int                    `yaml:"policy_priority"`
-	EncodedDefinition string                 `yaml:"policy_definition"`
-	Definition        map[string]interface{} `yaml:"definition"`
+	Enabled           bool   `yaml:"enabled"`
+	Name              string `yaml:"policy_name"`
+	Priority          int    `yaml:"policy_priority"`
+	EncodedDefinition string `yaml:"policy_definition"`
 }
 
 func ReadConfig(path string) (Config, error) {
@@ -62,10 +61,6 @@ func ReadConfig(path string) (Config, error) {
 	}
 
 	if err := ValidateConfig(config); err != nil {
-		return Config{}, err
-	}
-
-	if err := json.Unmarshal([]byte(config.RabbitmqConfig.Policy.EncodedDefinition), &config.RabbitmqConfig.Policy.Definition); err != nil {
 		return Config{}, err
 	}
 

@@ -24,7 +24,7 @@ var _ = Describe("Config", func() {
 			Expect(config.ServiceConfig.Username).To(Equal("p1-rabbit"))
 			Expect(config.RabbitmqConfig.Administrator.Username).To(Equal("guest"))
 			Expect(config.RabbitmqConfig.Policy.Name).To(Equal("operator_set_policy"))
-			Expect(config.RabbitmqConfig.Policy.Definition["ha-mode"]).To(Equal("exactly"))
+			Expect(config.RabbitmqConfig.Policy.EncodedDefinition).To(ContainSubstring("ha-mode"))
 		})
 
 		Context("when the config is not in the correct format", func() {

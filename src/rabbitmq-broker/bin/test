@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 cd $(dirname $0)/..
 
@@ -17,6 +17,11 @@ echo "About to start rabbitmq"
 service rabbitmq-server start
 rabbitmq-plugins enable rabbitmq_management
 
-echo "About to run lein test"
+echo "About to run the go broker"
+pushd ../rabbitmq-service-broker
+  config=../rabbitmq-broker/test/config/valid.yml
+  make run config_path="$config" &
+popd
 
-lein test
+ echo "About to run lein test"
+ lein test

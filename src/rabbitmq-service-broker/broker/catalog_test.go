@@ -24,6 +24,8 @@ var _ = Describe("Service Broker", func() {
 				ProviderDisplayName: "SomeCompany",
 				DocumentationUrl:    "https://example.com",
 				SupportUrl:          "https://support.example.com",
+				PlanUuid:            "11111111-1111-1111-1111-111111111111",
+				Shareable:           false,
 			},
 		}
 
@@ -43,6 +45,18 @@ var _ = Describe("Service Broker", func() {
 				ProviderDisplayName: "SomeCompany",
 				DocumentationUrl:    "https://example.com",
 				SupportUrl:          "https://support.example.com",
+				Shareable:           &cfg.ServiceConfig.Shareable,
+			},
+			Plans: []brokerapi.ServicePlan{
+				brokerapi.ServicePlan{
+					ID:          "11111111-1111-1111-1111-111111111111",
+					Name:        "standard",
+					Description: "Provides a multi-tenant RabbitMQ cluster",
+					Metadata: &brokerapi.ServicePlanMetadata{
+						DisplayName: "Standard",
+						Bullets:     []string{"RabbitMQ", "Multi-tenant"},
+					},
+				},
 			},
 		}}))
 	})

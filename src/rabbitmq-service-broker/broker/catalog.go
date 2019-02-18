@@ -21,6 +21,18 @@ func (b RabbitMQServiceBroker) Services(ctx context.Context) ([]brokerapi.Servic
 				ProviderDisplayName: b.Config.ServiceConfig.ProviderDisplayName,
 				DocumentationUrl:    b.Config.ServiceConfig.DocumentationUrl,
 				SupportUrl:          b.Config.ServiceConfig.SupportUrl,
+				Shareable:           &b.Config.ServiceConfig.Shareable,
+			},
+			Plans: []brokerapi.ServicePlan{
+				brokerapi.ServicePlan{
+					ID:          b.Config.ServiceConfig.PlanUuid,
+					Name:        "standard",
+					Description: "Provides a multi-tenant RabbitMQ cluster",
+					Metadata: &brokerapi.ServicePlanMetadata{
+						DisplayName: "Standard",
+						Bullets:     []string{"RabbitMQ", "Multi-tenant"},
+					},
+				},
 			},
 		},
 	}, nil

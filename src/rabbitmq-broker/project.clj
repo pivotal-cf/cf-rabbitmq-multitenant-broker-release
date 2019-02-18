@@ -29,6 +29,7 @@
                  [beckon                     "0.1.1"]
                  ;; test stubbing
                  [robert/hooke "1.3.0"]
+                 [slingshot "0.12.2"]
                  ]
   :source-paths      ["src/clojure"]
   :java-source-paths ["src/java"]

@@ -28,6 +28,9 @@ var _ = Describe("/v2/catalog", func() {
 			Expect(json.Unmarshal(body, &catalog)).To(Succeed())
 
 			Expect(catalog["services"]).To(HaveLen(1))
+
+			shareable := false
+
 			Expect(catalog["services"][0]).To(Equal(brokerapi.Service{
 				ID:          "00000000-0000-0000-0000-000000000000",
 				Name:        "p-rabbitmq",
@@ -40,6 +43,18 @@ var _ = Describe("/v2/catalog", func() {
 					ProviderDisplayName: "SomeCompany",
 					DocumentationUrl:    "https://example.com",
 					SupportUrl:          "https://support.example.com",
+					Shareable:           &shareable,
+				},
+				Plans: []brokerapi.ServicePlan{
+					brokerapi.ServicePlan{
+						ID:          "11111111-1111-1111-1111-111111111111",
+						Name:        "standard",
+						Description: "Provides a multi-tenant RabbitMQ cluster",
+						Metadata: &brokerapi.ServicePlanMetadata{
+							DisplayName: "Standard",
+							Bullets:     []string{"RabbitMQ", "Multi-tenant"},
+						},
+					},
 				},
 			}))
 		})
