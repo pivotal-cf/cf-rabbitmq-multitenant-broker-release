@@ -38,6 +38,7 @@ var _ = Describe("Service Broker", func() {
 			Name:        cfg.ServiceConfig.Name,
 			Description: cfg.ServiceConfig.OfferingDescription,
 			Bindable:    true,
+			Tags:        []string{"rabbitmq", "rabbit", "messaging", "message-queue", "amqp", "mqtt", "stomp"},
 			Metadata: &brokerapi.ServiceMetadata{
 				DisplayName:         "WhiteRabbitMQ",
 				ImageUrl:            fmt.Sprintf("data:image/png;base64,%s", "image_icon_base64"),

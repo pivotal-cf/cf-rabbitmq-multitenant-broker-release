@@ -14,6 +14,7 @@ func (b RabbitMQServiceBroker) Services(ctx context.Context) ([]brokerapi.Servic
 			Name:        b.Config.ServiceConfig.Name,
 			Description: b.Config.ServiceConfig.OfferingDescription,
 			Bindable:    true,
+			Tags:        []string{"rabbitmq", "rabbit", "messaging", "message-queue", "amqp", "mqtt", "stomp"},
 			Metadata: &brokerapi.ServiceMetadata{
 				DisplayName:         b.Config.ServiceConfig.DisplayName,
 				ImageUrl:            fmt.Sprintf("data:image/png;base64,%s", b.Config.ServiceConfig.IconImage),
