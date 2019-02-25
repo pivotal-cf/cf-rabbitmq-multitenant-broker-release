@@ -13,4 +13,4 @@ service rabbitmq-server start
 rabbitmq-plugins enable rabbitmq_management
 
 echo "About to run service broker integration tests"
-GOFLAGS='-mod=vendor' ginkgo -r integrationtests
+GOFLAGS='-mod=vendor' ginkgo -v -r integrationtests

@@ -16,15 +16,28 @@ var _ = Describe("Config", func() {
 
 	Describe("ReadConfig", func() {
 		It("reads the config from file", func() {
-			path, err := filepath.Abs(filepath.Join("..", "integrationtests", "fixtures", "config.yml"))
+			path, err := filepath.Abs(filepath.Join("fixtures", "config.yml"))
 			Expect(err).NotTo(HaveOccurred())
 			config, err = broker.ReadConfig(path)
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(config.ServiceConfig.Username).To(Equal("p1-rabbit"))
-			Expect(config.RabbitmqConfig.Administrator.Username).To(Equal("guest"))
-			Expect(config.RabbitmqConfig.Policy.Name).To(Equal("operator_set_policy"))
-			Expect(config.RabbitmqConfig.Policy.EncodedDefinition).To(ContainSubstring("ha-mode"))
+			Expect(config.RabbitMQConfig.Administrator.Username).To(Equal("guest"))
+			Expect(config.RabbitMQConfig.Policy.Name).To(Equal("operator_set_policy"))
+			Expect(config.RabbitMQConfig.Management.Username).To(Equal("management-username"))
+		})
+
+		It("decodes the JSON policy definition", func() {
+			path, err := filepath.Abs(filepath.Join("fixtures", "config.yml"))
+			Expect(err).NotTo(HaveOccurred())
+			config, err = broker.ReadConfig(path)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(config.RabbitMQConfig.Policy.Definition).To(Equal(broker.PolicyDefinition{
+				"ha-mode":      "exactly",
+				"ha-sync-mode": "automatic",
+				"ha-params":    float64(2),
+			}))
 		})
 
 		Context("when the config is not in the correct format", func() {
@@ -72,11 +85,11 @@ var _ = Describe("Config", func() {
 					Name:     "p-rabbitmq",
 					Username: "Robbit",
 					Password: "super-secret",
-					PlanUuid: "007",
+					PlanUUID: "007",
 				},
-				RabbitmqConfig: broker.RabbitmqConfig{
+				RabbitMQConfig: broker.RabbitMQConfig{
 					Hosts: []string{"robbit"},
-					Administrator: broker.RabbitmqCredentials{
+					Administrator: broker.RabbitMQCredentials{
 						Username: "admin",
 						Password: "admin",
 					},
@@ -114,25 +127,25 @@ var _ = Describe("Config", func() {
 		})
 
 		It("returns an error when it has an empty plan UUID", func() {
-			config.ServiceConfig.PlanUuid = ""
+			config.ServiceConfig.PlanUUID = ""
 			err := broker.ValidateConfig(config)
 			Expect(err).To(MatchError("plan uuid is not set"))
 		})
 
 		It("returns an error when it has an empty hosts", func() {
-			config.RabbitmqConfig.Hosts = []string{}
+			config.RabbitMQConfig.Hosts = []string{}
 			err := broker.ValidateConfig(config)
 			Expect(err).To(MatchError("no rabbitmq hosts were set"))
 		})
 
 		It("returns an error when it has an empty administrator username", func() {
-			config.RabbitmqConfig.Administrator.Username = ""
+			config.RabbitMQConfig.Administrator.Username = ""
 			err := broker.ValidateConfig(config)
 			Expect(err).To(MatchError("administrator username is not set"))
 		})
 
 		It("returns an error when it has an empty administrator password", func() {
-			config.RabbitmqConfig.Administrator.Password = ""
+			config.RabbitMQConfig.Administrator.Password = ""
 			err := broker.ValidateConfig(config)
 			Expect(err).To(MatchError("administrator password is not set"))
 		})

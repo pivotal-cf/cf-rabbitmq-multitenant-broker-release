@@ -9,6 +9,9 @@ import (
 	"github.com/pivotal-cf/brokerapi"
 
 	"rabbitmq-service-broker/broker"
+	"rabbitmq-service-broker/broker/fakes"
+
+	"code.cloudfoundry.org/lager/lagertest"
 )
 
 var _ = Describe("Service Broker", func() {
@@ -22,14 +25,15 @@ var _ = Describe("Service Broker", func() {
 				IconImage:           "image_icon_base64",
 				LongDescription:     "this is a long description",
 				ProviderDisplayName: "SomeCompany",
-				DocumentationUrl:    "https://example.com",
-				SupportUrl:          "https://support.example.com",
-				PlanUuid:            "11111111-1111-1111-1111-111111111111",
+				DocumentationURL:    "https://example.com",
+				SupportURL:          "https://support.example.com",
+				PlanUUID:            "11111111-1111-1111-1111-111111111111",
 				Shareable:           false,
 			},
 		}
-
-		broker := broker.New(cfg)
+		client := new(fakes.FakeAPIClient)
+		logger := lagertest.NewTestLogger("test")
+		broker := broker.New(cfg, client, logger)
 		services, err := broker.Services(context.Background())
 		Expect(err).NotTo(HaveOccurred())
 

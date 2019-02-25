@@ -1,22 +1,35 @@
 package integrationtests_test
 
 import (
+	"io"
+	"io/ioutil"
+	"net/http"
 	"os/exec"
 	"path/filepath"
 	"testing"
 
+	rabbithole "github.com/michaelklishin/rabbit-hole"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
 )
 
+const (
+	baseURL  = "http://localhost:8901/v2/"
+	username = "p1-rabbit"
+	password = "p1-rabbit-testpwd"
+)
+
+var (
+	session   *gexec.Session
+	rmqClient *rabbithole.Client
+)
+
 func TestIntegrationtests(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Integrationtests Suite")
 }
-
-var session *gexec.Session
 
 var _ = BeforeSuite(func() {
 	pathToServiceBroker, err := gexec.Build("rabbitmq-service-broker")
@@ -30,9 +43,30 @@ var _ = BeforeSuite(func() {
 	Expect(err).NotTo(HaveOccurred())
 
 	Eventually(session.Out).Should(gbytes.Say("RabbitMQ Service Broker listening on port"))
+
+	rmqClient, err = rabbithole.NewClient("http://127.0.0.1:15672", "guest", "guest")
+	Expect(err).NotTo(HaveOccurred())
 })
 
 var _ = AfterSuite(func() {
 	session.Kill().Wait()
 	gexec.CleanupBuildArtifacts()
 })
+
+func doRequest(method, url string, body io.Reader) (*http.Response, []byte) {
+	req, err := http.NewRequest(method, url, body)
+	Expect(err).NotTo(HaveOccurred())
+
+	req.SetBasicAuth(username, password)
+	req.Header.Set("X-Broker-API-Version", "2.14")
+
+	req.Close = true
+	resp, err := http.DefaultClient.Do(req)
+	Expect(err).NotTo(HaveOccurred())
+
+	bodyContent, err := ioutil.ReadAll(resp.Body)
+	Expect(err).NotTo(HaveOccurred())
+
+	Expect(resp.Body.Close()).To(Succeed())
+	return resp, bodyContent
+}

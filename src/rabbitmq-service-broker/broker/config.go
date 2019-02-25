@@ -1,6 +1,7 @@
 package broker
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
@@ -10,7 +11,7 @@ import (
 
 type Config struct {
 	ServiceConfig  ServiceConfig  `yaml:"service"`
-	RabbitmqConfig RabbitmqConfig `yaml:"rabbitmq"`
+	RabbitMQConfig RabbitMQConfig `yaml:"rabbitmq"`
 }
 
 type ServiceConfig struct {
@@ -19,34 +20,37 @@ type ServiceConfig struct {
 	OfferingDescription string `yaml:"offering_description"`
 	Username            string `yaml:"username"`
 	Password            string `yaml:"password"`
-	PlanUuid            string `yaml:"plan_uuid"`
+	PlanUUID            string `yaml:"plan_uuid"`
 	DisplayName         string `yaml:"display_name"`
 	IconImage           string `yaml:"icon_image"`
 	LongDescription     string `yaml:"long_description"`
 	ProviderDisplayName string `yaml:"provider_display_name"`
-	DocumentationUrl    string `yaml:"documentation_url"`
-	SupportUrl          string `yaml:"support_url"`
+	DocumentationURL    string `yaml:"documentation_url"`
+	SupportURL          string `yaml:"support_url"`
 	Shareable           bool   `yaml:"shareable"`
 }
 
-type RabbitmqConfig struct {
+type RabbitMQConfig struct {
 	Hosts            []string            `yaml:"hosts"`
-	DnsHost          string              `yaml:"dns_host"`
+	DNSHost          string              `yaml:"dns_host"`
 	ManagementDomain string              `yaml:"management_domain"`
-	Administrator    RabbitmqCredentials `yaml:"administrator"`
-	Policy           RabbitmqPolicy      `yaml:"operator_set_policy"`
+	Management       RabbitMQCredentials `yaml:"management"`
+	Administrator    RabbitMQCredentials `yaml:"administrator"`
+	Policy           RabbitMQPolicy      `yaml:"operator_set_policy"`
 }
 
-type RabbitmqCredentials struct {
+type RabbitMQCredentials struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 }
 
-type RabbitmqPolicy struct {
-	Enabled           bool   `yaml:"enabled"`
-	Name              string `yaml:"policy_name"`
-	Priority          int    `yaml:"policy_priority"`
-	EncodedDefinition string `yaml:"policy_definition"`
+type PolicyDefinition map[string]interface{}
+
+type RabbitMQPolicy struct {
+	Enabled    bool             `yaml:"enabled"`
+	Name       string           `yaml:"policy_name"`
+	Priority   int              `yaml:"policy_priority"`
+	Definition PolicyDefinition `yaml:"policy_definition"`
 }
 
 func ReadConfig(path string) (Config, error) {
@@ -80,18 +84,24 @@ func ValidateConfig(config Config) error {
 	if config.ServiceConfig.Password == "" {
 		return fmt.Errorf("service password is not set")
 	}
-	if config.ServiceConfig.PlanUuid == "" {
+	if config.ServiceConfig.PlanUUID == "" {
 		return fmt.Errorf("plan uuid is not set")
 	}
-	if len(config.RabbitmqConfig.Hosts) < 1 {
+	if len(config.RabbitMQConfig.Hosts) < 1 {
 		return fmt.Errorf("no rabbitmq hosts were set")
 	}
-	if config.RabbitmqConfig.Administrator.Username == "" {
+	if config.RabbitMQConfig.Administrator.Username == "" {
 		return fmt.Errorf("administrator username is not set")
 	}
-	if config.RabbitmqConfig.Administrator.Password == "" {
+	if config.RabbitMQConfig.Administrator.Password == "" {
 		return fmt.Errorf("administrator password is not set")
 	}
 
 	return nil
+}
+
+func (p *PolicyDefinition) UnmarshalYAML(f func(interface{}) error) error {
+	var s string
+	f(&s)
+	return json.Unmarshal([]byte(s), p)
 }

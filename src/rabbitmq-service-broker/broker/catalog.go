@@ -10,23 +10,23 @@ import (
 func (b RabbitMQServiceBroker) Services(ctx context.Context) ([]brokerapi.Service, error) {
 	return []brokerapi.Service{
 		brokerapi.Service{
-			ID:          b.Config.ServiceConfig.UUID,
-			Name:        b.Config.ServiceConfig.Name,
-			Description: b.Config.ServiceConfig.OfferingDescription,
+			ID:          b.config.ServiceConfig.UUID,
+			Name:        b.config.ServiceConfig.Name,
+			Description: b.config.ServiceConfig.OfferingDescription,
 			Bindable:    true,
 			Tags:        []string{"rabbitmq", "rabbit", "messaging", "message-queue", "amqp", "mqtt", "stomp"},
 			Metadata: &brokerapi.ServiceMetadata{
-				DisplayName:         b.Config.ServiceConfig.DisplayName,
-				ImageUrl:            fmt.Sprintf("data:image/png;base64,%s", b.Config.ServiceConfig.IconImage),
-				LongDescription:     b.Config.ServiceConfig.LongDescription,
-				ProviderDisplayName: b.Config.ServiceConfig.ProviderDisplayName,
-				DocumentationUrl:    b.Config.ServiceConfig.DocumentationUrl,
-				SupportUrl:          b.Config.ServiceConfig.SupportUrl,
-				Shareable:           &b.Config.ServiceConfig.Shareable,
+				DisplayName:         b.config.ServiceConfig.DisplayName,
+				ImageUrl:            fmt.Sprintf("data:image/png;base64,%s", b.config.ServiceConfig.IconImage),
+				LongDescription:     b.config.ServiceConfig.LongDescription,
+				ProviderDisplayName: b.config.ServiceConfig.ProviderDisplayName,
+				DocumentationUrl:    b.config.ServiceConfig.DocumentationURL,
+				SupportUrl:          b.config.ServiceConfig.SupportURL,
+				Shareable:           &b.config.ServiceConfig.Shareable,
 			},
 			Plans: []brokerapi.ServicePlan{
 				brokerapi.ServicePlan{
-					ID:          b.Config.ServiceConfig.PlanUuid,
+					ID:          b.config.ServiceConfig.PlanUUID,
 					Name:        "standard",
 					Description: "Provides a multi-tenant RabbitMQ cluster",
 					Metadata: &brokerapi.ServicePlanMetadata{

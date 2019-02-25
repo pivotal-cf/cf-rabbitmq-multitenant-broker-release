@@ -1,5 +1,7 @@
 # code.cloudfoundry.org/lager v2.0.0+incompatible
 code.cloudfoundry.org/lager
+code.cloudfoundry.org/lager/lagertest
+code.cloudfoundry.org/lager/lagerctx
 # github.com/gorilla/mux v1.7.0
 github.com/gorilla/mux
 # github.com/hpcloud/tail v1.0.0
@@ -8,6 +10,8 @@ github.com/hpcloud/tail/ratelimiter
 github.com/hpcloud/tail/util
 github.com/hpcloud/tail/watch
 github.com/hpcloud/tail/winfile
+# github.com/michaelklishin/rabbit-hole v1.5.0
+github.com/michaelklishin/rabbit-hole
 # github.com/onsi/ginkgo v1.7.0
 github.com/onsi/ginkgo
 github.com/onsi/ginkgo/config
@@ -29,6 +33,7 @@ github.com/onsi/ginkgo/internal/specrunner
 github.com/onsi/ginkgo/reporters/stenographer/support/go-isatty
 # github.com/onsi/gomega v1.4.3
 github.com/onsi/gomega
+github.com/onsi/gomega/gbytes
 github.com/onsi/gomega/gexec
 github.com/onsi/gomega/internal/assertion
 github.com/onsi/gomega/internal/asyncassertion
@@ -36,7 +41,6 @@ github.com/onsi/gomega/internal/testingtsupport
 github.com/onsi/gomega/matchers
 github.com/onsi/gomega/types
 github.com/onsi/gomega/format
-github.com/onsi/gomega/gbytes
 github.com/onsi/gomega/internal/oraclematcher
 github.com/onsi/gomega/matchers/support/goraph/bipartitegraph
 github.com/onsi/gomega/matchers/support/goraph/edge
