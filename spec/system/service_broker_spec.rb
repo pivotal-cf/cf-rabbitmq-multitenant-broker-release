@@ -107,6 +107,18 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
         rabbitmq_broker_service['provider_display_name'] = 'CompanyName'
         rabbitmq_broker_service['documentation_url'] = 'https://documentation.url'
         rabbitmq_broker_service['support_url'] = 'https://support.url'
+
+        # Configuring go broker service metadata
+        rabbitmq_service_broker_job = rabbitmq_broker_instance_group['jobs'].select { |job| job['name'] == 'rabbitmq-service-broker' }.first
+        rabbitmq_go_broker_service = rabbitmq_service_broker_job['properties']['rabbitmq-service-broker']['service']
+        rabbitmq_go_broker_service['name'] = 'service-name'
+        rabbitmq_go_broker_service['display_name'] = 'apps-manager-test-name'
+        rabbitmq_go_broker_service['offering_description'] = 'Some description of our service'
+        rabbitmq_go_broker_service['long_description'] = 'Some long description of our service'
+        rabbitmq_go_broker_service['icon_image'] = 'image-uri'
+        rabbitmq_go_broker_service['provider_display_name'] = 'CompanyName'
+        rabbitmq_go_broker_service['documentation_url'] = 'https://documentation.url'
+        rabbitmq_go_broker_service['support_url'] = 'https://support.url'
       end
 
       # Setup Cloud Foundry
