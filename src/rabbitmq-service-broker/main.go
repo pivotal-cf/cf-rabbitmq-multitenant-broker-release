@@ -14,12 +14,14 @@ import (
 	"github.com/pivotal-cf/brokerapi"
 )
 
-const port = 8901
-
-var configPath string
+var (
+	configPath string
+	port       int
+)
 
 func init() {
 	flag.StringVar(&configPath, "configPath", "", "Config file location")
+	flag.IntVar(&port, "port", 8901, "Port to listen on")
 }
 
 func main() {

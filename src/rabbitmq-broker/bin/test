@@ -23,5 +23,5 @@ pushd ../rabbitmq-service-broker
   make run config_path="$config" &
 popd
 
- echo "About to run lein test"
- lein test
+echo "About to run lein test"
+lein test

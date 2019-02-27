@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	baseURL  = "http://localhost:8901/v2/"
+	baseURL  = "http://localhost:8902/v2/"
 	username = "p1-rabbit"
 	password = "p1-rabbit-testpwd"
 )
@@ -38,7 +38,7 @@ var _ = BeforeSuite(func() {
 	path, err := filepath.Abs(filepath.Join("fixtures", "config.yml"))
 	Expect(err).ToNot(HaveOccurred())
 
-	command := exec.Command(pathToServiceBroker, "-configPath", path)
+	command := exec.Command(pathToServiceBroker, "-configPath", path, "-port", "8902")
 	session, err = gexec.Start(command, GinkgoWriter, GinkgoWriter)
 	Expect(err).NotTo(HaveOccurred())
 
