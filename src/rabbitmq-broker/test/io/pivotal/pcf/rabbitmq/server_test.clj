@@ -29,18 +29,6 @@
   (with-open [stream (io/reader logfile)]
     (format "%s\n" (string/join "\n" (line-seq stream)))))
 
-(deftest create-service
-  (testing "should log on service creation"
-    (with-redefs [rs/grant-broker-administrator-permissions NoOp]
-      (io/delete-file logfile true)
-      (server/create-service {:params {:id "my service"}})
-      (is (.contains (get-logs) "Asked to provision a service: my service"))))
-  (testing "should log error when rabbitmq is down during service creation"
-    (with-redefs [rs/vhost-exists? ThrowException]
-      (io/delete-file logfile true)
-      (server/create-service {:params {:id "my service"}})
-      (is (.contains (get-logs) "Failed to provision a service: my service")))))
-
 (deftest delete-service
   (testing "should log on service deletion"
     (with-redefs [rs/vhost-exists? NoOp]

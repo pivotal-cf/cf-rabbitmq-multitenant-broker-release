@@ -35,7 +35,7 @@ func (b RabbitMQServiceBroker) Provision(ctx context.Context, instanceID string,
 	if b.cfg.RabbitMQ.Management.Username != "" {
 		err = b.assignPermissionsToUser(vhost, b.cfg.RabbitMQ.Management.Username)
 		if err != nil {
-			return spec, err
+			logger.Info("provision-management-user-skipped")
 		}
 	}
 

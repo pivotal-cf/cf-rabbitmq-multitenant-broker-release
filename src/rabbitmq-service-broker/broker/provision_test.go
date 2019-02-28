@@ -106,10 +106,10 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 					}
 				})
 
-				It("cleans up the vhost", func() {
+				It("ignores the error", func() {
 					_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
-					Expect(err).To(MatchError("http request failed with status code: 403"))
-					Expect(client.DeleteVhostCallCount()).To(Equal(1))
+					Expect(err).NotTo(HaveOccurred())
+					Expect(client.DeleteVhostCallCount()).To(Equal(0))
 				})
 			})
 		})

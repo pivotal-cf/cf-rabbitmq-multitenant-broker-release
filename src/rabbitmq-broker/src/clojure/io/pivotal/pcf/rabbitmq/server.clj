@@ -99,58 +99,28 @@
 ;; Routes
 ;;
 
-;; TODO:
-;; 1. Forward the body
-;; 2. Forward request method (or create different function for GET, PUT, etc)
-(defn forward-request
+(defn forward-request-put
   [req]
-  (let [headers (get req :headers)
+  (let [headers (select-keys (get req :headers) ["authorization"])
         endpoint (get req :uri)
-        body (get req :body)
-        method (get req :request-method)]
+        body (slurp (get req :body))]
+    (try+
+      (httpc/put (format "http://localhost:8901%s" endpoint) {:body body :headers (assoc headers :X-Broker-API-Version "2.14")})
+    (catch Object e
+      (log/infof "forward-request failed for: %s, %s, %s" endpoint headers body)
+      e
+    ))))
+
+(defn forward-request-get
+  [req]
+  (let [headers (select-keys (get req :headers) ["authorization"])
+        endpoint (get req :uri)]
     (try+
       (httpc/get (format "http://localhost:8901%s" endpoint) {:headers (assoc headers :X-Broker-API-Version "2.14")})
     (catch Object e
       (log/infof "forward-request failed for: %s, %s" endpoint headers)
       e
     ))))
-
-(defn create-service
-  [{:keys [params] :as req}]
-  ;; (slurp (:body req)) provides access to:
-  ;;  * service_id
-  ;;  * plan_id
-  ;;  * organization_guid
-  ;;  * space_guid
-  (log/infof "Asked to provision a service: %s" (:id params))
-  (if-let [^String id (:id params)]
-    (try
-      (if (rs/vhost-exists? id)
-        (do (log/warnf "Vhost %s already exists" id)
-          (conflict))
-        (let [[mu mp] (rs/generate-credentials "mu" id)]
-          (try
-            (rs/add-vhost id)
-            (log/infof "Created vhost %s" id)
-            (rs/add-user mu mp)
-            (rs/grant-permissions mu id)
-            (log/infof "Created special user for dashboard access: %s" mu)
-            (rs/grant-broker-administrator-permissions id)
-            (log/infof "Granted broker administrator access to vhost %s" id)
-            (if-not (nil? (cfg/rabbitmq-management-username)) (rs/grant-permissions (cfg/rabbitmq-management-username) id))
-            (log/infof "Granted management administrator access to vhost %s" id)
-            (if (cfg/operator-set-policy-enabled?) (rs/add-operator-set-policy id))
-            (catch Exception e
-              (rs/delete-vhost id)
-              (log/errorf "Failed to provision a service: %s" id)
-              (rs/delete-user mu)
-              (throw e)))
-          (created {:dashboard_url (rs/dashboard-url)})))
-    (catch Exception e
-      (log/errorf "Failed to provision a service: %s" id)
-      (.printStackTrace e)
-      (log-exception e)))
-    (conflict)))
 
 (defn delete-service
   [{:keys [params] :as req}]
@@ -234,8 +204,8 @@
   (ok "2.0"))
 
 (defroutes broker-v2-routes
-  (GET    "/v2/catalog"               req forward-request)
-  (PUT    "/v2/service_instances/:id" req create-service)
+  (GET    "/v2/catalog"               req forward-request-get)
+  (PUT    "/v2/service_instances/:id" req forward-request-put)
   (DELETE "/v2/service_instances/:id" req delete-service)
   (PUT    "/v2/service_instances/:instance_id/service_bindings/:id" req bind-service)
   (DELETE "/v2/service_instances/:instance_id/service_bindings/:id" req unbind-service)
