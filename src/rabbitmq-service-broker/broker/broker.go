@@ -5,6 +5,8 @@ import (
 	"errors"
 	"net/http"
 
+	"rabbitmq-service-broker/config"
+
 	"code.cloudfoundry.org/lager"
 	rabbithole "github.com/michaelklishin/rabbit-hole"
 	"github.com/pivotal-cf/brokerapi"
@@ -21,14 +23,14 @@ type APIClient interface {
 }
 
 type RabbitMQServiceBroker struct {
-	config Config
+	cfg    config.Config
 	client APIClient
 	logger lager.Logger
 }
 
-func New(cfg Config, client APIClient, logger lager.Logger) brokerapi.ServiceBroker {
+func New(cfg config.Config, client APIClient, logger lager.Logger) brokerapi.ServiceBroker {
 	return RabbitMQServiceBroker{
-		config: cfg,
+		cfg:    cfg,
 		client: client,
 		logger: logger,
 	}

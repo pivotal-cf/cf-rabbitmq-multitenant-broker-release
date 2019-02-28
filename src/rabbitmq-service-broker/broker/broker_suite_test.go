@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	"rabbitmq-service-broker/broker"
+	"rabbitmq-service-broker/config"
 
 	"github.com/pivotal-cf/brokerapi"
 
@@ -20,17 +21,17 @@ func TestBroker(t *testing.T) {
 	RunSpecs(t, "Broker Suite")
 }
 
-func defaultConfig() broker.Config {
-	return broker.Config{
-		RabbitMQConfig: broker.RabbitMQConfig{
+func defaultConfig() config.Config {
+	return config.Config{
+		RabbitMQ: config.RabbitMQ{
 			ManagementDomain: "foo.bar.com",
-			Administrator: broker.RabbitMQCredentials{
+			Administrator: config.AdminCredentials{
 				Username: "default-admin-username",
 			},
 		},
 	}
 }
 
-func defaultServiceBroker(config broker.Config, client *fakes.FakeAPIClient) brokerapi.ServiceBroker {
-	return broker.New(config, client, lagertest.NewTestLogger("test"))
+func defaultServiceBroker(conf config.Config, client *fakes.FakeAPIClient) brokerapi.ServiceBroker {
+	return broker.New(conf, client, lagertest.NewTestLogger("test"))
 }

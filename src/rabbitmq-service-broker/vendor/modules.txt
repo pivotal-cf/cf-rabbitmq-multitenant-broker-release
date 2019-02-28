@@ -2,6 +2,11 @@
 code.cloudfoundry.org/lager
 code.cloudfoundry.org/lager/lagertest
 code.cloudfoundry.org/lager/lagerctx
+# github.com/go-playground/locales v0.12.1
+github.com/go-playground/locales
+github.com/go-playground/locales/currency
+# github.com/go-playground/universal-translator v0.16.0
+github.com/go-playground/universal-translator
 # github.com/gorilla/mux v1.7.0
 github.com/gorilla/mux
 # github.com/hpcloud/tail v1.0.0
@@ -10,6 +15,8 @@ github.com/hpcloud/tail/ratelimiter
 github.com/hpcloud/tail/util
 github.com/hpcloud/tail/watch
 github.com/hpcloud/tail/winfile
+# github.com/leodido/go-urn v1.1.0
+github.com/leodido/go-urn
 # github.com/michaelklishin/rabbit-hole v1.5.0
 github.com/michaelklishin/rabbit-hole
 # github.com/onsi/ginkgo v1.7.0
@@ -52,7 +59,7 @@ github.com/pivotal-cf/brokerapi/auth
 github.com/pivotal-cf/brokerapi/middlewares/originating_identity_header
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
-# golang.org/x/net v0.0.0-20180906233101-161cd47e91fd
+# golang.org/x/net v0.0.0-20181005035420-146acd28ed58
 golang.org/x/net/html/charset
 golang.org/x/net/html
 golang.org/x/net/html/atom
@@ -76,6 +83,8 @@ golang.org/x/text/runes
 golang.org/x/text/internal/tag
 # gopkg.in/fsnotify.v1 v1.4.7
 gopkg.in/fsnotify.v1
+# gopkg.in/go-playground/validator.v9 v9.27.0
+gopkg.in/go-playground/validator.v9
 # gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7
 gopkg.in/tomb.v1
 # gopkg.in/yaml.v2 v2.2.1

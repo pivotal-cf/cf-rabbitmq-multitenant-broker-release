@@ -10,17 +10,18 @@ import (
 
 	"rabbitmq-service-broker/broker"
 	"rabbitmq-service-broker/broker/fakes"
+	"rabbitmq-service-broker/config"
 
 	"code.cloudfoundry.org/lager/lagertest"
 )
 
 var _ = Describe("Service Broker", func() {
 	It("returns a valid catalog", func() {
-		cfg := broker.Config{
-			ServiceConfig: broker.ServiceConfig{
+		cfg := config.Config{
+			Service: config.Service{
 				UUID:                "00000000-0000-0000-0000-000000000000",
 				Name:                "p-rabbitmq",
-				OfferingDescription: "this is a description",
+				Description:         "this is a description",
 				DisplayName:         "WhiteRabbitMQ",
 				IconImage:           "image_icon_base64",
 				LongDescription:     "this is a long description",
@@ -38,9 +39,9 @@ var _ = Describe("Service Broker", func() {
 		Expect(err).NotTo(HaveOccurred())
 
 		Expect(services).To(Equal([]brokerapi.Service{brokerapi.Service{
-			ID:          cfg.ServiceConfig.UUID,
-			Name:        cfg.ServiceConfig.Name,
-			Description: cfg.ServiceConfig.OfferingDescription,
+			ID:          cfg.Service.UUID,
+			Name:        cfg.Service.Name,
+			Description: cfg.Service.Description,
 			Bindable:    true,
 			Tags:        []string{"rabbitmq", "rabbit", "messaging", "message-queue", "amqp", "mqtt", "stomp"},
 			Metadata: &brokerapi.ServiceMetadata{
@@ -50,7 +51,7 @@ var _ = Describe("Service Broker", func() {
 				ProviderDisplayName: "SomeCompany",
 				DocumentationUrl:    "https://example.com",
 				SupportUrl:          "https://support.example.com",
-				Shareable:           &cfg.ServiceConfig.Shareable,
+				Shareable:           &cfg.Service.Shareable,
 			},
 			Plans: []brokerapi.ServicePlan{
 				brokerapi.ServicePlan{

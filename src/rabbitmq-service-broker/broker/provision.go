@@ -27,19 +27,19 @@ func (b RabbitMQServiceBroker) Provision(ctx context.Context, instanceID string,
 		}
 	}()
 
-	err = b.assignPermissionsToUser(vhost, b.config.RabbitMQConfig.Administrator.Username)
+	err = b.assignPermissionsToUser(vhost, b.cfg.RabbitMQ.Administrator.Username)
 	if err != nil {
 		return spec, err
 	}
 
-	if b.config.RabbitMQConfig.Management.Username != "" {
-		err = b.assignPermissionsToUser(vhost, b.config.RabbitMQConfig.Management.Username)
+	if b.cfg.RabbitMQ.Management.Username != "" {
+		err = b.assignPermissionsToUser(vhost, b.cfg.RabbitMQ.Management.Username)
 		if err != nil {
 			return spec, err
 		}
 	}
 
-	if b.config.RabbitMQConfig.Policy.Enabled {
+	if b.cfg.RabbitMQ.OperatorSetPolicy.Enabled {
 		err = b.createPolicy(vhost)
 		if err != nil {
 			return spec, err
@@ -47,7 +47,7 @@ func (b RabbitMQServiceBroker) Provision(ctx context.Context, instanceID string,
 	}
 
 	logger.Info("provision-succeeded")
-	url := fmt.Sprintf("https://%s/#/login/", b.config.RabbitMQConfig.ManagementDomain)
+	url := fmt.Sprintf("https://%s/#/login/", b.cfg.RabbitMQ.ManagementDomain)
 	return brokerapi.ProvisionedServiceSpec{DashboardURL: url}, nil
 }
 
@@ -102,16 +102,16 @@ func (b *RabbitMQServiceBroker) createPolicy(vhost string) error {
 	logger := b.logger.Session("create-policy")
 
 	policy := rabbithole.Policy{
-		Definition: rabbithole.PolicyDefinition(b.config.RabbitMQConfig.Policy.Definition),
-		Priority:   b.config.RabbitMQConfig.Policy.Priority,
+		Definition: rabbithole.PolicyDefinition(b.cfg.RabbitMQ.OperatorSetPolicy.Definition),
+		Priority:   b.cfg.RabbitMQ.OperatorSetPolicy.Priority,
 		Vhost:      vhost,
 		Pattern:    ".*",
 		ApplyTo:    "all",
-		Name:       b.config.RabbitMQConfig.Policy.Name,
+		Name:       b.cfg.RabbitMQ.OperatorSetPolicy.Name,
 	}
 
 	logger.Info("put-policy", lager.Data{"policy": policy})
-	err := validateResponse(b.client.PutPolicy(vhost, b.config.RabbitMQConfig.Policy.Name, policy))
+	err := validateResponse(b.client.PutPolicy(vhost, b.cfg.RabbitMQ.OperatorSetPolicy.Name, policy))
 	if err != nil {
 		logger.Error("put-policy-failed", err)
 		return err

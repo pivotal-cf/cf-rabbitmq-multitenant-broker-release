@@ -78,9 +78,9 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 	Context("management user permissions", func() {
 		When("the management user is set", func() {
 			BeforeEach(func() {
-				config := defaultConfig()
-				config.RabbitMQConfig.Management.Username = "default-management-username"
-				broker = defaultServiceBroker(config, client)
+				cfg := defaultConfig()
+				cfg.RabbitMQ.Management.Username = "default-management-username"
+				broker = defaultServiceBroker(cfg, client)
 			})
 
 			It("grants permissions on the vhost to the management RMQ user", func() {
@@ -126,12 +126,12 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 	Context("vhost policies", func() {
 		When("vhost policies are configured", func() {
 			BeforeEach(func() {
-				config := defaultConfig()
-				config.RabbitMQConfig.Policy.Enabled = true
-				config.RabbitMQConfig.Policy.Name = "fake-policy-name"
-				config.RabbitMQConfig.Policy.Definition = map[string]interface{}{"fake-policy-key": "fake-policy-value"}
-				config.RabbitMQConfig.Policy.Priority = 42
-				broker = defaultServiceBroker(config, client)
+				cfg := defaultConfig()
+				cfg.RabbitMQ.OperatorSetPolicy.Enabled = true
+				cfg.RabbitMQ.OperatorSetPolicy.Name = "fake-policy-name"
+				cfg.RabbitMQ.OperatorSetPolicy.Definition = map[string]interface{}{"fake-policy-key": "fake-policy-value"}
+				cfg.RabbitMQ.OperatorSetPolicy.Priority = 42
+				broker = defaultServiceBroker(cfg, client)
 			})
 
 			It("sets policies for the new instance", func() {

@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"rabbitmq-service-broker/broker"
+	"rabbitmq-service-broker/config"
 
 	"code.cloudfoundry.org/lager"
 	rabbithole "github.com/michaelklishin/rabbit-hole"
@@ -31,21 +32,21 @@ func main() {
 	logger.RegisterSink(lager.NewPrettySink(os.Stdout, lager.DEBUG))
 	logger.RegisterSink(lager.NewPrettySink(os.Stderr, lager.ERROR))
 
-	config, err := broker.ReadConfig(configPath)
+	cfg, err := config.Read(configPath)
 	if err != nil {
 		logger.Fatal("read-config", err)
 	}
 
 	client, _ := rabbithole.NewClient(
-		fmt.Sprintf("http://%s:15672", config.RabbitMQConfig.Hosts[0]),
-		config.RabbitMQConfig.Administrator.Username,
-		config.RabbitMQConfig.Administrator.Password,
+		fmt.Sprintf("http://%s:15672", cfg.RabbitMQ.Hosts[0]),
+		cfg.RabbitMQ.Administrator.Username,
+		cfg.RabbitMQ.Administrator.Password,
 	)
 
-	broker := broker.New(config, client, logger)
+	broker := broker.New(cfg, client, logger)
 	credentials := brokerapi.BrokerCredentials{
-		Username: config.ServiceConfig.Username,
-		Password: config.ServiceConfig.Password,
+		Username: cfg.Service.Username,
+		Password: cfg.Service.Password,
 	}
 
 	brokerAPI := brokerapi.New(broker, logger, credentials)
