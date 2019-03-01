@@ -29,15 +29,11 @@ type RabbitMQServiceBroker struct {
 }
 
 func New(cfg config.Config, client APIClient, logger lager.Logger) brokerapi.ServiceBroker {
-	return RabbitMQServiceBroker{
+	return &RabbitMQServiceBroker{
 		cfg:    cfg,
 		client: client,
 		logger: logger,
 	}
-}
-
-func (b RabbitMQServiceBroker) Deprovision(ctx context.Context, instanceID string, details brokerapi.DeprovisionDetails, asyncAllowed bool) (brokerapi.DeprovisionServiceSpec, error) {
-	return brokerapi.DeprovisionServiceSpec{}, errors.New("Not implemented")
 }
 
 func (b RabbitMQServiceBroker) GetInstance(ctx context.Context, instanceID string) (brokerapi.GetInstanceDetailsSpec, error) {

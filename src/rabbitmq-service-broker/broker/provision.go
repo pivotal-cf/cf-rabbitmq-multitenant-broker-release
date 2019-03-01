@@ -12,7 +12,7 @@ import (
 	"code.cloudfoundry.org/lager"
 )
 
-func (b RabbitMQServiceBroker) Provision(ctx context.Context, instanceID string, details brokerapi.ProvisionDetails, asyncAllowed bool) (spec brokerapi.ProvisionedServiceSpec, err error) {
+func (b *RabbitMQServiceBroker) Provision(ctx context.Context, instanceID string, details brokerapi.ProvisionDetails, asyncAllowed bool) (spec brokerapi.ProvisionedServiceSpec, err error) {
 	logger := b.logger.Session("provision")
 	vhost := instanceID
 
@@ -72,15 +72,16 @@ func (b *RabbitMQServiceBroker) createVhost(vhost string) error {
 	return nil
 }
 
-func (b *RabbitMQServiceBroker) deleteVhost(vhost string) {
+func (b *RabbitMQServiceBroker) deleteVhost(vhost string) error {
 	logger := b.logger.Session("delete-vhost")
 	logger.Info("delete-vhost")
 	err := validateResponse(b.client.DeleteVhost(vhost))
 	if err != nil {
 		logger.Error("delete-vhost-failed", err)
-		return
+		return err
 	}
 	logger.Info("delete-vhost-succeeded")
+	return nil
 }
 
 func (b *RabbitMQServiceBroker) assignPermissionsToUser(vhost, username string) error {

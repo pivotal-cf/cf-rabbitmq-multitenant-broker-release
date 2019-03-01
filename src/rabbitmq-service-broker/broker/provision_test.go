@@ -34,20 +34,20 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 	})
 
 	It("creates a vhost", func() {
-		_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+		_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 		Expect(err).NotTo(HaveOccurred())
 
 		Expect(client.PutVhostCallCount()).To(Equal(1))
-		Expect(client.PutVhostArgsForCall(0)).To(Equal("my-service-id"))
+		Expect(client.PutVhostArgsForCall(0)).To(Equal("my-service-instance-id"))
 	})
 
 	It("grants permissions on the vhost to the service broker RMQ admin user", func() {
-		_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+		_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 		Expect(err).NotTo(HaveOccurred())
 
 		Expect(client.UpdatePermissionsInCallCount()).To(Equal(1))
 		vhost, username, permissions := client.UpdatePermissionsInArgsForCall(0)
-		Expect(vhost).To(Equal("my-service-id"))
+		Expect(vhost).To(Equal("my-service-instance-id"))
 		Expect(username).To(Equal("default-admin-username"))
 		Expect(permissions.Configure).To(Equal(".*"))
 		Expect(permissions.Read).To(Equal(".*"))
@@ -55,7 +55,7 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 	})
 
 	It("return the dashboard URL", func() {
-		spec, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+		spec, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 		Expect(err).NotTo(HaveOccurred())
 
 		Expect(spec.DashboardURL).To(Equal("https://foo.bar.com/#/login/"))
@@ -69,7 +69,7 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 		})
 
 		It("cleans up the vhost", func() {
-			_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+			_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 			Expect(err).To(MatchError("http request failed with status code: 403"))
 			Expect(client.DeleteVhostCallCount()).To(Equal(1))
 		})
@@ -84,12 +84,12 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 			})
 
 			It("grants permissions on the vhost to the management RMQ user", func() {
-				_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+				_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 				Expect(err).NotTo(HaveOccurred())
 
 				Expect(client.UpdatePermissionsInCallCount()).To(Equal(2))
 				vhost, username, permissions := client.UpdatePermissionsInArgsForCall(1)
-				Expect(vhost).To(Equal("my-service-id"))
+				Expect(vhost).To(Equal("my-service-instance-id"))
 				Expect(username).To(Equal("default-management-username"))
 				Expect(permissions.Configure).To(Equal(".*"))
 				Expect(permissions.Read).To(Equal(".*"))
@@ -107,7 +107,7 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 				})
 
 				It("ignores the error", func() {
-					_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+					_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 					Expect(err).NotTo(HaveOccurred())
 					Expect(client.DeleteVhostCallCount()).To(Equal(0))
 				})
@@ -116,7 +116,7 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 
 		When("the management RMQ user has not been set", func() {
 			It("does not attempt to grant it permissions", func() {
-				_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+				_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(client.UpdatePermissionsInCallCount()).To(Equal(1))
 			})
@@ -135,12 +135,12 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 			})
 
 			It("sets policies for the new instance", func() {
-				_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+				_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 				Expect(err).NotTo(HaveOccurred())
 
 				Expect(client.PutPolicyCallCount()).To(Equal(1))
 				vhost, policyName, policy := client.PutPolicyArgsForCall(0)
-				Expect(vhost).To(Equal("my-service-id"))
+				Expect(vhost).To(Equal("my-service-instance-id"))
 				Expect(policyName).To(Equal("fake-policy-name"))
 				Expect(policy.Definition).To(BeEquivalentTo(map[string]interface{}{"fake-policy-key": "fake-policy-value"}))
 				Expect(policy.Priority).To(Equal(42))
@@ -152,7 +152,7 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 				})
 
 				It("cleans up the vhost", func() {
-					_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+					_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 					Expect(err).To(MatchError("http request failed with status code: 403"))
 					Expect(client.DeleteVhostCallCount()).To(Equal(1))
 				})
@@ -161,7 +161,7 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 
 		When("there are no policies configured", func() {
 			It("does not attempt to configure any", func() {
-				_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+				_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 				Expect(err).NotTo(HaveOccurred())
 
 				Expect(client.PutPolicyCallCount()).To(Equal(0))
@@ -173,11 +173,11 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 		It("returns ErrInstanceAlreadyExists error", func() {
 			client.GetVhostReturns(&rabbithole.VhostInfo{}, nil)
 
-			_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+			_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 			Expect(err).To(Equal(brokerapi.ErrInstanceAlreadyExists))
 
 			Expect(client.GetVhostCallCount()).To(Equal(1))
-			Expect(client.GetVhostArgsForCall(0)).To(Equal("my-service-id"))
+			Expect(client.GetVhostArgsForCall(0)).To(Equal("my-service-instance-id"))
 			Expect(client.PutVhostCallCount()).To(Equal(0))
 		})
 	})
@@ -186,14 +186,14 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 		It("returns an error when the RMQ API returns an error", func() {
 			client.PutVhostReturns(nil, fmt.Errorf("vhost-creation-failed"))
 
-			_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+			_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 			Expect(err).To(MatchError("vhost-creation-failed"))
 		})
 
 		It("returns an error when the RMQ API returns a bad HTTP response code", func() {
 			client.PutVhostReturns(&http.Response{StatusCode: http.StatusInternalServerError}, nil)
 
-			_, err := broker.Provision(ctx, "my-service-id", brokerapi.ProvisionDetails{}, false)
+			_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 			Expect(err).To(MatchError("http request failed with status code: 500"))
 		})
 	})
