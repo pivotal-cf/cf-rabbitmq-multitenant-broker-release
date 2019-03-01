@@ -122,22 +122,17 @@
       e
     ))))
 
-(defn delete-service
-  [{:keys [params] :as req}]
-  (log/infof "Asked to deprovision a service: %s" (:id params))
-  (if-let [^String id (:id params)]
-    (try
-      (if (rs/vhost-exists? id)
-        (do (rs/delete-vhost id)
-            (log/infof "Deleted vhost %s" id)
-            (ok))
-        (do (log/warnf "Vhost %s does not exist" id)
-            (gone)))
-      (gone)
-    (catch Exception e
-      (log/errorf "Failed to deprovision a service: %s" id)
-      (.printStackTrace e)
-      (log-exception e)))))
+(defn forward-request-delete
+  [req]
+  (let [headers (select-keys (get req :headers) ["authorization"])
+        endpoint (get req :uri),
+        query-string (get req :query-string)]
+    (try+
+      (httpc/delete (format "http://localhost:8901%s?%s" endpoint query-string) {:headers (assoc headers :X-Broker-API-Version "2.14")})
+    (catch Object e
+      (log/infof "forward-request failed for: %s, %s" endpoint headers)
+      e
+    ))))
 
 (defn bind-service
   [{:keys [params] :as req}]
@@ -204,7 +199,7 @@
 (defroutes broker-v2-routes
   (GET    "/v2/catalog"               req forward-request-get)
   (PUT    "/v2/service_instances/:id" req forward-request-put)
-  (DELETE "/v2/service_instances/:id" req delete-service)
+  (DELETE "/v2/service_instances/:id" req forward-request-delete)
   (PUT    "/v2/service_instances/:instance_id/service_bindings/:id" req bind-service)
   (DELETE "/v2/service_instances/:instance_id/service_bindings/:id" req unbind-service)
   (GET    "/ops/config"               req show-raw-config)

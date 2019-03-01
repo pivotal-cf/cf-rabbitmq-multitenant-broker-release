@@ -204,7 +204,7 @@
       (try
         (with-server-running
           (provided-vhost-does-not-exist id
-                                         (let [{:keys [status]} (th/raw-delete (format "v2/service_instances/%s" id))]
+                                         (let [{:keys [status]} (th/raw-delete (format "v2/service_instances/%s?service_id=00000000-0000-0000-0000-000000000000&plan_id=11111111-1111-1111-1111-111111111111" id))]
                                            (is (= 410 status)))))
         (finally
           (rs/delete-vhost id)))))
