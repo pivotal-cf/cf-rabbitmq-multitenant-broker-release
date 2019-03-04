@@ -51,6 +51,6 @@ func main() {
 
 	brokerAPI := brokerapi.New(broker, logger, credentials)
 	http.Handle("/", brokerAPI)
-	fmt.Printf("RabbitMQ Service Broker listening on port %d\n", port)
+	logger.Info("main-serving", lager.Data{"port": port})
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
 }

@@ -11,7 +11,6 @@ import (
 	rabbithole "github.com/michaelklishin/rabbit-hole"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
 )
 
@@ -42,7 +41,7 @@ var _ = BeforeSuite(func() {
 	session, err = gexec.Start(command, GinkgoWriter, GinkgoWriter)
 	Expect(err).NotTo(HaveOccurred())
 
-	Eventually(session.Out).Should(gbytes.Say("RabbitMQ Service Broker listening on port"))
+	Eventually(brokerIsServing).Should(BeTrue())
 
 	rmqClient, err = rabbithole.NewClient("http://127.0.0.1:15672", "guest", "guest")
 	Expect(err).NotTo(HaveOccurred())
@@ -69,4 +68,9 @@ func doRequest(method, url string, body io.Reader) (*http.Response, []byte) {
 
 	Expect(resp.Body.Close()).To(Succeed())
 	return resp, bodyContent
+}
+
+func brokerIsServing() bool {
+	_, err := http.Get(baseURL)
+	return err == nil
 }
