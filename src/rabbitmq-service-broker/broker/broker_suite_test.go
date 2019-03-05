@@ -28,8 +28,15 @@ func defaultConfig() config.Config {
 			Administrator: config.AdminCredentials{
 				Username: "default-admin-username",
 			},
+			Hosts: []string{"fake-hostname-1", "fake-hostname-2"},
 		},
 	}
+}
+
+func defaultConfigWithUserTags() config.Config {
+	cfg := defaultConfig()
+	cfg.RabbitMQ.RegularUserTags = "administrator"
+	return cfg
 }
 
 func defaultServiceBroker(conf config.Config, client *fakes.FakeAPIClient) brokerapi.ServiceBroker {

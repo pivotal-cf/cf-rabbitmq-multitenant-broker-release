@@ -14,6 +14,7 @@ service:
   icon_image: image_icon_base64
   shareable: true
 rabbitmq:
+  regular_user_tags: "policymaker,management"
   management_domain: pivotal-rabbitmq.127.0.0.1
   hosts:
     - 127.0.0.1
@@ -28,3 +29,4 @@ rabbitmq:
     policy_name: operator_set_policy
     policy_definition: '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'
     policy_priority: 50
+  ssl: "fake-certificate"

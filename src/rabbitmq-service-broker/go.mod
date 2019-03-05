@@ -29,7 +29,7 @@ require (
 	github.com/leodido/go-urn v1.1.0 // indirect
 	github.com/michaelklishin/rabbit-hole v1.5.0
 	github.com/microcosm-cc/bluemonday v1.0.2 // indirect
-	github.com/onsi/ginkgo v1.8.0
+	github.com/onsi/ginkgo v1.7.0
 	github.com/onsi/gomega v1.4.3
 	github.com/openzipkin/zipkin-go v0.1.5 // indirect
 	github.com/pborman/uuid v1.2.0 // indirect

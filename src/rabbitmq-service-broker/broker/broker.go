@@ -22,6 +22,8 @@ type APIClient interface {
 	DeleteVhost(vhostname string) (res *http.Response, err error)
 	DeleteUser(username string) (res *http.Response, err error)
 	ListUsers() (users []rabbithole.UserInfo, err error)
+	PutUser(string, rabbithole.UserSettings) (*http.Response, error)
+	ProtocolPorts() (res map[string]rabbithole.Port, err error)
 }
 
 type RabbitMQServiceBroker struct {
@@ -48,10 +50,6 @@ func (b RabbitMQServiceBroker) Update(ctx context.Context, instanceID string, de
 
 func (b RabbitMQServiceBroker) LastOperation(ctx context.Context, instanceID string, details brokerapi.PollDetails) (brokerapi.LastOperation, error) {
 	return brokerapi.LastOperation{}, errors.New("Not implemented")
-}
-
-func (b RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID string, details brokerapi.BindDetails, asyncAllowed bool) (brokerapi.Binding, error) {
-	return brokerapi.Binding{}, errors.New("Not implemented")
 }
 
 func (b RabbitMQServiceBroker) Unbind(ctx context.Context, instanceID, bindingID string, details brokerapi.UnbindDetails, asyncAllowed bool) (brokerapi.UnbindSpec, error) {

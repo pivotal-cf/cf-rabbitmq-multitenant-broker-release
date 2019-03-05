@@ -47,10 +47,12 @@ var _ = Describe("Config", func() {
 				Shareable:           true,
 			},
 			RabbitMQ: RabbitMQ{
+				RegularUserTags:  "policymaker,management",
 				Hosts:            []string{"127.0.0.1", "127.0.0.2"},
 				Administrator:    AdminCredentials{"fake-rmq-user", "fake-rmq-password"},
 				Management:       ManagementCredentials{"management-username"},
 				ManagementDomain: "pivotal-rabbitmq.127.0.0.1",
+				TLS:              true,
 				OperatorSetPolicy: RabbitMQPolicy{
 					Enabled: true,
 					Name:    "operator_set_policy",
@@ -86,5 +88,11 @@ var _ = Describe("Config", func() {
 	It("fails when the list of hosts is empty", func() {
 		_, err := Read(fixture("empty-hosts.yml"))
 		Expect(err).To(MatchError("Config file has missing fields: rabbitmq.hosts"))
+	})
+
+	It("interprets an empty field as disabling TLS", func() {
+		conf, err := Read(fixture("ssl-empty.yml"))
+		Expect(err).NotTo(HaveOccurred())
+		Expect(conf.RabbitMQ.TLS).To(BeEquivalentTo(false))
 	})
 })

@@ -47,6 +47,8 @@ type RabbitMQ struct {
 	Management        ManagementCredentials `yaml:"management"`
 	ManagementDomain  string                `yaml:"management_domain" validate:"required"`
 	OperatorSetPolicy RabbitMQPolicy        `yaml:"operator_set_policy"`
+	RegularUserTags   string                `yaml:"regular_user_tags"`
+	TLS               TLSEnabled            `yaml:"ssl"`
 }
 
 type ManagementCredentials struct {
@@ -73,6 +75,18 @@ func (p *PolicyDefinition) UnmarshalYAML(f func(interface{}) error) error {
 		return err
 	}
 	return json.Unmarshal([]byte(s), p)
+}
+
+type TLSEnabled bool
+
+func (t *TLSEnabled) UnmarshalYAML(f func(interface{}) error) error {
+	var s string
+	if err := f(&s); err != nil {
+		return err
+	}
+
+	*t = TLSEnabled(len(s) != 0)
+	return nil
 }
 
 func Read(path string) (Config, error) {
