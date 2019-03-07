@@ -20,6 +20,7 @@ type APIClient interface {
 	UpdatePermissionsIn(vhost, username string, permissions rabbithole.Permissions) (res *http.Response, err error)
 	PutPolicy(vhost, name string, policy rabbithole.Policy) (res *http.Response, err error)
 	DeleteVhost(vhostname string) (res *http.Response, err error)
+	DeleteUser(username string) (res *http.Response, err error)
 }
 
 type RabbitMQServiceBroker struct {

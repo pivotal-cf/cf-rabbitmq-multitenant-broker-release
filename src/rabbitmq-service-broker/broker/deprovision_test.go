@@ -45,6 +45,36 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 			_, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
 			Expect(err).To(HaveOccurred())
 		})
+
+		It("deletes the management user if it exists", func() {
+			client.DeleteVhostReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
+			client.DeleteUserReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
+			spec, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(spec.IsAsync).To(BeFalse())
+
+			Expect(client.DeleteVhostCallCount()).To(Equal(1))
+			Expect(client.DeleteVhostArgsForCall(0)).To(Equal("my-service-instance-id"))
+
+			Expect(client.DeleteUserCallCount()).To(Equal(1))
+			Expect(client.DeleteUserArgsForCall(0)).To(Equal("mu-my-service-instance-id"))
+
+		})
+
+		It("ignores the error when the management user doesn't exist", func() {
+			client.DeleteVhostReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
+			client.DeleteUserReturns(&http.Response{StatusCode: http.StatusNotFound}, nil)
+			spec, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(spec.IsAsync).To(BeFalse())
+
+			Expect(client.DeleteVhostCallCount()).To(Equal(1))
+			Expect(client.DeleteVhostArgsForCall(0)).To(Equal("my-service-instance-id"))
+
+			Expect(client.DeleteUserCallCount()).To(Equal(1))
+			Expect(client.DeleteUserArgsForCall(0)).To(Equal("mu-my-service-instance-id"))
+
+		})
 	})
 
 	When("the instance does not exist", func() {

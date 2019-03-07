@@ -10,6 +10,19 @@ import (
 )
 
 type FakeAPIClient struct {
+	DeleteUserStub        func(string) (*http.Response, error)
+	deleteUserMutex       sync.RWMutex
+	deleteUserArgsForCall []struct {
+		arg1 string
+	}
+	deleteUserReturns struct {
+		result1 *http.Response
+		result2 error
+	}
+	deleteUserReturnsOnCall map[int]struct {
+		result1 *http.Response
+		result2 error
+	}
 	DeleteVhostStub        func(string) (*http.Response, error)
 	deleteVhostMutex       sync.RWMutex
 	deleteVhostArgsForCall []struct {
@@ -82,6 +95,69 @@ type FakeAPIClient struct {
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
+}
+
+func (fake *FakeAPIClient) DeleteUser(arg1 string) (*http.Response, error) {
+	fake.deleteUserMutex.Lock()
+	ret, specificReturn := fake.deleteUserReturnsOnCall[len(fake.deleteUserArgsForCall)]
+	fake.deleteUserArgsForCall = append(fake.deleteUserArgsForCall, struct {
+		arg1 string
+	}{arg1})
+	fake.recordInvocation("DeleteUser", []interface{}{arg1})
+	fake.deleteUserMutex.Unlock()
+	if fake.DeleteUserStub != nil {
+		return fake.DeleteUserStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	fakeReturns := fake.deleteUserReturns
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeAPIClient) DeleteUserCallCount() int {
+	fake.deleteUserMutex.RLock()
+	defer fake.deleteUserMutex.RUnlock()
+	return len(fake.deleteUserArgsForCall)
+}
+
+func (fake *FakeAPIClient) DeleteUserCalls(stub func(string) (*http.Response, error)) {
+	fake.deleteUserMutex.Lock()
+	defer fake.deleteUserMutex.Unlock()
+	fake.DeleteUserStub = stub
+}
+
+func (fake *FakeAPIClient) DeleteUserArgsForCall(i int) string {
+	fake.deleteUserMutex.RLock()
+	defer fake.deleteUserMutex.RUnlock()
+	argsForCall := fake.deleteUserArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeAPIClient) DeleteUserReturns(result1 *http.Response, result2 error) {
+	fake.deleteUserMutex.Lock()
+	defer fake.deleteUserMutex.Unlock()
+	fake.DeleteUserStub = nil
+	fake.deleteUserReturns = struct {
+		result1 *http.Response
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeAPIClient) DeleteUserReturnsOnCall(i int, result1 *http.Response, result2 error) {
+	fake.deleteUserMutex.Lock()
+	defer fake.deleteUserMutex.Unlock()
+	fake.DeleteUserStub = nil
+	if fake.deleteUserReturnsOnCall == nil {
+		fake.deleteUserReturnsOnCall = make(map[int]struct {
+			result1 *http.Response
+			result2 error
+		})
+	}
+	fake.deleteUserReturnsOnCall[i] = struct {
+		result1 *http.Response
+		result2 error
+	}{result1, result2}
 }
 
 func (fake *FakeAPIClient) DeleteVhost(arg1 string) (*http.Response, error) {
@@ -407,6 +483,8 @@ func (fake *FakeAPIClient) UpdatePermissionsInReturnsOnCall(i int, result1 *http
 func (fake *FakeAPIClient) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
+	fake.deleteUserMutex.RLock()
+	defer fake.deleteUserMutex.RUnlock()
 	fake.deleteVhostMutex.RLock()
 	defer fake.deleteVhostMutex.RUnlock()
 	fake.getVhostMutex.RLock()
