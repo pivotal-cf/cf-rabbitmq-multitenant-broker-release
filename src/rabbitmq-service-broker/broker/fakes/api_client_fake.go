@@ -49,6 +49,18 @@ type FakeAPIClient struct {
 		result1 *rabbithole.VhostInfo
 		result2 error
 	}
+	ListUsersStub        func() ([]rabbithole.UserInfo, error)
+	listUsersMutex       sync.RWMutex
+	listUsersArgsForCall []struct {
+	}
+	listUsersReturns struct {
+		result1 []rabbithole.UserInfo
+		result2 error
+	}
+	listUsersReturnsOnCall map[int]struct {
+		result1 []rabbithole.UserInfo
+		result2 error
+	}
 	PutPolicyStub        func(string, string, rabbithole.Policy) (*http.Response, error)
 	putPolicyMutex       sync.RWMutex
 	putPolicyArgsForCall []struct {
@@ -286,6 +298,61 @@ func (fake *FakeAPIClient) GetVhostReturnsOnCall(i int, result1 *rabbithole.Vhos
 	}{result1, result2}
 }
 
+func (fake *FakeAPIClient) ListUsers() ([]rabbithole.UserInfo, error) {
+	fake.listUsersMutex.Lock()
+	ret, specificReturn := fake.listUsersReturnsOnCall[len(fake.listUsersArgsForCall)]
+	fake.listUsersArgsForCall = append(fake.listUsersArgsForCall, struct {
+	}{})
+	fake.recordInvocation("ListUsers", []interface{}{})
+	fake.listUsersMutex.Unlock()
+	if fake.ListUsersStub != nil {
+		return fake.ListUsersStub()
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	fakeReturns := fake.listUsersReturns
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeAPIClient) ListUsersCallCount() int {
+	fake.listUsersMutex.RLock()
+	defer fake.listUsersMutex.RUnlock()
+	return len(fake.listUsersArgsForCall)
+}
+
+func (fake *FakeAPIClient) ListUsersCalls(stub func() ([]rabbithole.UserInfo, error)) {
+	fake.listUsersMutex.Lock()
+	defer fake.listUsersMutex.Unlock()
+	fake.ListUsersStub = stub
+}
+
+func (fake *FakeAPIClient) ListUsersReturns(result1 []rabbithole.UserInfo, result2 error) {
+	fake.listUsersMutex.Lock()
+	defer fake.listUsersMutex.Unlock()
+	fake.ListUsersStub = nil
+	fake.listUsersReturns = struct {
+		result1 []rabbithole.UserInfo
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeAPIClient) ListUsersReturnsOnCall(i int, result1 []rabbithole.UserInfo, result2 error) {
+	fake.listUsersMutex.Lock()
+	defer fake.listUsersMutex.Unlock()
+	fake.ListUsersStub = nil
+	if fake.listUsersReturnsOnCall == nil {
+		fake.listUsersReturnsOnCall = make(map[int]struct {
+			result1 []rabbithole.UserInfo
+			result2 error
+		})
+	}
+	fake.listUsersReturnsOnCall[i] = struct {
+		result1 []rabbithole.UserInfo
+		result2 error
+	}{result1, result2}
+}
+
 func (fake *FakeAPIClient) PutPolicy(arg1 string, arg2 string, arg3 rabbithole.Policy) (*http.Response, error) {
 	fake.putPolicyMutex.Lock()
 	ret, specificReturn := fake.putPolicyReturnsOnCall[len(fake.putPolicyArgsForCall)]
@@ -489,6 +556,8 @@ func (fake *FakeAPIClient) Invocations() map[string][][]interface{} {
 	defer fake.deleteVhostMutex.RUnlock()
 	fake.getVhostMutex.RLock()
 	defer fake.getVhostMutex.RUnlock()
+	fake.listUsersMutex.RLock()
+	defer fake.listUsersMutex.RUnlock()
 	fake.putPolicyMutex.RLock()
 	defer fake.putPolicyMutex.RUnlock()
 	fake.putVhostMutex.RLock()
