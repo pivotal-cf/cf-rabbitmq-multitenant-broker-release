@@ -12,7 +12,7 @@ import (
 	"github.com/pivotal-cf/brokerapi"
 )
 
-func (b RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID string, details brokerapi.BindDetails, asyncAllowed bool) (brokerapi.Binding, error) {
+func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID string, details brokerapi.BindDetails, asyncAllowed bool) (brokerapi.Binding, error) {
 	logger := b.logger.Session("bind")
 
 	username := bindingID
