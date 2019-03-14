@@ -134,39 +134,6 @@
       e
     ))))
 
-(defn bind-service
-  [{:keys [params] :as req}]
-  ;; (slurp (:body req)) provides access to:
-  ;;  * service_id
-  ;;  * plan_id
-  ;;  * app_guid
-  (log/infof "Asked to bind a service: %s, RabbitMQ user id: %s" (:instance_id params) (:id params))
-  (let [^String virtual-host (:instance_id params) ; Instance ID in CF = Virtual Host ID in Rabbit
-        ^String user-id  (:id params)]             ; Binding ID in CF = User ID in Rabbit
-    (try
-      (if (and virtual-host user-id (rs/vhost-exists? virtual-host))
-        (if (rs/user-exists? user-id)
-          (conflict)
-          (let [password (rs/generate-password)]
-            (try
-              (rs/add-user user-id password)
-              (rs/grant-permissions user-id virtual-host)
-              (ok {:credentials (rs/credentials-for (cfg/node-hosts)
-                                  virtual-host
-                                  user-id
-                                  password
-                                  (rs/protocol-ports)
-                                  (cfg/using-tls?))})
-              (catch Exception e
-                (log/errorf "Failed to grant user %s permissions to vhost %s: %s" user-id virtual-host (.getMessage e))
-                (rs/delete-user user-id)
-                (internal-error)))))
-        (gone))
-      (catch Exception e
-        (log/errorf "Failed to bind a service: %s" virtual-host)
-        (.printStackTrace e)
-        (log-exception e)))))
-
 (defn unbind-service
   [{:keys [params] :as req}]
   (log/infof "Asked to unbind a service: %s, RabbitMQ user id: %s" (:instance_id params) (:id params))
@@ -200,7 +167,7 @@
   (GET    "/v2/catalog"               req forward-request-get)
   (PUT    "/v2/service_instances/:id" req forward-request-put)
   (DELETE "/v2/service_instances/:id" req forward-request-delete)
-  (PUT    "/v2/service_instances/:instance_id/service_bindings/:id" req bind-service)
+  (PUT    "/v2/service_instances/:instance_id/service_bindings/:id" req forward-request-put)
   (DELETE "/v2/service_instances/:instance_id/service_bindings/:id" req unbind-service)
   (GET    "/ops/config"               req show-raw-config)
   (GET    "/ops/cf/api/version"       req show-cf-api-version))

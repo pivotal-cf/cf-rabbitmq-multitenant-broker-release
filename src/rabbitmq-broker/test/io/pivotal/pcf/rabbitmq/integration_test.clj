@@ -84,6 +84,16 @@
         (cfg/init! nil)
         (.stop s#)))))
 
+(defn create-service-body []
+  {:body {:service_id "00000000-0000-0000-0000-000000000000"
+          :plan_id "11111111-1111-1111-1111-111111111111"
+          :organization_guid "fake-org-guid"
+          :space_guid "fake-space-guid"}})
+
+(defn create-bind-body []
+  {:body {:service_id "00000000-0000-0000-0000-000000000000"
+          :plan_id "11111111-1111-1111-1111-111111111111"}})
+
 
 ;;
 ;; Tests
@@ -112,59 +122,6 @@
             metadata (get s1 :metadata)]
         (is (= false  (get metadata :shareable)))
         ))))
-
-;; (deftest test-create-service-with-operater-set-policy
-;;   (testing "with provided service id that is NOT taken"
-;;     (let [id (.toLowerCase ^String (str (UUID/randomUUID)))]
-;;       (with-server-running-operator-set-policy-config "config/valid_with_operator_set_policy.yml"
-;;         (provided-vhost-does-not-exist id
-;;                                        (let [res         (th/put (format "v2/service_instances/%s" id) "http" (create-service-body))
-;;                                              ^String dbu (:dashboard_url res)]
-;;                                          (is dbu)
-;;                                          (is (.startsWith dbu "https://pivotal-rabbitmq.127.0.0.1/#/login")))
-;;                                        (is (rs/vhost-exists? id))
-;;                                        (is (some (fn [x] (re-matches (re-pattern (format "mu-%s.*" id)) x)) (map (fn [x] (:name x)) (rs/list-users))))
-;;                                        (th/has-policy? id (cfg/operator-set-policy-name))))))
-;;     (testing "when there's already a vhost registered"
-;;       (let [id (.toLowerCase ^String (str (UUID/randomUUID)))]
-;;         (with-server-running-operator-set-policy-config "config/valid_with_operator_set_policy.yml"
-;;           (provided-vhost-does-not-exist id
-;;                                          (hc/add-vhost "existing-vhost")
-;;                                          (hc/set-permissions "existing-vhost" "guest" {:configure ".*" :read ".*" :write ".*"})
-;;                                          (let [res         (th/put (format "v2/service_instances/%s" id))
-;;                                                ^String dbu (:dashboard_url res)]
-;;                                            (is dbu)
-;;                                            (is (.startsWith dbu "https://pivotal-rabbitmq.127.0.0.1/#/login/")))
-;;                                          (is (rs/vhost-exists? id))
-;;                                          (is (th/has-no-policy? "existing-vhost" (cfg/operator-set-policy-name))))))))
-;;
-;; (defn make-it-fail [f x]
-;;   (throw (Exception. "Injected failure for testing")))
-;;
-;;
-;; (deftest test-create-service-with-invalid-policy
-;;   (testing "broker cleans after exception"
-;;     (let [id (.toLowerCase ^String (str (UUID/randomUUID)))]
-;;       (with-server-running-operator-set-policy-config "config/valid_with_operator_set_policy.yml"
-;;         (provided-vhost-does-not-exist id
-;;                                        (hooke/add-hook #'rs/add-operator-set-policy #'make-it-fail)
-;;                                        (th/raw-put (format "v2/service_instances/%s" id))
-;;                                        (is (false? ( rs/vhost-exists? id)))
-;;                                        (is (not (some (fn [x] (re-matches (re-pattern (format "mu-%s.*" id)) x)) (map (fn [x] (:name x)) (rs/list-users)))))
-;;                                        (hooke/remove-hook #'rs/add-operator-set-policy #'make-it-fail)
-;;        )
-;;       )
-;;     )
-;;   )
-;; )
-;;
-;;
-
-(defn create-service-body []
-  {:body {:service_id "00000000-0000-0000-0000-000000000000"
-          :plan_id "11111111-1111-1111-1111-111111111111"
-          :organization_guid "fake-org-guid"
-          :space_guid "fake-space-guid"}})
 
 (deftest test-create-service-without-operator-set-policy
   (testing "with provided service id that is NOT taken"
@@ -220,12 +177,12 @@
           n   (count (rs/list-users))]
       (with-server-running
         (provided-vhost-exists sid
-                               (let [{:keys [status body]} (th/raw-put (format "v2/service_instances/%s/service_bindings/%s" sid bid))
+                               (let [{:keys [status body]} (th/raw-put (format "v2/service_instances/%s/service_bindings/%s" sid bid) "http" (create-bind-body))
                                      res                   (json/decode body false)
                                      n'                    (count (rs/list-users))
                                      ^String dbu           (get-in res ["credentials" "dashboard_url"])]
                                  (is dbu)
-                                 (is (= 200 status))
+                                 (is (= 201 status))
                                  (is (= (inc n) n'))
                                  (is (get res "credentials"))
                                  (is (.startsWith dbu (format "https://pivotal-rabbitmq.127.0.0.1/#/login/%s" bid)))
@@ -247,11 +204,10 @@
           n   (count (rs/list-users))]
       (with-server-running
         (provided-vhost-does-not-exist sid
-                                       (let [{:keys [status body]} (th/raw-put (format "v2/service_instances/%s/service_bindings/%s" sid bid))
+                                       (let [{:keys [status body]} (th/raw-put (format "v2/service_instances/%s/service_bindings/%s" sid bid) "http" (create-bind-body))
                                              res                   (json/decode body true)
                                              n'                    (count (rs/list-users))]
-                                         (is (= 410 status))
-                                         (is (= {} res))
+                                         (is (= 404 status))
                                          (is (= n n')))))))
   (testing "with provided binding id that IS NOT valid (duplicate)"
     (let [sid (.toLowerCase ^String (str (UUID/randomUUID)))
@@ -260,10 +216,9 @@
         (provided-vhost-exists sid
                                (provided-user-exists bid
                                                      (let [n                     (count (rs/list-users))
-                                                           {:keys [status body]} (th/raw-put (format "v2/service_instances/%s/service_bindings/%s" sid bid))
+                                                           {:keys [status body]} (th/raw-put (format "v2/service_instances/%s/service_bindings/%s" sid bid) "http" (create-bind-body))
                                                            res                   (json/decode body true)
                                                            n'                    (count (rs/list-users))]
-                                                       (is (= {} res))
                                                        (is (= 409 status))
                                                        (is (= n n'))))))))
   (testing "with provided binding id that IS NOT valid (missing)"
@@ -271,7 +226,7 @@
           n   (count (rs/list-users))]
       (with-server-running
         (provided-vhost-exists sid
-                               (let [{:keys [status body]} (th/raw-put (format "v2/service_instances/%s/service_bindings/" sid))
+                               (let [{:keys [status body]} (th/raw-put (format "v2/service_instances/%s/service_bindings/" sid) "http" (create-bind-body))
                                      n'                    (count (rs/list-users))]
                                  (is (= 404 status))
                                  (is (= n n'))))))))
