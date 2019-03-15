@@ -23,6 +23,7 @@ var _ = Describe("Config", func() {
 				ManagementDomain: "fake-management-domain",
 				Hosts:            []string{"fake-host-1", "fake-host-2"},
 				Administrator:    AdminCredentials{"fake-rmq-user", "fake-rmq-password"},
+				TLS:              false,
 			},
 		}))
 	})
@@ -90,9 +91,36 @@ var _ = Describe("Config", func() {
 		Expect(err).To(MatchError("Config file has missing fields: rabbitmq.hosts"))
 	})
 
-	It("interprets an empty field as disabling TLS", func() {
-		conf, err := Read(fixture("ssl-empty.yml"))
-		Expect(err).NotTo(HaveOccurred())
-		Expect(conf.RabbitMQ.TLS).To(BeEquivalentTo(false))
+	Describe("the `ssl` field", func() {
+		It("interprets a `false` as disabling TLS", func() {
+			conf, err := Read(fixture("ssl-false.yml"))
+			Expect(err).NotTo(HaveOccurred())
+			Expect(conf.RabbitMQ.TLS).To(BeEquivalentTo(false))
+		})
+
+		It("interprets an empty field as disabling TLS", func() {
+			conf, err := Read(fixture("ssl-empty.yml"))
+			Expect(err).NotTo(HaveOccurred())
+			Expect(conf.RabbitMQ.TLS).To(BeEquivalentTo(false))
+		})
+		It("interprets `null` as disabling TLS", func() {
+			conf, err := Read(fixture("ssl-null.yml"))
+			Expect(err).NotTo(HaveOccurred())
+			Expect(conf.RabbitMQ.TLS).To(BeEquivalentTo(false))
+		})
+
+		It("interprets `true` as enabling TLS", func() {
+			conf, err := Read(fixture("ssl-true.yml"))
+			Expect(err).NotTo(HaveOccurred())
+			Expect(conf.RabbitMQ.TLS).To(BeEquivalentTo(true))
+		})
+
+		It("interprets a certificate as enabling TLS", func() {
+			conf, err := Read(fixture("ssl-cert.yml"))
+			Expect(err).NotTo(HaveOccurred())
+			Expect(conf.RabbitMQ.TLS).To(BeEquivalentTo(true))
+		})
+
 	})
+
 })

@@ -77,6 +77,8 @@ func (p *PolicyDefinition) UnmarshalYAML(f func(interface{}) error) error {
 	return json.Unmarshal([]byte(s), p)
 }
 
+// TLSEnabled is a boolean true/false according to the job spec, but we must also support usages
+// where it's set to the the value of a certificate (for true) or empty/null (for false)
 type TLSEnabled bool
 
 func (t *TLSEnabled) UnmarshalYAML(f func(interface{}) error) error {
@@ -85,7 +87,7 @@ func (t *TLSEnabled) UnmarshalYAML(f func(interface{}) error) error {
 		return err
 	}
 
-	*t = TLSEnabled(len(s) != 0)
+	*t = TLSEnabled(len(s) != 0 && s != "false")
 	return nil
 }
 

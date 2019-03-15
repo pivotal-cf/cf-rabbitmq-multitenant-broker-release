@@ -121,6 +121,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 
 					Expect(binding.Credentials).To(HaveKeyWithValue("username", "binding-id"))
 					Expect(binding.Credentials).To(HaveKeyWithValue("vhost", "my-service-instance-id"))
+					Expect(binding.Credentials).To(HaveKeyWithValue("ssl", false))
 					Expect(binding.Credentials).To(HaveKeyWithValue("hostname", "fake-hostname-1"))
 					Expect(binding.Credentials).To(HaveKeyWithValue("hostnames", ConsistOf("fake-hostname-1", "fake-hostname-2")))
 					Expect(binding.Credentials).To(HaveKeyWithValue("protocols", SatisfyAll(
