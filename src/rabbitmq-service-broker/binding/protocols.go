@@ -31,6 +31,8 @@ func (b Builder) protocols() protocols {
 			ps["stomp"] = b.addSTOMPProtocol(port, false)
 		case "stomp/ssl":
 			ps["stomp+ssl"] = b.addSTOMPProtocol(port, true)
+		case "http/web-stomp":
+			ps["ws"] = b.addWebSTOMPProtocol(port)
 		}
 	}
 	ps["management"] = b.addMgmtProtocol()
