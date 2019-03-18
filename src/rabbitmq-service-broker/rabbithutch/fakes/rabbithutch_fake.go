@@ -7,6 +7,21 @@ import (
 )
 
 type FakeRabbitHutch struct {
+	CreateUserStub        func(string, string, string) (string, error)
+	createUserMutex       sync.RWMutex
+	createUserArgsForCall []struct {
+		arg1 string
+		arg2 string
+		arg3 string
+	}
+	createUserReturns struct {
+		result1 string
+		result2 error
+	}
+	createUserReturnsOnCall map[int]struct {
+		result1 string
+		result2 error
+	}
 	EnsureVHostExistsStub        func(string) error
 	ensureVHostExistsMutex       sync.RWMutex
 	ensureVHostExistsArgsForCall []struct {
@@ -20,6 +35,71 @@ type FakeRabbitHutch struct {
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
+}
+
+func (fake *FakeRabbitHutch) CreateUser(arg1 string, arg2 string, arg3 string) (string, error) {
+	fake.createUserMutex.Lock()
+	ret, specificReturn := fake.createUserReturnsOnCall[len(fake.createUserArgsForCall)]
+	fake.createUserArgsForCall = append(fake.createUserArgsForCall, struct {
+		arg1 string
+		arg2 string
+		arg3 string
+	}{arg1, arg2, arg3})
+	fake.recordInvocation("CreateUser", []interface{}{arg1, arg2, arg3})
+	fake.createUserMutex.Unlock()
+	if fake.CreateUserStub != nil {
+		return fake.CreateUserStub(arg1, arg2, arg3)
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	fakeReturns := fake.createUserReturns
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeRabbitHutch) CreateUserCallCount() int {
+	fake.createUserMutex.RLock()
+	defer fake.createUserMutex.RUnlock()
+	return len(fake.createUserArgsForCall)
+}
+
+func (fake *FakeRabbitHutch) CreateUserCalls(stub func(string, string, string) (string, error)) {
+	fake.createUserMutex.Lock()
+	defer fake.createUserMutex.Unlock()
+	fake.CreateUserStub = stub
+}
+
+func (fake *FakeRabbitHutch) CreateUserArgsForCall(i int) (string, string, string) {
+	fake.createUserMutex.RLock()
+	defer fake.createUserMutex.RUnlock()
+	argsForCall := fake.createUserArgsForCall[i]
+	return argsForCall.arg1, argsForCall.arg2, argsForCall.arg3
+}
+
+func (fake *FakeRabbitHutch) CreateUserReturns(result1 string, result2 error) {
+	fake.createUserMutex.Lock()
+	defer fake.createUserMutex.Unlock()
+	fake.CreateUserStub = nil
+	fake.createUserReturns = struct {
+		result1 string
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeRabbitHutch) CreateUserReturnsOnCall(i int, result1 string, result2 error) {
+	fake.createUserMutex.Lock()
+	defer fake.createUserMutex.Unlock()
+	fake.CreateUserStub = nil
+	if fake.createUserReturnsOnCall == nil {
+		fake.createUserReturnsOnCall = make(map[int]struct {
+			result1 string
+			result2 error
+		})
+	}
+	fake.createUserReturnsOnCall[i] = struct {
+		result1 string
+		result2 error
+	}{result1, result2}
 }
 
 func (fake *FakeRabbitHutch) EnsureVHostExists(arg1 string) error {
@@ -85,6 +165,8 @@ func (fake *FakeRabbitHutch) EnsureVHostExistsReturnsOnCall(i int, result1 error
 func (fake *FakeRabbitHutch) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
+	fake.createUserMutex.RLock()
+	defer fake.createUserMutex.RUnlock()
 	fake.ensureVHostExistsMutex.RLock()
 	defer fake.ensureVHostExistsMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}

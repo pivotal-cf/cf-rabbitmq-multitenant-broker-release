@@ -2,53 +2,29 @@ package broker
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/base64"
-
-	rabbithole "github.com/michaelklishin/rabbit-hole"
 
 	"rabbitmq-service-broker/binding"
 
+	"code.cloudfoundry.org/lager"
 	"github.com/pivotal-cf/brokerapi"
 )
 
 func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID string, details brokerapi.BindDetails, asyncAllowed bool) (brokerapi.Binding, error) {
-	logger := b.logger.Session("bind")
+	logger := b.logger.Session("bind", lager.Data{
+		"service_instance_id": instanceID,
+		"binding_id":          bindingID,
+	})
+	logger.Info("entry")
 
 	username := bindingID
 	vhost := instanceID
 
-	// ensureVhostExists
-	//   fail
-	//
-	// createUserAndAssignPermissions
-	//
-	// build binding
 	if err := b.rabbithutch.EnsureVHostExists(vhost); err != nil {
 		logger.Error("bind-error-checking-vhost-present", err)
 		return brokerapi.Binding{}, err
 	}
 
-	tags := b.cfg.RabbitMQ.RegularUserTags
-	if tags == "" {
-		tags = "policymaker,management"
-	}
-
-	password, err := generatePassword()
-	if err != nil {
-		return brokerapi.Binding{}, err
-	}
-
-	userSettings := rabbithole.UserSettings{
-		Password: password,
-		Tags:     tags,
-	}
-	err = b.createUser(username, userSettings)
-	if err != nil {
-		return brokerapi.Binding{}, err
-	}
-
-	err = b.assignPermissionsToUser(vhost, username)
+	password, err := b.rabbithutch.CreateUser(username, vhost, b.cfg.RabbitMQ.RegularUserTags)
 	if err != nil {
 		return brokerapi.Binding{}, err
 	}
@@ -88,13 +64,4 @@ func (b *RabbitMQServiceBroker) protocolPorts() (map[string]int, error) {
 	}
 
 	return result, nil
-}
-
-func generatePassword() (string, error) {
-	rb := make([]byte, 24)
-	_, err := rand.Read(rb)
-	if err != nil {
-		return "", err
-	}
-	return base64.URLEncoding.EncodeToString(rb), nil
 }

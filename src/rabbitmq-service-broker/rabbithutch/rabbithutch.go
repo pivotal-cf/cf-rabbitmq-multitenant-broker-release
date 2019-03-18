@@ -24,6 +24,7 @@ type APIClient interface {
 
 type RabbitHutch interface {
 	EnsureVHostExists(string) error
+	CreateUser(string, string, string) (string, error)
 }
 
 type rabbitHutch struct {
