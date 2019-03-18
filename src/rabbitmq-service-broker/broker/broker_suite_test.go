@@ -11,7 +11,7 @@ import (
 
 	"github.com/pivotal-cf/brokerapi"
 
-	"rabbitmq-service-broker/broker/fakes"
+	"rabbitmq-service-broker/rabbithutch/fakes"
 
 	"code.cloudfoundry.org/lager/lagertest"
 )
@@ -39,6 +39,6 @@ func defaultConfigWithUserTags() config.Config {
 	return cfg
 }
 
-func defaultServiceBroker(conf config.Config, client *fakes.FakeAPIClient) brokerapi.ServiceBroker {
-	return broker.New(conf, client, lagertest.NewTestLogger("test"))
+func defaultServiceBroker(conf config.Config, client *fakes.FakeAPIClient, rabbithutch *fakes.FakeRabbitHutch) brokerapi.ServiceBroker {
+	return broker.New(conf, client, rabbithutch, lagertest.NewTestLogger("test"))
 }

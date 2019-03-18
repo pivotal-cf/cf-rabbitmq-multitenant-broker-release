@@ -9,6 +9,7 @@ import (
 
 	"rabbitmq-service-broker/broker"
 	"rabbitmq-service-broker/config"
+	"rabbitmq-service-broker/rabbithutch"
 
 	"code.cloudfoundry.org/lager"
 	rabbithole "github.com/michaelklishin/rabbit-hole"
@@ -43,7 +44,7 @@ func main() {
 		cfg.RabbitMQ.Administrator.Password,
 	)
 
-	broker := broker.New(cfg, client, logger)
+	broker := broker.New(cfg, client, rabbithutch.New(client), logger)
 	credentials := brokerapi.BrokerCredentials{
 		Username: cfg.Service.Username,
 		Password: cfg.Service.Password,

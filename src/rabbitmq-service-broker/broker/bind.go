@@ -18,14 +18,15 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 	username := bindingID
 	vhost := instanceID
 
-	exists, err := b.vhostExists(instanceID)
-	if err != nil {
-		logger.Error("bind-error-getting-vhost", err)
+	// ensureVhostExists
+	//   fail
+	//
+	// createUserAndAssignPermissions
+	//
+	// build binding
+	if err := b.rabbithutch.EnsureVHostExists(vhost); err != nil {
+		logger.Error("bind-error-checking-vhost-present", err)
 		return brokerapi.Binding{}, err
-	}
-	if !exists {
-		logger.Error("bind-service-does-not-exist", brokerapi.ErrInstanceDoesNotExist)
-		return brokerapi.Binding{}, brokerapi.ErrInstanceDoesNotExist
 	}
 
 	tags := b.cfg.RabbitMQ.RegularUserTags

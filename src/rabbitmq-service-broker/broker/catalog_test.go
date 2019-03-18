@@ -8,11 +8,8 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/pivotal-cf/brokerapi"
 
-	"rabbitmq-service-broker/broker"
-	"rabbitmq-service-broker/broker/fakes"
 	"rabbitmq-service-broker/config"
-
-	"code.cloudfoundry.org/lager/lagertest"
+	"rabbitmq-service-broker/rabbithutch/fakes"
 )
 
 var _ = Describe("Service Broker", func() {
@@ -32,9 +29,9 @@ var _ = Describe("Service Broker", func() {
 				Shareable:           false,
 			},
 		}
-		client := new(fakes.FakeAPIClient)
-		logger := lagertest.NewTestLogger("test")
-		broker := broker.New(cfg, client, logger)
+		rabbitClient := &fakes.FakeAPIClient{}
+		rabbithutch := &fakes.FakeRabbitHutch{}
+		broker := defaultServiceBroker(cfg, rabbitClient, rabbithutch)
 		services, err := broker.Services(context.Background())
 		Expect(err).NotTo(HaveOccurred())
 

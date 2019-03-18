@@ -3,7 +3,7 @@ package fakes
 
 import (
 	"net/http"
-	"rabbitmq-service-broker/broker"
+	"rabbitmq-service-broker/rabbithutch"
 	"sync"
 
 	rabbithole "github.com/michaelklishin/rabbit-hole"
@@ -732,4 +732,4 @@ func (fake *FakeAPIClient) recordInvocation(key string, args []interface{}) {
 	fake.invocations[key] = append(fake.invocations[key], args)
 }
 
-var _ broker.APIClient = new(FakeAPIClient)
+var _ rabbithutch.APIClient = new(FakeAPIClient)

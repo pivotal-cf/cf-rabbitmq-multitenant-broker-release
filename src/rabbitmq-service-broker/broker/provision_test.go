@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"rabbitmq-service-broker/broker/fakes"
+	"rabbitmq-service-broker/rabbithutch/fakes"
 
 	rabbithole "github.com/michaelklishin/rabbit-hole"
 
@@ -17,14 +17,16 @@ import (
 
 var _ = Describe("Provisioning a RMQ service instance", func() {
 	var (
-		client *fakes.FakeAPIClient
-		broker brokerapi.ServiceBroker
-		ctx    context.Context
+		client      *fakes.FakeAPIClient
+		rabbithutch *fakes.FakeRabbitHutch
+		broker      brokerapi.ServiceBroker
+		ctx         context.Context
 	)
 
 	BeforeEach(func() {
-		client = new(fakes.FakeAPIClient)
-		broker = defaultServiceBroker(defaultConfig(), client)
+		client = &fakes.FakeAPIClient{}
+		rabbithutch = &fakes.FakeRabbitHutch{}
+		broker = defaultServiceBroker(defaultConfig(), client, rabbithutch)
 		ctx = context.TODO()
 		client.GetVhostReturns(nil, fmt.Errorf("vhost does not exist"))
 		client.PutVhostReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
@@ -80,7 +82,7 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 			BeforeEach(func() {
 				cfg := defaultConfig()
 				cfg.RabbitMQ.Management.Username = "default-management-username"
-				broker = defaultServiceBroker(cfg, client)
+				broker = defaultServiceBroker(cfg, client, rabbithutch)
 			})
 
 			It("grants permissions on the vhost to the management RMQ user", func() {
@@ -131,7 +133,7 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 				cfg.RabbitMQ.OperatorSetPolicy.Name = "fake-policy-name"
 				cfg.RabbitMQ.OperatorSetPolicy.Definition = map[string]interface{}{"fake-policy-key": "fake-policy-value"}
 				cfg.RabbitMQ.OperatorSetPolicy.Priority = 42
-				broker = defaultServiceBroker(cfg, client)
+				broker = defaultServiceBroker(cfg, client, rabbithutch)
 			})
 
 			It("sets policies for the new instance", func() {

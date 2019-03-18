@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"rabbitmq-service-broker/broker/fakes"
+	"rabbitmq-service-broker/rabbithutch/fakes"
 
 	rabbithole "github.com/michaelklishin/rabbit-hole"
 	"github.com/pivotal-cf/brokerapi"
@@ -16,17 +16,18 @@ import (
 
 var _ = Describe("Deprovisioning a RMQ service instance", func() {
 	var (
-		client *fakes.FakeAPIClient
-		broker brokerapi.ServiceBroker
-		ctx    context.Context
+		client      *fakes.FakeAPIClient
+		rabbithutch *fakes.FakeRabbitHutch
+		broker      brokerapi.ServiceBroker
+		ctx         context.Context
 	)
 
 	When("the instance exists", func() {
 		BeforeEach(func() {
-			client = new(fakes.FakeAPIClient)
+			client = &fakes.FakeAPIClient{}
+			rabbithutch = &fakes.FakeRabbitHutch{}
+			broker = defaultServiceBroker(defaultConfig(), client, rabbithutch)
 			client.GetVhostReturns(&rabbithole.VhostInfo{}, nil)
-
-			broker = defaultServiceBroker(defaultConfig(), client)
 			ctx = context.TODO()
 		})
 
@@ -94,7 +95,7 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 			client = new(fakes.FakeAPIClient)
 			client.GetVhostReturns(nil, rabbithole.ErrorResponse{StatusCode: 404})
 
-			broker = defaultServiceBroker(defaultConfig(), client)
+			broker = defaultServiceBroker(defaultConfig(), client, rabbithutch)
 			ctx = context.TODO()
 		})
 
@@ -109,7 +110,7 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 			client = new(fakes.FakeAPIClient)
 			client.GetVhostReturns(nil, errors.New("oops"))
 
-			broker = defaultServiceBroker(defaultConfig(), client)
+			broker = defaultServiceBroker(defaultConfig(), client, rabbithutch)
 			ctx = context.TODO()
 		})
 

@@ -9,7 +9,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"rabbitmq-service-broker/broker/fakes"
+	"rabbitmq-service-broker/rabbithutch/fakes"
 
 	rabbithole "github.com/michaelklishin/rabbit-hole"
 	"github.com/pivotal-cf/brokerapi"
@@ -20,23 +20,36 @@ var _ = Describe("Binding a RMQ service instance", func() {
 		rabbitClient *fakes.FakeAPIClient
 		broker       brokerapi.ServiceBroker
 		ctx          context.Context
+		rabbithutch  *fakes.FakeRabbitHutch
 	)
 
 	BeforeEach(func() {
-		rabbitClient = new(fakes.FakeAPIClient)
-		broker = defaultServiceBroker(defaultConfig(), rabbitClient)
+		rabbitClient = &fakes.FakeAPIClient{}
+		rabbithutch = &fakes.FakeRabbitHutch{}
+		broker = defaultServiceBroker(defaultConfig(), rabbitClient, rabbithutch)
 		ctx = context.TODO()
 		rabbitClient.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusOK}, nil)
 	})
 
 	When("the SI does not exist", func() {
 		BeforeEach(func() {
-			rabbitClient.GetVhostReturns(nil, rabbithole.ErrorResponse{StatusCode: http.StatusNotFound})
+			rabbithutch.EnsureVHostExistsReturns(brokerapi.ErrInstanceDoesNotExist)
 		})
 
 		It("fails with an error saying the SI does not exist", func() {
 			_, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
 			Expect(err).To(MatchError(brokerapi.ErrInstanceDoesNotExist))
+		})
+	})
+
+	When("we fail to query the vhost", func() {
+		BeforeEach(func() {
+			rabbithutch.EnsureVHostExistsReturns(rabbithole.ErrorResponse{StatusCode: http.StatusInternalServerError})
+		})
+
+		It("fails with an error saying the vhost could not be retrieved", func() {
+			_, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
+			Expect(err).To(MatchError(rabbithole.ErrorResponse{StatusCode: http.StatusInternalServerError}))
 		})
 	})
 
@@ -80,7 +93,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 			When("user tags are set in the config", func() {
 				BeforeEach(func() {
 					rabbitClient = new(fakes.FakeAPIClient)
-					broker = defaultServiceBroker(defaultConfigWithUserTags(), rabbitClient)
+					broker = defaultServiceBroker(defaultConfigWithUserTags(), rabbitClient, rabbithutch)
 					ctx = context.TODO()
 					rabbitClient.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusOK}, nil)
 				})
