@@ -36,7 +36,6 @@ func (r *rabbitHutch) CreateUser(username, vhost, tags string) (string, error) {
 	permissions := rabbithole.Permissions{Configure: ".*", Write: ".*", Read: ".*"}
 	err = validateResponse(r.client.UpdatePermissionsIn(vhost, username, permissions))
 	if err != nil {
-		r.DeleteUser(username)
 		return "", err
 	}
 

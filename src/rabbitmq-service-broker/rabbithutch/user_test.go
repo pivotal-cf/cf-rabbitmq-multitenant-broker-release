@@ -23,7 +23,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 		rabbithutch = New(rabbitClient)
 	})
 
-	Describe("the user", func() {
+	Describe("createUser()", func() {
 
 		It("creates a user", func() {
 			rabbitClient.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusOK}, nil)
@@ -55,18 +55,6 @@ var _ = Describe("Binding a RMQ service instance", func() {
 			Expect(err).To(MatchError(brokerapi.ErrBindingAlreadyExists))
 		})
 
-		It("deletes the user if setting permissions fails", func() {
-			rabbitClient.PutUserReturns(&http.Response{StatusCode: http.StatusOK}, nil)
-			rabbitClient.UpdatePermissionsInReturns(nil, errors.New("cannot update permissions"))
-
-			_, err := rabbithutch.CreateUser("fake-user", "fake-vhost", "")
-
-			Expect(err).To(MatchError("cannot update permissions"))
-			Expect(rabbitClient.DeleteUserCallCount()).To(Equal(1))
-			user := rabbitClient.DeleteUserArgsForCall(0)
-			Expect(user).To(Equal("fake-user"))
-		})
-
 		It("grants the user full permissions to the vhost", func() {
 			rabbitClient.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusOK}, nil)
 
@@ -96,6 +84,18 @@ var _ = Describe("Binding a RMQ service instance", func() {
 				Expect(info.Password).To(MatchRegexp(`[a-zA-Z0-9\-_]{24}`))
 				Expect(info.Tags).To(Equal("some-tags"))
 			})
+		})
+	})
+
+	Describe("DeleteUser()", func() {
+
+		It("deletes the user", func() {
+			err := rabbithutch.DeleteUser("fake-user")
+
+			Expect(err).NotTo(HaveOccurred())
+			Expect(rabbitClient.DeleteUserCallCount()).To(Equal(1))
+			user := rabbitClient.DeleteUserArgsForCall(0)
+			Expect(user).To(Equal("fake-user"))
 		})
 	})
 })
