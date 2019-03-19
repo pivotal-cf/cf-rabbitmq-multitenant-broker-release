@@ -21,6 +21,11 @@ integration_tests: ## runs integration tests in Docker (for development)
 unit_tests: ## runs the unit tests
 	GOFLAGS='-mod=vendor' ginkgo -r --skipPackage=integrationtests
 
+tests: unit_tests integration_tests ## runs unit and integration tests
+
+acceptance_tests: ## runs the clojure broker tests
+	../rabbitmq-broker/bin/test-from-docker
+
 coverage: ## runs test coverage tool
 	GOFLAGS='-mod=vendor' ginkgo -r --skipPackage=integrationtests -cover -coverprofile rabbitmq-service-broker.coverprofile -outputdir .
 	echo 'mode: atomic' >rabbitmq-service-broker.coverage ## https://github.com/onsi/ginkgo/issues/518
