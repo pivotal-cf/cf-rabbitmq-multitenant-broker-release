@@ -30,11 +30,6 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 	}
 
 	password, err := b.rabbithutch.CreateUser(username, vhost, b.cfg.RabbitMQ.RegularUserTags)
-	defer func() {
-		if err != nil {
-			b.rabbithutch.DeleteUser(username)
-		}
-	}()
 	if err != nil {
 		return brokerapi.Binding{}, err
 	}

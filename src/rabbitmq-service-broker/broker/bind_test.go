@@ -67,23 +67,10 @@ var _ = Describe("Binding a RMQ service instance", func() {
 				Expect(tags).To(Equal(""))
 			})
 
-			When("user creation fails", func() {
-				var err error
-				BeforeEach(func() {
-					rabbithutch.CreateUserReturns("fake-password", errors.New("foo"))
-					_, err = broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
-				})
-
-				It("fails with an error if it cannot create a user", func() {
-					Expect(err).To(MatchError("foo"))
-				})
-
-				It("deletes the user if creation fails", func() {
-					username := rabbithutch.DeleteUserArgsForCall(0)
-
-					Expect(rabbithutch.DeleteUserCallCount()).To(Equal(1))
-					Expect(username).To(Equal("binding-id"))
-				})
+			It("fails with an error if it cannot create a user", func() {
+				rabbithutch.CreateUserReturns("fake-password", errors.New("foo"))
+				_, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
+				Expect(err).To(MatchError("foo"))
 			})
 
 			When("user tags are set in the config", func() {
@@ -115,7 +102,6 @@ var _ = Describe("Binding a RMQ service instance", func() {
 					rabbithutch.ProtocolPortsReturns(nil, fmt.Errorf("failed to read protocol ports"))
 					_, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
 
-					Expect(rabbithutch.DeleteUserCallCount()).To(Equal(0))
 					Expect(err).To(MatchError("failed to read protocol ports"))
 				})
 			})
