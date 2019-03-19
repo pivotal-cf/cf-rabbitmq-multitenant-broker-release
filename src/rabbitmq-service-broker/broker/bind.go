@@ -26,11 +26,13 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 
 	protocolPorts, err := b.rabbithutch.ProtocolPorts()
 	if err != nil {
+		logger.Error("bind-error-retrieving-protocol-ports", err)
 		return brokerapi.Binding{}, err
 	}
 
 	password, err := b.rabbithutch.CreateUser(username, vhost, b.cfg.RabbitMQ.RegularUserTags)
 	if err != nil {
+		logger.Error("bind-error-creating-user", err)
 		return brokerapi.Binding{}, err
 	}
 
@@ -46,6 +48,7 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 
 	credentials, err := credsBuilder.Build()
 	if err != nil {
+		logger.Error("bind-error-building-credentials", err)
 		return brokerapi.Binding{}, err
 	}
 
