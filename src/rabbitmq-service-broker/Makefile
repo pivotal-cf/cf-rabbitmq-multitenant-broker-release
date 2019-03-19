@@ -18,10 +18,10 @@ run: ## starts the broker for testing
 integration_tests: ## runs integration tests in Docker (for development)
 	docker run --rm -v "${PWD}:/rabbitmq-service-broker" cflondonservices/london-services-ci-rabbitmq /rabbitmq-service-broker/ci/run_integration_tests.sh
 
-unit_tests:
+unit_tests: ## runs the unit tests
 	GOFLAGS='-mod=vendor' ginkgo -r --skipPackage=integrationtests
 
-coverage:
+coverage: ## runs test coverage tool
 	GOFLAGS='-mod=vendor' ginkgo -r --skipPackage=integrationtests -cover -coverprofile rabbitmq-service-broker.coverprofile -outputdir .
 	echo 'mode: atomic' >rabbitmq-service-broker.coverage ## https://github.com/onsi/ginkgo/issues/518
 	grep -v 'mode:' rabbitmq-service-broker.coverprofile >>rabbitmq-service-broker.coverage
