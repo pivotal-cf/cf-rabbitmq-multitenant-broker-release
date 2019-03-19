@@ -24,12 +24,12 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 		return brokerapi.Binding{}, err
 	}
 
-	password, err := b.rabbithutch.CreateUser(username, vhost, b.cfg.RabbitMQ.RegularUserTags)
+	protocolPorts, err := b.rabbithutch.ProtocolPorts()
 	if err != nil {
 		return brokerapi.Binding{}, err
 	}
 
-	protocolPorts, err := b.rabbithutch.ProtocolPorts()
+	password, err := b.rabbithutch.CreateUser(username, vhost, b.cfg.RabbitMQ.RegularUserTags)
 	if err != nil {
 		return brokerapi.Binding{}, err
 	}

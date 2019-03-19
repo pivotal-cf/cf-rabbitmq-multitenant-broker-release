@@ -36,6 +36,7 @@ func (r *rabbitHutch) CreateUser(username, vhost, tags string) (string, error) {
 	permissions := rabbithole.Permissions{Configure: ".*", Write: ".*", Read: ".*"}
 	err = validateResponse(r.client.UpdatePermissionsIn(vhost, username, permissions))
 	if err != nil {
+		r.DeleteUser(username)
 		return "", err
 	}
 
@@ -61,4 +62,12 @@ func generatePassword() (string, error) {
 		return "", err
 	}
 	return base64.URLEncoding.EncodeToString(rb), nil
+}
+
+func (r *rabbitHutch) DeleteUser(username string) error {
+	_, err := r.client.DeleteUser(username)
+	if err != nil {
+		return err
+	}
+	return nil
 }
