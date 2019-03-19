@@ -59,6 +59,10 @@ var _ = Describe("the lifecycle of a service instance", func() {
 		bindResponse, bindBody := bind(bindingID, serviceInstanceID, serviceID, planID)
 		Expect(bindResponse.StatusCode).To(Equal(http.StatusCreated), string(bindBody))
 
+		By("resending a binding request")
+		resentBindResponse, resentBindBody := bind(bindingID, serviceInstanceID, serviceID, planID)
+		Expect(resentBindResponse.StatusCode).To(Equal(http.StatusConflict), string(resentBindBody))
+
 		By("checking the binding credentials")
 		var binding map[string]interface{}
 		Expect(json.Unmarshal(bindBody, &binding)).To(Succeed())
