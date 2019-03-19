@@ -33,6 +33,18 @@ type FakeRabbitHutch struct {
 	ensureVHostExistsReturnsOnCall map[int]struct {
 		result1 error
 	}
+	ProtocolPortsStub        func() (map[string]int, error)
+	protocolPortsMutex       sync.RWMutex
+	protocolPortsArgsForCall []struct {
+	}
+	protocolPortsReturns struct {
+		result1 map[string]int
+		result2 error
+	}
+	protocolPortsReturnsOnCall map[int]struct {
+		result1 map[string]int
+		result2 error
+	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
@@ -162,6 +174,61 @@ func (fake *FakeRabbitHutch) EnsureVHostExistsReturnsOnCall(i int, result1 error
 	}{result1}
 }
 
+func (fake *FakeRabbitHutch) ProtocolPorts() (map[string]int, error) {
+	fake.protocolPortsMutex.Lock()
+	ret, specificReturn := fake.protocolPortsReturnsOnCall[len(fake.protocolPortsArgsForCall)]
+	fake.protocolPortsArgsForCall = append(fake.protocolPortsArgsForCall, struct {
+	}{})
+	fake.recordInvocation("ProtocolPorts", []interface{}{})
+	fake.protocolPortsMutex.Unlock()
+	if fake.ProtocolPortsStub != nil {
+		return fake.ProtocolPortsStub()
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	fakeReturns := fake.protocolPortsReturns
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeRabbitHutch) ProtocolPortsCallCount() int {
+	fake.protocolPortsMutex.RLock()
+	defer fake.protocolPortsMutex.RUnlock()
+	return len(fake.protocolPortsArgsForCall)
+}
+
+func (fake *FakeRabbitHutch) ProtocolPortsCalls(stub func() (map[string]int, error)) {
+	fake.protocolPortsMutex.Lock()
+	defer fake.protocolPortsMutex.Unlock()
+	fake.ProtocolPortsStub = stub
+}
+
+func (fake *FakeRabbitHutch) ProtocolPortsReturns(result1 map[string]int, result2 error) {
+	fake.protocolPortsMutex.Lock()
+	defer fake.protocolPortsMutex.Unlock()
+	fake.ProtocolPortsStub = nil
+	fake.protocolPortsReturns = struct {
+		result1 map[string]int
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeRabbitHutch) ProtocolPortsReturnsOnCall(i int, result1 map[string]int, result2 error) {
+	fake.protocolPortsMutex.Lock()
+	defer fake.protocolPortsMutex.Unlock()
+	fake.ProtocolPortsStub = nil
+	if fake.protocolPortsReturnsOnCall == nil {
+		fake.protocolPortsReturnsOnCall = make(map[int]struct {
+			result1 map[string]int
+			result2 error
+		})
+	}
+	fake.protocolPortsReturnsOnCall[i] = struct {
+		result1 map[string]int
+		result2 error
+	}{result1, result2}
+}
+
 func (fake *FakeRabbitHutch) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
@@ -169,6 +236,8 @@ func (fake *FakeRabbitHutch) Invocations() map[string][][]interface{} {
 	defer fake.createUserMutex.RUnlock()
 	fake.ensureVHostExistsMutex.RLock()
 	defer fake.ensureVHostExistsMutex.RUnlock()
+	fake.protocolPortsMutex.RLock()
+	defer fake.protocolPortsMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}
 	for key, value := range fake.invocations {
 		copiedInvocations[key] = value

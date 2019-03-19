@@ -29,7 +29,7 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 		return brokerapi.Binding{}, err
 	}
 
-	protocolPorts, err := b.protocolPorts()
+	protocolPorts, err := b.rabbithutch.ProtocolPorts()
 	if err != nil {
 		return brokerapi.Binding{}, err
 	}
@@ -50,18 +50,4 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 	}
 
 	return brokerapi.Binding{Credentials: credentials}, nil
-}
-
-func (b *RabbitMQServiceBroker) protocolPorts() (map[string]int, error) {
-	protocolPorts, err := b.client.ProtocolPorts()
-	if err != nil {
-		return nil, err
-	}
-
-	result := make(map[string]int)
-	for protocol, port := range protocolPorts {
-		result[protocol] = int(port)
-	}
-
-	return result, nil
 }

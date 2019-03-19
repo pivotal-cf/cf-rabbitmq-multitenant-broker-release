@@ -98,19 +98,17 @@ var _ = Describe("Binding a RMQ service instance", func() {
 
 		Describe("the binding data", func() {
 			When("it cannot read the protocol ports", func() {
-				BeforeEach(func() {
-					rabbitClient.ProtocolPortsReturns(nil, fmt.Errorf("failed to read protocol ports"))
-				})
-
 				It("fails with an error", func() {
+					rabbithutch.ProtocolPortsReturns(nil, fmt.Errorf("failed to read protocol ports"))
 					_, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
+
 					Expect(err).To(MatchError("failed to read protocol ports"))
 				})
 			})
 
 			When("it reads the protocol ports", func() {
 				BeforeEach(func() {
-					rabbitClient.ProtocolPortsReturns(fakeProtocolPorts(), nil)
+					rabbithutch.ProtocolPortsReturns(fakeProtocolPorts(), nil)
 					rabbithutch.CreateUserReturns("fake-password", nil)
 				})
 
@@ -138,8 +136,8 @@ var _ = Describe("Binding a RMQ service instance", func() {
 	})
 })
 
-func fakeProtocolPorts() map[string]rabbithole.Port {
-	return map[string]rabbithole.Port{
+func fakeProtocolPorts() map[string]int {
+	return map[string]int{
 		"amqp/ssl":   5671,
 		"clustering": 25672,
 		"http":       15672,
