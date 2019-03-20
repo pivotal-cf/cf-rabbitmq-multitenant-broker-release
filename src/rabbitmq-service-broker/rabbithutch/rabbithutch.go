@@ -18,6 +18,8 @@ type APIClient interface {
 	ListUsers() (users []rabbithole.UserInfo, err error)
 	PutUser(string, rabbithole.UserSettings) (*http.Response, error)
 	ProtocolPorts() (res map[string]rabbithole.Port, err error)
+	ListConnections() (conns []rabbithole.ConnectionInfo, err error)
+	CloseConnection(name string) (res *http.Response, err error)
 }
 
 //go:generate counterfeiter -o ./fakes/rabbithutch_fake.go $FILE RabbitHutch
@@ -27,6 +29,7 @@ type RabbitHutch interface {
 	CreateUser(string, string, string) (string, error)
 	ProtocolPorts() (map[string]int, error)
 	DeleteUser(string) error
+	CloseConnections(string) (*http.Response, error)
 }
 
 type rabbitHutch struct {

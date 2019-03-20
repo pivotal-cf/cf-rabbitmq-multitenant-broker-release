@@ -10,6 +10,8 @@ import (
 
 	. "rabbitmq-service-broker/rabbithutch"
 	"rabbitmq-service-broker/rabbithutch/fakes"
+
+	rabbithole "github.com/michaelklishin/rabbit-hole"
 )
 
 var _ = Describe("Binding a RMQ service instance", func() {
@@ -23,7 +25,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 		rabbithutch = New(rabbitClient)
 	})
 
-	Describe("the user", func() {
+	Describe("creating the user", func() {
 
 		It("creates a user", func() {
 			rabbitClient.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusOK}, nil)
@@ -97,5 +99,97 @@ var _ = Describe("Binding a RMQ service instance", func() {
 				Expect(info.Tags).To(Equal("some-tags"))
 			})
 		})
+	})
+	Describe("deleting a user binding", func() {
+		It("returns an error if it cannot list connections", func() {
+			err := errors.New("connections error")
+			rabbitClient.ListConnectionsReturns([]rabbithole.ConnectionInfo{}, err)
+			_, respErr := rabbithutch.CloseConnections("fake-user")
+			Expect(respErr).To(Equal(err))
+		})
+
+		It("closes all connections by the specified user", func() {
+			connections := []rabbithole.ConnectionInfo{
+				rabbithole.ConnectionInfo{
+					Name: "Connection 1",
+					User: "fake-user",
+				},
+				rabbithole.ConnectionInfo{
+					Name: "Connection 2",
+					User: "fake-user",
+				},
+				rabbithole.ConnectionInfo{
+					Name: "Connection 3",
+					User: "not-fake-user",
+				},
+			}
+
+			rabbitClient.ListConnectionsReturns(connections, nil)
+
+			_, err := rabbithutch.CloseConnections("fake-user")
+
+			Expect(rabbitClient.ListConnectionsCallCount()).To(Equal(1))
+			Expect(rabbitClient.CloseConnectionCallCount()).To(Equal(2))
+			Expect(rabbitClient.CloseConnectionArgsForCall(0)).To(Equal("Connection 1"))
+			Expect(rabbitClient.CloseConnectionArgsForCall(1)).To(Equal("Connection 2"))
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(rabbitClient.DeleteUserCallCount()).To(Equal(1))
+			Expect(rabbitClient.DeleteUserArgsForCall(0)).To(Equal("fake-user"))
+
+		})
+		It("returns an error if it cannot delete the user", func() {
+			connections := []rabbithole.ConnectionInfo{
+				rabbithole.ConnectionInfo{
+					Name: "Connection 1",
+					User: "fake-user",
+				},
+				rabbithole.ConnectionInfo{
+					Name: "Connection 2",
+					User: "fake-user",
+				},
+				rabbithole.ConnectionInfo{
+					Name: "Connection 3",
+					User: "not-fake-user",
+				},
+			}
+
+			rabbitClient.ListConnectionsReturns(connections, nil)
+			err := errors.New("fake user error")
+			rabbitClient.DeleteUserReturns(nil, err)
+
+			_, respErr := rabbithutch.CloseConnections("fake-user")
+
+			Expect(rabbitClient.DeleteUserCallCount()).To(Equal(1))
+			Expect(rabbitClient.DeleteUserArgsForCall(0)).To(Equal("fake-user"))
+			Expect(respErr).To(Equal(err))
+		})
+
+		It("deletes the connections even if deleting the user errors", func() {
+			connections := []rabbithole.ConnectionInfo{
+				rabbithole.ConnectionInfo{
+					Name: "Connection 1",
+					User: "fake-user",
+				},
+				rabbithole.ConnectionInfo{
+					Name: "Connection 2",
+					User: "fake-user",
+				},
+				rabbithole.ConnectionInfo{
+					Name: "Connection 3",
+					User: "not-fake-user",
+				},
+			}
+
+			rabbitClient.ListConnectionsReturns(connections, nil)
+			err := errors.New("fake user error")
+			rabbitClient.DeleteUserReturns(nil, err)
+
+			_, respErr := rabbithutch.CloseConnections("fake-user")
+
+			Expect(rabbitClient.CloseConnectionCallCount()).To(Equal(2))
+			Expect(respErr).To(Equal(err))
+		})
+
 	})
 })

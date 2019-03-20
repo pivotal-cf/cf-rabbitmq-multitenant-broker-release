@@ -10,6 +10,19 @@ import (
 )
 
 type FakeAPIClient struct {
+	CloseConnectionStub        func(string) (*http.Response, error)
+	closeConnectionMutex       sync.RWMutex
+	closeConnectionArgsForCall []struct {
+		arg1 string
+	}
+	closeConnectionReturns struct {
+		result1 *http.Response
+		result2 error
+	}
+	closeConnectionReturnsOnCall map[int]struct {
+		result1 *http.Response
+		result2 error
+	}
 	DeleteUserStub        func(string) (*http.Response, error)
 	deleteUserMutex       sync.RWMutex
 	deleteUserArgsForCall []struct {
@@ -47,6 +60,18 @@ type FakeAPIClient struct {
 	}
 	getVhostReturnsOnCall map[int]struct {
 		result1 *rabbithole.VhostInfo
+		result2 error
+	}
+	ListConnectionsStub        func() ([]rabbithole.ConnectionInfo, error)
+	listConnectionsMutex       sync.RWMutex
+	listConnectionsArgsForCall []struct {
+	}
+	listConnectionsReturns struct {
+		result1 []rabbithole.ConnectionInfo
+		result2 error
+	}
+	listConnectionsReturnsOnCall map[int]struct {
+		result1 []rabbithole.ConnectionInfo
 		result2 error
 	}
 	ListUsersStub        func() ([]rabbithole.UserInfo, error)
@@ -133,6 +158,69 @@ type FakeAPIClient struct {
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
+}
+
+func (fake *FakeAPIClient) CloseConnection(arg1 string) (*http.Response, error) {
+	fake.closeConnectionMutex.Lock()
+	ret, specificReturn := fake.closeConnectionReturnsOnCall[len(fake.closeConnectionArgsForCall)]
+	fake.closeConnectionArgsForCall = append(fake.closeConnectionArgsForCall, struct {
+		arg1 string
+	}{arg1})
+	fake.recordInvocation("CloseConnection", []interface{}{arg1})
+	fake.closeConnectionMutex.Unlock()
+	if fake.CloseConnectionStub != nil {
+		return fake.CloseConnectionStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	fakeReturns := fake.closeConnectionReturns
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeAPIClient) CloseConnectionCallCount() int {
+	fake.closeConnectionMutex.RLock()
+	defer fake.closeConnectionMutex.RUnlock()
+	return len(fake.closeConnectionArgsForCall)
+}
+
+func (fake *FakeAPIClient) CloseConnectionCalls(stub func(string) (*http.Response, error)) {
+	fake.closeConnectionMutex.Lock()
+	defer fake.closeConnectionMutex.Unlock()
+	fake.CloseConnectionStub = stub
+}
+
+func (fake *FakeAPIClient) CloseConnectionArgsForCall(i int) string {
+	fake.closeConnectionMutex.RLock()
+	defer fake.closeConnectionMutex.RUnlock()
+	argsForCall := fake.closeConnectionArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeAPIClient) CloseConnectionReturns(result1 *http.Response, result2 error) {
+	fake.closeConnectionMutex.Lock()
+	defer fake.closeConnectionMutex.Unlock()
+	fake.CloseConnectionStub = nil
+	fake.closeConnectionReturns = struct {
+		result1 *http.Response
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeAPIClient) CloseConnectionReturnsOnCall(i int, result1 *http.Response, result2 error) {
+	fake.closeConnectionMutex.Lock()
+	defer fake.closeConnectionMutex.Unlock()
+	fake.CloseConnectionStub = nil
+	if fake.closeConnectionReturnsOnCall == nil {
+		fake.closeConnectionReturnsOnCall = make(map[int]struct {
+			result1 *http.Response
+			result2 error
+		})
+	}
+	fake.closeConnectionReturnsOnCall[i] = struct {
+		result1 *http.Response
+		result2 error
+	}{result1, result2}
 }
 
 func (fake *FakeAPIClient) DeleteUser(arg1 string) (*http.Response, error) {
@@ -320,6 +408,61 @@ func (fake *FakeAPIClient) GetVhostReturnsOnCall(i int, result1 *rabbithole.Vhos
 	}
 	fake.getVhostReturnsOnCall[i] = struct {
 		result1 *rabbithole.VhostInfo
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeAPIClient) ListConnections() ([]rabbithole.ConnectionInfo, error) {
+	fake.listConnectionsMutex.Lock()
+	ret, specificReturn := fake.listConnectionsReturnsOnCall[len(fake.listConnectionsArgsForCall)]
+	fake.listConnectionsArgsForCall = append(fake.listConnectionsArgsForCall, struct {
+	}{})
+	fake.recordInvocation("ListConnections", []interface{}{})
+	fake.listConnectionsMutex.Unlock()
+	if fake.ListConnectionsStub != nil {
+		return fake.ListConnectionsStub()
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	fakeReturns := fake.listConnectionsReturns
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeAPIClient) ListConnectionsCallCount() int {
+	fake.listConnectionsMutex.RLock()
+	defer fake.listConnectionsMutex.RUnlock()
+	return len(fake.listConnectionsArgsForCall)
+}
+
+func (fake *FakeAPIClient) ListConnectionsCalls(stub func() ([]rabbithole.ConnectionInfo, error)) {
+	fake.listConnectionsMutex.Lock()
+	defer fake.listConnectionsMutex.Unlock()
+	fake.ListConnectionsStub = stub
+}
+
+func (fake *FakeAPIClient) ListConnectionsReturns(result1 []rabbithole.ConnectionInfo, result2 error) {
+	fake.listConnectionsMutex.Lock()
+	defer fake.listConnectionsMutex.Unlock()
+	fake.ListConnectionsStub = nil
+	fake.listConnectionsReturns = struct {
+		result1 []rabbithole.ConnectionInfo
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeAPIClient) ListConnectionsReturnsOnCall(i int, result1 []rabbithole.ConnectionInfo, result2 error) {
+	fake.listConnectionsMutex.Lock()
+	defer fake.listConnectionsMutex.Unlock()
+	fake.ListConnectionsStub = nil
+	if fake.listConnectionsReturnsOnCall == nil {
+		fake.listConnectionsReturnsOnCall = make(map[int]struct {
+			result1 []rabbithole.ConnectionInfo
+			result2 error
+		})
+	}
+	fake.listConnectionsReturnsOnCall[i] = struct {
+		result1 []rabbithole.ConnectionInfo
 		result2 error
 	}{result1, result2}
 }
@@ -695,12 +838,16 @@ func (fake *FakeAPIClient) UpdatePermissionsInReturnsOnCall(i int, result1 *http
 func (fake *FakeAPIClient) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
+	fake.closeConnectionMutex.RLock()
+	defer fake.closeConnectionMutex.RUnlock()
 	fake.deleteUserMutex.RLock()
 	defer fake.deleteUserMutex.RUnlock()
 	fake.deleteVhostMutex.RLock()
 	defer fake.deleteVhostMutex.RUnlock()
 	fake.getVhostMutex.RLock()
 	defer fake.getVhostMutex.RUnlock()
+	fake.listConnectionsMutex.RLock()
+	defer fake.listConnectionsMutex.RUnlock()
 	fake.listUsersMutex.RLock()
 	defer fake.listUsersMutex.RUnlock()
 	fake.protocolPortsMutex.RLock()

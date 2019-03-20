@@ -71,3 +71,24 @@ func (r *rabbitHutch) DeleteUser(username string) error {
 	}
 	return nil
 }
+
+func (r *rabbitHutch) CloseConnections(username string) (*http.Response, error) {
+	conns, err := r.client.ListConnections()
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		for _, conn := range conns {
+			if conn.User == username {
+				r.client.CloseConnection(conn.Name)
+			}
+		}
+	}()
+
+	if err := r.DeleteUser(username); err != nil {
+		return nil, err
+	}
+
+	return nil, err
+}

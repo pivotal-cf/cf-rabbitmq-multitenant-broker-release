@@ -2,11 +2,25 @@
 package fakes
 
 import (
+	"net/http"
 	"rabbitmq-service-broker/rabbithutch"
 	"sync"
 )
 
 type FakeRabbitHutch struct {
+	CloseConnectionsStub        func(string) (*http.Response, error)
+	closeConnectionsMutex       sync.RWMutex
+	closeConnectionsArgsForCall []struct {
+		arg1 string
+	}
+	closeConnectionsReturns struct {
+		result1 *http.Response
+		result2 error
+	}
+	closeConnectionsReturnsOnCall map[int]struct {
+		result1 *http.Response
+		result2 error
+	}
 	CreateUserStub        func(string, string, string) (string, error)
 	createUserMutex       sync.RWMutex
 	createUserArgsForCall []struct {
@@ -58,6 +72,69 @@ type FakeRabbitHutch struct {
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
+}
+
+func (fake *FakeRabbitHutch) CloseConnections(arg1 string) (*http.Response, error) {
+	fake.closeConnectionsMutex.Lock()
+	ret, specificReturn := fake.closeConnectionsReturnsOnCall[len(fake.closeConnectionsArgsForCall)]
+	fake.closeConnectionsArgsForCall = append(fake.closeConnectionsArgsForCall, struct {
+		arg1 string
+	}{arg1})
+	fake.recordInvocation("CloseConnections", []interface{}{arg1})
+	fake.closeConnectionsMutex.Unlock()
+	if fake.CloseConnectionsStub != nil {
+		return fake.CloseConnectionsStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	fakeReturns := fake.closeConnectionsReturns
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeRabbitHutch) CloseConnectionsCallCount() int {
+	fake.closeConnectionsMutex.RLock()
+	defer fake.closeConnectionsMutex.RUnlock()
+	return len(fake.closeConnectionsArgsForCall)
+}
+
+func (fake *FakeRabbitHutch) CloseConnectionsCalls(stub func(string) (*http.Response, error)) {
+	fake.closeConnectionsMutex.Lock()
+	defer fake.closeConnectionsMutex.Unlock()
+	fake.CloseConnectionsStub = stub
+}
+
+func (fake *FakeRabbitHutch) CloseConnectionsArgsForCall(i int) string {
+	fake.closeConnectionsMutex.RLock()
+	defer fake.closeConnectionsMutex.RUnlock()
+	argsForCall := fake.closeConnectionsArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeRabbitHutch) CloseConnectionsReturns(result1 *http.Response, result2 error) {
+	fake.closeConnectionsMutex.Lock()
+	defer fake.closeConnectionsMutex.Unlock()
+	fake.CloseConnectionsStub = nil
+	fake.closeConnectionsReturns = struct {
+		result1 *http.Response
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeRabbitHutch) CloseConnectionsReturnsOnCall(i int, result1 *http.Response, result2 error) {
+	fake.closeConnectionsMutex.Lock()
+	defer fake.closeConnectionsMutex.Unlock()
+	fake.CloseConnectionsStub = nil
+	if fake.closeConnectionsReturnsOnCall == nil {
+		fake.closeConnectionsReturnsOnCall = make(map[int]struct {
+			result1 *http.Response
+			result2 error
+		})
+	}
+	fake.closeConnectionsReturnsOnCall[i] = struct {
+		result1 *http.Response
+		result2 error
+	}{result1, result2}
 }
 
 func (fake *FakeRabbitHutch) CreateUser(arg1 string, arg2 string, arg3 string) (string, error) {
@@ -303,6 +380,8 @@ func (fake *FakeRabbitHutch) ProtocolPortsReturnsOnCall(i int, result1 map[strin
 func (fake *FakeRabbitHutch) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
+	fake.closeConnectionsMutex.RLock()
+	defer fake.closeConnectionsMutex.RUnlock()
 	fake.createUserMutex.RLock()
 	defer fake.createUserMutex.RUnlock()
 	fake.deleteUserMutex.RLock()
