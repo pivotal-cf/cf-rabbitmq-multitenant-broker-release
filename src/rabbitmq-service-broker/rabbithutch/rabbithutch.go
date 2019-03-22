@@ -28,8 +28,7 @@ type RabbitHutch interface {
 	EnsureVHostExists(string) error
 	CreateUser(string, string, string) (string, error)
 	ProtocolPorts() (map[string]int, error)
-	DeleteUser(string) error
-	CloseConnections(string) (*http.Response, error)
+	DeleteUserAndConnections(string) error
 }
 
 type rabbitHutch struct {

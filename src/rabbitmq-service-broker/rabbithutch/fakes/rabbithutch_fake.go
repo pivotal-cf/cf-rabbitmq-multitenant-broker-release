@@ -2,25 +2,11 @@
 package fakes
 
 import (
-	"net/http"
 	"rabbitmq-service-broker/rabbithutch"
 	"sync"
 )
 
 type FakeRabbitHutch struct {
-	CloseConnectionsStub        func(string) (*http.Response, error)
-	closeConnectionsMutex       sync.RWMutex
-	closeConnectionsArgsForCall []struct {
-		arg1 string
-	}
-	closeConnectionsReturns struct {
-		result1 *http.Response
-		result2 error
-	}
-	closeConnectionsReturnsOnCall map[int]struct {
-		result1 *http.Response
-		result2 error
-	}
 	CreateUserStub        func(string, string, string) (string, error)
 	createUserMutex       sync.RWMutex
 	createUserArgsForCall []struct {
@@ -36,15 +22,15 @@ type FakeRabbitHutch struct {
 		result1 string
 		result2 error
 	}
-	DeleteUserStub        func(string) error
-	deleteUserMutex       sync.RWMutex
-	deleteUserArgsForCall []struct {
+	DeleteUserAndConnectionsStub        func(string) error
+	deleteUserAndConnectionsMutex       sync.RWMutex
+	deleteUserAndConnectionsArgsForCall []struct {
 		arg1 string
 	}
-	deleteUserReturns struct {
+	deleteUserAndConnectionsReturns struct {
 		result1 error
 	}
-	deleteUserReturnsOnCall map[int]struct {
+	deleteUserAndConnectionsReturnsOnCall map[int]struct {
 		result1 error
 	}
 	EnsureVHostExistsStub        func(string) error
@@ -72,69 +58,6 @@ type FakeRabbitHutch struct {
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
-}
-
-func (fake *FakeRabbitHutch) CloseConnections(arg1 string) (*http.Response, error) {
-	fake.closeConnectionsMutex.Lock()
-	ret, specificReturn := fake.closeConnectionsReturnsOnCall[len(fake.closeConnectionsArgsForCall)]
-	fake.closeConnectionsArgsForCall = append(fake.closeConnectionsArgsForCall, struct {
-		arg1 string
-	}{arg1})
-	fake.recordInvocation("CloseConnections", []interface{}{arg1})
-	fake.closeConnectionsMutex.Unlock()
-	if fake.CloseConnectionsStub != nil {
-		return fake.CloseConnectionsStub(arg1)
-	}
-	if specificReturn {
-		return ret.result1, ret.result2
-	}
-	fakeReturns := fake.closeConnectionsReturns
-	return fakeReturns.result1, fakeReturns.result2
-}
-
-func (fake *FakeRabbitHutch) CloseConnectionsCallCount() int {
-	fake.closeConnectionsMutex.RLock()
-	defer fake.closeConnectionsMutex.RUnlock()
-	return len(fake.closeConnectionsArgsForCall)
-}
-
-func (fake *FakeRabbitHutch) CloseConnectionsCalls(stub func(string) (*http.Response, error)) {
-	fake.closeConnectionsMutex.Lock()
-	defer fake.closeConnectionsMutex.Unlock()
-	fake.CloseConnectionsStub = stub
-}
-
-func (fake *FakeRabbitHutch) CloseConnectionsArgsForCall(i int) string {
-	fake.closeConnectionsMutex.RLock()
-	defer fake.closeConnectionsMutex.RUnlock()
-	argsForCall := fake.closeConnectionsArgsForCall[i]
-	return argsForCall.arg1
-}
-
-func (fake *FakeRabbitHutch) CloseConnectionsReturns(result1 *http.Response, result2 error) {
-	fake.closeConnectionsMutex.Lock()
-	defer fake.closeConnectionsMutex.Unlock()
-	fake.CloseConnectionsStub = nil
-	fake.closeConnectionsReturns = struct {
-		result1 *http.Response
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeRabbitHutch) CloseConnectionsReturnsOnCall(i int, result1 *http.Response, result2 error) {
-	fake.closeConnectionsMutex.Lock()
-	defer fake.closeConnectionsMutex.Unlock()
-	fake.CloseConnectionsStub = nil
-	if fake.closeConnectionsReturnsOnCall == nil {
-		fake.closeConnectionsReturnsOnCall = make(map[int]struct {
-			result1 *http.Response
-			result2 error
-		})
-	}
-	fake.closeConnectionsReturnsOnCall[i] = struct {
-		result1 *http.Response
-		result2 error
-	}{result1, result2}
 }
 
 func (fake *FakeRabbitHutch) CreateUser(arg1 string, arg2 string, arg3 string) (string, error) {
@@ -202,62 +125,62 @@ func (fake *FakeRabbitHutch) CreateUserReturnsOnCall(i int, result1 string, resu
 	}{result1, result2}
 }
 
-func (fake *FakeRabbitHutch) DeleteUser(arg1 string) error {
-	fake.deleteUserMutex.Lock()
-	ret, specificReturn := fake.deleteUserReturnsOnCall[len(fake.deleteUserArgsForCall)]
-	fake.deleteUserArgsForCall = append(fake.deleteUserArgsForCall, struct {
+func (fake *FakeRabbitHutch) DeleteUserAndConnections(arg1 string) error {
+	fake.deleteUserAndConnectionsMutex.Lock()
+	ret, specificReturn := fake.deleteUserAndConnectionsReturnsOnCall[len(fake.deleteUserAndConnectionsArgsForCall)]
+	fake.deleteUserAndConnectionsArgsForCall = append(fake.deleteUserAndConnectionsArgsForCall, struct {
 		arg1 string
 	}{arg1})
-	fake.recordInvocation("DeleteUser", []interface{}{arg1})
-	fake.deleteUserMutex.Unlock()
-	if fake.DeleteUserStub != nil {
-		return fake.DeleteUserStub(arg1)
+	fake.recordInvocation("DeleteUserAndConnections", []interface{}{arg1})
+	fake.deleteUserAndConnectionsMutex.Unlock()
+	if fake.DeleteUserAndConnectionsStub != nil {
+		return fake.DeleteUserAndConnectionsStub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.deleteUserReturns
+	fakeReturns := fake.deleteUserAndConnectionsReturns
 	return fakeReturns.result1
 }
 
-func (fake *FakeRabbitHutch) DeleteUserCallCount() int {
-	fake.deleteUserMutex.RLock()
-	defer fake.deleteUserMutex.RUnlock()
-	return len(fake.deleteUserArgsForCall)
+func (fake *FakeRabbitHutch) DeleteUserAndConnectionsCallCount() int {
+	fake.deleteUserAndConnectionsMutex.RLock()
+	defer fake.deleteUserAndConnectionsMutex.RUnlock()
+	return len(fake.deleteUserAndConnectionsArgsForCall)
 }
 
-func (fake *FakeRabbitHutch) DeleteUserCalls(stub func(string) error) {
-	fake.deleteUserMutex.Lock()
-	defer fake.deleteUserMutex.Unlock()
-	fake.DeleteUserStub = stub
+func (fake *FakeRabbitHutch) DeleteUserAndConnectionsCalls(stub func(string) error) {
+	fake.deleteUserAndConnectionsMutex.Lock()
+	defer fake.deleteUserAndConnectionsMutex.Unlock()
+	fake.DeleteUserAndConnectionsStub = stub
 }
 
-func (fake *FakeRabbitHutch) DeleteUserArgsForCall(i int) string {
-	fake.deleteUserMutex.RLock()
-	defer fake.deleteUserMutex.RUnlock()
-	argsForCall := fake.deleteUserArgsForCall[i]
+func (fake *FakeRabbitHutch) DeleteUserAndConnectionsArgsForCall(i int) string {
+	fake.deleteUserAndConnectionsMutex.RLock()
+	defer fake.deleteUserAndConnectionsMutex.RUnlock()
+	argsForCall := fake.deleteUserAndConnectionsArgsForCall[i]
 	return argsForCall.arg1
 }
 
-func (fake *FakeRabbitHutch) DeleteUserReturns(result1 error) {
-	fake.deleteUserMutex.Lock()
-	defer fake.deleteUserMutex.Unlock()
-	fake.DeleteUserStub = nil
-	fake.deleteUserReturns = struct {
+func (fake *FakeRabbitHutch) DeleteUserAndConnectionsReturns(result1 error) {
+	fake.deleteUserAndConnectionsMutex.Lock()
+	defer fake.deleteUserAndConnectionsMutex.Unlock()
+	fake.DeleteUserAndConnectionsStub = nil
+	fake.deleteUserAndConnectionsReturns = struct {
 		result1 error
 	}{result1}
 }
 
-func (fake *FakeRabbitHutch) DeleteUserReturnsOnCall(i int, result1 error) {
-	fake.deleteUserMutex.Lock()
-	defer fake.deleteUserMutex.Unlock()
-	fake.DeleteUserStub = nil
-	if fake.deleteUserReturnsOnCall == nil {
-		fake.deleteUserReturnsOnCall = make(map[int]struct {
+func (fake *FakeRabbitHutch) DeleteUserAndConnectionsReturnsOnCall(i int, result1 error) {
+	fake.deleteUserAndConnectionsMutex.Lock()
+	defer fake.deleteUserAndConnectionsMutex.Unlock()
+	fake.DeleteUserAndConnectionsStub = nil
+	if fake.deleteUserAndConnectionsReturnsOnCall == nil {
+		fake.deleteUserAndConnectionsReturnsOnCall = make(map[int]struct {
 			result1 error
 		})
 	}
-	fake.deleteUserReturnsOnCall[i] = struct {
+	fake.deleteUserAndConnectionsReturnsOnCall[i] = struct {
 		result1 error
 	}{result1}
 }
@@ -380,12 +303,10 @@ func (fake *FakeRabbitHutch) ProtocolPortsReturnsOnCall(i int, result1 map[strin
 func (fake *FakeRabbitHutch) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
-	fake.closeConnectionsMutex.RLock()
-	defer fake.closeConnectionsMutex.RUnlock()
 	fake.createUserMutex.RLock()
 	defer fake.createUserMutex.RUnlock()
-	fake.deleteUserMutex.RLock()
-	defer fake.deleteUserMutex.RUnlock()
+	fake.deleteUserAndConnectionsMutex.RLock()
+	defer fake.deleteUserAndConnectionsMutex.RUnlock()
 	fake.ensureVHostExistsMutex.RLock()
 	defer fake.ensureVHostExistsMutex.RUnlock()
 	fake.protocolPortsMutex.RLock()

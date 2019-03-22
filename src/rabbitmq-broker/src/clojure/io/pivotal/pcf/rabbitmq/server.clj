@@ -134,26 +134,6 @@
       e
     ))))
 
-(defn unbind-service
-  [{:keys [params] :as req}]
-  (log/infof "Asked to unbind a service: %s, RabbitMQ user id: %s" (:instance_id params) (:id params))
-  (let [^String vh (:instance_id params)
-        ^String u  (:id params)]
-    (try
-      (if (and vh u)
-        (let [xs (rs/close-connections-from u)]
-          (rs/delete-user u)
-          (log/infof "Deleted user %s" u)
-          (log/infof "Forcing connections from %s to close" u)
-          (rs/close-connections-from u)
-          (log/infof "Force-closed %d connections" (count xs))
-          (ok))
-        (gone))
-      (catch Exception e
-        (log/errorf "Failed to unbind a service: %s" vh)
-        (.printStackTrace e)
-        (log-exception e)))))
-
 (defn show-raw-config
   [_]
   (let [pretty-printed (json/generate-string (cfg/serializable-config) {:pretty true})]
@@ -168,7 +148,7 @@
   (PUT    "/v2/service_instances/:id" req forward-request-put)
   (DELETE "/v2/service_instances/:id" req forward-request-delete)
   (PUT    "/v2/service_instances/:instance_id/service_bindings/:id" req forward-request-put)
-  (DELETE "/v2/service_instances/:instance_id/service_bindings/:id" req unbind-service)
+  (DELETE "/v2/service_instances/:instance_id/service_bindings/:id" req forward-request-delete)
   (GET    "/ops/config"               req show-raw-config)
   (GET    "/ops/cf/api/version"       req show-cf-api-version))
 

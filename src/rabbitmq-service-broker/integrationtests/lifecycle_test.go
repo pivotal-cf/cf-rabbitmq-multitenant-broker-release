@@ -59,10 +59,6 @@ var _ = Describe("the lifecycle of a service instance", func() {
 		bindResponse, bindBody := bind(bindingID, serviceInstanceID, serviceID, planID)
 		Expect(bindResponse.StatusCode).To(Equal(http.StatusCreated), string(bindBody))
 
-		By("resending a binding request")
-		resentBindResponse, resentBindBody := bind(bindingID, serviceInstanceID, serviceID, planID)
-		Expect(resentBindResponse.StatusCode).To(Equal(http.StatusConflict), string(resentBindBody))
-
 		By("checking the binding credentials")
 		var binding map[string]interface{}
 		Expect(json.Unmarshal(bindBody, &binding)).To(Succeed())
@@ -70,12 +66,25 @@ var _ = Describe("the lifecycle of a service instance", func() {
 			HaveKeyWithValue("username", bindingID),
 			HaveKeyWithValue("vhost", serviceInstanceID))))
 
-		By("checking that that binding user has access to the vhost")
+		By("checking that the user exists")
+		userInfo, userErr := rmqClient.GetUser(bindingID)
+		Expect(userErr).NotTo(HaveOccurred())
+		Expect(userInfo.Name).To(Equal(bindingID))
+
+		By("checking that the binding user has access to the vhost")
 		perms, err = rmqClient.GetPermissionsIn(serviceInstanceID, bindingID)
 		Expect(err).NotTo(HaveOccurred())
 		Expect(perms.Configure).To(Equal(".*"))
 		Expect(perms.Write).To(Equal(".*"))
 		Expect(perms.Read).To(Equal(".*"))
+
+		By("sending an unbind request")
+		unbindResponse, unbindBody := doRequest(http.MethodDelete, unbindURL(serviceInstanceID, bindingID, serviceID, planID), nil)
+		Expect(unbindResponse.StatusCode).To(Equal(http.StatusOK), string(unbindBody))
+
+		By("checking that the user no longer exists")
+		_, userErr = rmqClient.GetUser(bindingID)
+		Expect(userErr).To(MatchError(ContainSubstring("Error 404")))
 
 		By("sending a deprovision request")
 		deprovisionResponse, deprovisionBody := doRequest(http.MethodDelete, deprovisionURL(serviceInstanceID, serviceID, planID), nil)
@@ -139,28 +148,58 @@ var _ = Describe("the lifecycle of a service instance", func() {
 		Expect(deprovisionResponse3.StatusCode).To(Equal(http.StatusOK), string(deprovisionBody3))
 	})
 
-	Context("provisioning", func() {
-		When("a service instance with the same ID has already been provisioned", func() {
-			const serviceInstanceID = "9ef8c450-6aa1-6d8a-b56f-a8bb4ddd1de4"
+	Context("errors", func() {
+		Context("provisioning", func() {
+			When("a service instance with the same ID has already been provisioned", func() {
+				const serviceInstanceID = "9ef8c450-6aa1-6d8a-b56f-a8bb4ddd1de4"
 
-			BeforeEach(func() {
-				response, body := provision(serviceInstanceID, serviceID, planID)
-				Expect(response.StatusCode).To(Equal(http.StatusCreated), string(body))
-			})
+				BeforeEach(func() {
+					response, body := provision(serviceInstanceID, serviceID, planID)
+					Expect(response.StatusCode).To(Equal(http.StatusCreated), string(body))
+				})
 
-			It("fails with HTTP 409", func() {
-				response, _ := provision(serviceInstanceID, serviceID, planID)
-				Expect(response.StatusCode).To(Equal(http.StatusConflict))
+				It("fails with HTTP 409", func() {
+					response, _ := provision(serviceInstanceID, serviceID, planID)
+					Expect(response.StatusCode).To(Equal(http.StatusConflict))
+				})
 			})
 		})
-	})
 
-	Context("deprovisioning", func() {
-		When("a service instance has not been provisioned", func() {
-			It("fails with HTTP 410", func() {
-				serviceInstanceID := "does-not-exist"
-				response, body := doRequest(http.MethodDelete, deprovisionURL(serviceInstanceID, serviceID, planID), nil)
-				Expect(response.StatusCode).To(Equal(http.StatusGone), string(body))
+		Context("deprovisioning", func() {
+			When("a service instance has not been provisioned", func() {
+				It("fails with HTTP 410", func() {
+					serviceInstanceID := "does-not-exist"
+					response, body := doRequest(http.MethodDelete, deprovisionURL(serviceInstanceID, serviceID, planID), nil)
+					Expect(response.StatusCode).To(Equal(http.StatusGone), string(body))
+				})
+			})
+		})
+
+		Context("binding", func() {
+			When("attempting to create the same binding more than once", func() {
+				serviceInstanceID := "7ef8c450-6aa1-4d8a-a56f-a8bb4ddd1de5"
+
+				BeforeEach(func() {
+					response, body := provision(serviceInstanceID, serviceID, planID)
+					Expect(response.StatusCode).To(Equal(http.StatusCreated), string(body))
+					bind(bindingID, serviceInstanceID, serviceID, planID)
+				})
+
+				It("fails with a 409", func() {
+					resentBindResponse, resentBindBody := bind(bindingID, serviceInstanceID, serviceID, planID)
+
+					Expect(resentBindResponse.StatusCode).To(Equal(http.StatusConflict), string(resentBindBody))
+				})
+			})
+		})
+
+		Context("unbinding", func() {
+			When("a binding doesn't exist", func() {
+				It("fails with HTTP 410", func() {
+					serviceInstanceID := "does-not-exist"
+					response, body := doRequest(http.MethodDelete, unbindURL(bindingID, serviceInstanceID, serviceID, planID), nil)
+					Expect(response.StatusCode).To(Equal(http.StatusGone), string(body))
+				})
 			})
 		})
 	})
@@ -176,6 +215,10 @@ func deprovisionURL(serviceInstanceID, serviceID, planID string) string {
 
 func bindURL(serviceInstanceID, bindingID string) string {
 	return fmt.Sprintf("%sservice_instances/%s/service_bindings/%s", baseURL, serviceInstanceID, bindingID)
+}
+
+func unbindURL(serviceInstanceID, bindingID, serviceID, planID string) string {
+	return fmt.Sprintf("%s?service_id=%s&plan_id=%s", bindURL(serviceInstanceID, bindingID), serviceID, planID)
 }
 
 func provision(serviceInstanceID, serviceID, planID string) (*http.Response, []byte) {

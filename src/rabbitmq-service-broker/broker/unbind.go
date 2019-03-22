@@ -2,11 +2,23 @@ package broker
 
 import (
 	"context"
-	"errors"
 
+	"code.cloudfoundry.org/lager"
 	"github.com/pivotal-cf/brokerapi"
 )
 
 func (b *RabbitMQServiceBroker) Unbind(ctx context.Context, instanceID, bindingID string, details brokerapi.UnbindDetails, asyncAllowed bool) (brokerapi.UnbindSpec, error) {
-	return brokerapi.UnbindSpec{}, errors.New("Not implemented")
+	logger := b.logger.Session("unbind", lager.Data{
+		"service_instance_id": instanceID,
+		"binding_id":          bindingID,
+	})
+	logger.Info("entry")
+	err := b.rabbithutch.DeleteUserAndConnections(bindingID)
+	if err != nil {
+		logger.Error("unbind-error", err)
+		return brokerapi.UnbindSpec{}, err
+	}
+
+	logger.Info("exit")
+	return brokerapi.UnbindSpec{}, nil
 }

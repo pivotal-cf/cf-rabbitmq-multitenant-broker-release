@@ -28,15 +28,3 @@
   []
   (with-open [stream (io/reader logfile)]
     (format "%s\n" (string/join "\n" (line-seq stream)))))
-
-
-(deftest unbind-service
-  (testing "should log on service unbinding"
-    (io/delete-file logfile true)
-    (server/unbind-service {:params {:instance_id "my service"}})
-    (is (.contains (get-logs) "Asked to unbind a service: my service")))
-  (testing "should log error when rabbitmq is down on service unbinding"
-    (with-redefs [rs/close-connections-from ThrowException]
-    (io/delete-file logfile true)
-    (server/unbind-service {:params {:instance_id "my service" :id "user id"}})
-    (is (.contains (get-logs) "Failed to unbind a service: my service")))))

@@ -101,13 +101,6 @@ var _ = Describe("Binding a RMQ service instance", func() {
 		})
 	})
 	Describe("deleting a user binding", func() {
-		It("returns an error if it cannot list connections", func() {
-			err := errors.New("connections error")
-			rabbitClient.ListConnectionsReturns([]rabbithole.ConnectionInfo{}, err)
-			_, respErr := rabbithutch.CloseConnections("fake-user")
-			Expect(respErr).To(Equal(err))
-		})
-
 		It("closes all connections by the specified user", func() {
 			connections := []rabbithole.ConnectionInfo{
 				rabbithole.ConnectionInfo{
@@ -126,7 +119,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 
 			rabbitClient.ListConnectionsReturns(connections, nil)
 
-			_, err := rabbithutch.CloseConnections("fake-user")
+			err := rabbithutch.DeleteUserAndConnections("fake-user")
 
 			Expect(rabbitClient.ListConnectionsCallCount()).To(Equal(1))
 			Expect(rabbitClient.CloseConnectionCallCount()).To(Equal(2))
@@ -158,7 +151,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 			err := errors.New("fake user error")
 			rabbitClient.DeleteUserReturns(nil, err)
 
-			_, respErr := rabbithutch.CloseConnections("fake-user")
+			respErr := rabbithutch.DeleteUserAndConnections("fake-user")
 
 			Expect(rabbitClient.DeleteUserCallCount()).To(Equal(1))
 			Expect(rabbitClient.DeleteUserArgsForCall(0)).To(Equal("fake-user"))
@@ -185,7 +178,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 			err := errors.New("fake user error")
 			rabbitClient.DeleteUserReturns(nil, err)
 
-			_, respErr := rabbithutch.CloseConnections("fake-user")
+			respErr := rabbithutch.DeleteUserAndConnections("fake-user")
 
 			Expect(rabbitClient.CloseConnectionCallCount()).To(Equal(2))
 			Expect(respErr).To(Equal(err))
