@@ -1,0 +1,14 @@
+---
+service:
+  username: "fake-service-username"
+  password: "fake-service-password"
+  name: "fake-service-name"
+  uuid: "fake-service-uuid"
+  plan_uuid: "fake-plan-uuid"
+rabbitmq:
+  management_domain: fake-management-domain
+  hosts: []
+  dns_host: "my-dns-host.com"
+  administrator:
+    username: "fake-rmq-user"
+    password: "fake-rmq-password"

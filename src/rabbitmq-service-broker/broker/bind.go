@@ -38,7 +38,7 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 
 	credsBuilder := binding.Builder{
 		MgmtDomain:    b.cfg.RabbitMQ.ManagementDomain,
-		Hostnames:     b.cfg.RabbitMQ.Hosts,
+		Hostnames:     b.cfg.NodeHosts(),
 		VHost:         vhost,
 		Username:      username,
 		Password:      password,

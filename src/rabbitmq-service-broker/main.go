@@ -39,7 +39,7 @@ func main() {
 	}
 
 	client, _ := rabbithole.NewClient(
-		fmt.Sprintf("http://%s:15672", cfg.RabbitMQ.Hosts[0]),
+		fmt.Sprintf("http://%s:15672", cfg.NodeHosts()[0]),
 		cfg.RabbitMQ.Administrator.Username,
 		cfg.RabbitMQ.Administrator.Password,
 	)

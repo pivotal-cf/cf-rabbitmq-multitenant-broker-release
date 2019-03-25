@@ -132,6 +132,21 @@ var _ = Describe("Binding a RMQ service instance", func() {
 					)))
 				})
 			})
+
+			When("using an external load balancer", func() {
+				BeforeEach(func() {
+					rabbithutch.ProtocolPortsReturns(fakeProtocolPorts(), nil)
+					rabbithutch.CreateUserReturns("fake-password", nil)
+				})
+
+				It("uses the right hosts", func() {
+					broker = defaultServiceBroker(defaultConfigWithExternalLoadBalancer(), rabbitClient, rabbithutch)
+					binding, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
+					Expect(err).NotTo(HaveOccurred())
+
+					Expect(binding.Credentials).To(HaveKeyWithValue("hostnames", ConsistOf("my-dns-host.com")))
+				})
+			})
 		})
 	})
 })

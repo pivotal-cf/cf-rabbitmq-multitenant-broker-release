@@ -81,14 +81,56 @@ var _ = Describe("Config", func() {
 		Expect(err).To(MatchError(ContainSubstring("service.name")))
 		Expect(err).To(MatchError(ContainSubstring("service.plan_uuid")))
 		Expect(err).To(MatchError(ContainSubstring("service.uuid")))
-		Expect(err).To(MatchError(ContainSubstring("rabbitmq.host")))
 		Expect(err).To(MatchError(ContainSubstring("rabbitmq.administrator.username")))
 		Expect(err).To(MatchError(ContainSubstring("rabbitmq.administrator.password")))
 	})
 
-	It("fails when the list of hosts is empty", func() {
-		_, err := Read(fixture("empty-hosts.yml"))
-		Expect(err).To(MatchError("Config file has missing fields: rabbitmq.hosts"))
+	Describe("hosts", func() {
+		It("fails when both `hosts` and the `dns_host` are empty", func() {
+			_, err := Read(fixture("empty-hosts.yml"))
+			Expect(err).To(MatchError("Config file has missing fields: at least one of rabbitmq.hosts or rabbitmq.dns_host must be specified"))
+		})
+
+		When("an external load balancer hostname is specified", func() {
+			It("does not fail when the list of hosts is empty", func() {
+				_, err := Read(fixture("external-load-balancer.yml"))
+				Expect(err).NotTo(HaveOccurred())
+			})
+
+			It("will use the external load balancer hostname in bindings", func() {
+				conf, err := Read(fixture("external-load-balancer.yml"))
+				Expect(err).NotTo(HaveOccurred())
+				Expect(conf.NodeHosts()).To(Equal([]string{"my-dns-host.com"}))
+			})
+
+		})
+
+		When("there is not an external load balancer", func() {
+			It("uses rabbitmq.hosts", func() {
+				conf, err := Read(fixture("minimal.yml"))
+				Expect(err).NotTo(HaveOccurred())
+				Expect(conf.NodeHosts()).To(Equal([]string{
+					"fake-host-1",
+					"fake-host-2",
+				}))
+			})
+		})
+
+		When("both hosts and an external load balancer hostname are specified", func() {
+			It("favours load balancer `dns_host` over `hosts`", func() {
+				conf, err := Read(fixture("hosts-and-external-load-balancer.yml"))
+				Expect(err).NotTo(HaveOccurred())
+				Expect(conf.NodeHosts()).To(Equal([]string{"my-dns-host.com"}))
+			})
+		})
+
+		When("`hosts` is a comma-separated string of IPs (rather than a YAML list)", func() {
+			It("reads it as a list of hosts", func() {
+				conf, err := Read(fixture("comma-list-hosts.yml"))
+				Expect(err).NotTo(HaveOccurred())
+				Expect(conf.NodeHosts()).To(BeEquivalentTo([]string{"127.0.0.1", "127.0.0.2"}))
+			})
+		})
 	})
 
 	Describe("the `ssl` field", func() {
@@ -120,7 +162,5 @@ var _ = Describe("Config", func() {
 			Expect(err).NotTo(HaveOccurred())
 			Expect(conf.RabbitMQ.TLS).To(BeEquivalentTo(true))
 		})
-
 	})
-
 })

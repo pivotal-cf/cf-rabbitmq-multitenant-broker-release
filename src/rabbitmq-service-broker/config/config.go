@@ -42,7 +42,8 @@ type Service struct {
 }
 
 type RabbitMQ struct {
-	Hosts             []string              `yaml:"hosts" validate:"required,min=1"`
+	Hosts             Hosts                 `yaml:"hosts"`
+	DNSHost           string                `yaml:"dns_host"`
 	Administrator     AdminCredentials      `yaml:"administrator" validate:"required"`
 	Management        ManagementCredentials `yaml:"management"`
 	ManagementDomain  string                `yaml:"management_domain" validate:"required"`
@@ -91,6 +92,42 @@ func (t *TLSEnabled) UnmarshalYAML(f func(interface{}) error) error {
 	return nil
 }
 
+// Hosts can be provided in the config file as either a YAML list, or a comma-seperated list
+type Hosts []string
+
+func (h *Hosts) UnmarshalYAML(f func(interface{}) error) error {
+	if err := h.unmarshalAsList(f); err == nil {
+		return nil
+	}
+
+	if err := h.unmarshalAsString(f); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (h *Hosts) unmarshalAsList(f func(interface{}) error) error {
+	var slice []string
+
+	if err := f(&slice); err != nil {
+		return err
+	}
+
+	*h = Hosts(slice)
+	return nil
+}
+
+func (h *Hosts) unmarshalAsString(f func(interface{}) error) error {
+	var s string
+	if err := f(&s); err != nil {
+		return err
+	}
+
+	*h = Hosts(splitCommaSeparatedList(s))
+	return nil
+}
+
 func Read(path string) (Config, error) {
 	configBytes, err := ioutil.ReadFile(filepath.FromSlash(path))
 	if err != nil {
@@ -109,6 +146,13 @@ func Read(path string) (Config, error) {
 	return config, nil
 }
 
+func (c *Config) NodeHosts() []string {
+	if host := c.RabbitMQ.DNSHost; host != "" {
+		return []string{host}
+	}
+	return c.RabbitMQ.Hosts
+}
+
 func validateConfig(config Config) error {
 	if err := validate.Struct(config); err != nil {
 		if errs, ok := err.(validator.ValidationErrors); ok {
@@ -121,5 +165,18 @@ func validateConfig(config Config) error {
 		return err
 	}
 
+	if nodeHosts := config.NodeHosts(); len(nodeHosts) == 0 {
+		return fmt.Errorf("Config file has missing fields: at least one of rabbitmq.hosts or rabbitmq.dns_host must be specified")
+	}
+
 	return nil
+}
+
+func splitCommaSeparatedList(s string) []string {
+	list := strings.Split(s, ",")
+	for i := range list {
+		list[i] = strings.TrimSpace(list[i])
+	}
+
+	return list
 }

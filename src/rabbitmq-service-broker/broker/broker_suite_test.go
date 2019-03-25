@@ -39,6 +39,13 @@ func defaultConfigWithUserTags() config.Config {
 	return cfg
 }
 
+func defaultConfigWithExternalLoadBalancer() config.Config {
+	cfg := defaultConfig()
+	cfg.RabbitMQ.DNSHost = "my-dns-host.com"
+	cfg.RabbitMQ.Hosts = []string{}
+	return cfg
+}
+
 func defaultServiceBroker(conf config.Config, client *fakes.FakeAPIClient, rabbithutch *fakes.FakeRabbitHutch) brokerapi.ServiceBroker {
 	return broker.New(conf, client, rabbithutch, lagertest.NewTestLogger("test"))
 }
