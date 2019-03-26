@@ -23,7 +23,7 @@ var (
 
 func init() {
 	flag.StringVar(&configPath, "configPath", "", "Config file location")
-	flag.IntVar(&port, "port", 8901, "Port to listen on")
+	flag.IntVar(&port, "port", 4567, "Port to listen on")
 }
 
 func main() {

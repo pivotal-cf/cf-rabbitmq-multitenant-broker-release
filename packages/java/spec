@@ -1,7 +1,0 @@
----
-name: java
-metadata:
-  version: 11.0.2_09
-files:
-- java/openjdk-11.0.2_09.tar.gz
-dependencies: []

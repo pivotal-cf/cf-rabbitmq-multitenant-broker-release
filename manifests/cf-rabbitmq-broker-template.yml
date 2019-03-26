@@ -24,37 +24,6 @@ instance_groups:
   jobs:
   - name: cf-cli-6-linux
     release: cf-cli
-  - name: rabbitmq-broker
-    release: cf-rabbitmq-multitenant-broker
-    properties:
-      cf:
-        domain: ((system-domain))
-      rabbitmq-broker:
-        route: ((rabbitmq-broker-hostname))
-        cc_endpoint: http://api.((system-domain))
-        service:
-          username: ((multitenant-rabbitmq-broker-username))
-          password: ((multitenant-rabbitmq-broker-password))
-          name: ((product-name))
-          uuid: ((rabbitmq-broker-uuid))
-          plan_uuid: ((rabbitmq-broker-plan-uuid))
-          shareable: true
-        logging:
-          level: debug
-          print_stack_traces: false
-        rabbitmq:
-          hosts: ((rabbitmq-hosts))
-          operator_set_policy:
-            enabled: true
-            policy_name: "operator_set_policy"
-            policy_definition: "{\"ha-mode\":\"exactly\",\"ha-params\":2,\"ha-sync-mode\":\"automatic\"}"
-            policy_priority: 50
-          management_domain: ((rabbitmq-management-hostname)).((system-domain))
-          management:
-            username: ((rabbitmq-management-username))
-          administrator:
-            username: ((rabbitmq-broker-username))
-            password: ((rabbitmq-broker-password))
   - name: rabbitmq-service-broker
     release: cf-rabbitmq-multitenant-broker
     properties:

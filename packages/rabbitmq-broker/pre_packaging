@@ -1,8 +1,0 @@
-# Note, using `pre_packaging` scripts is now deprecated.  This script is run as part of `bosh create-release`.
-
-set -e -x
-
-cd "${BUILD_DIR}/rabbitmq-broker"
-
-lein uberjar
-cp target/broker-1.3.0-SNAPSHOT-standalone.jar ${BUILD_DIR}/rabbitmq-broker/pcf-rabbitmq-broker.jar

@@ -89,27 +89,15 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
 
         # Broker with HA policy
         rabbitmq_broker_instance_group = manifest['instance_groups'].select { |instance_group| instance_group['name'] == 'rmq-broker' }.first
-        rabbitmq_broker_job = rabbitmq_broker_instance_group['jobs'].select { |job| job['name'] == 'rabbitmq-broker' }.first
-        rabbitmq_broker_job['properties']['rabbitmq-broker']['rabbitmq']['operator_set_policy'] = {
+        rabbitmq_service_broker_job = rabbitmq_broker_instance_group['jobs'].select { |job| job['name'] == 'rabbitmq-service-broker' }.first
+        rabbitmq_service_broker_job['properties']['rabbitmq-service-broker']['rabbitmq']['operator_set_policy'] = {
           'enabled' => true,
           'policy_name' => 'operator_set_policy',
           'policy_definition' => '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}',
           'policy_priority' => 50
         }
 
-        # Configuring broker service metadata
-        rabbitmq_broker_service = rabbitmq_broker_job['properties']['rabbitmq-broker']['service']
-        rabbitmq_broker_service['name'] = 'service-name'
-        rabbitmq_broker_service['display_name'] = 'apps-manager-test-name'
-        rabbitmq_broker_service['offering_description'] = 'Some description of our service'
-        rabbitmq_broker_service['long_description'] = 'Some long description of our service'
-        rabbitmq_broker_service['icon_image'] = 'image-uri'
-        rabbitmq_broker_service['provider_display_name'] = 'CompanyName'
-        rabbitmq_broker_service['documentation_url'] = 'https://documentation.url'
-        rabbitmq_broker_service['support_url'] = 'https://support.url'
-
         # Configuring go broker service metadata
-        rabbitmq_service_broker_job = rabbitmq_broker_instance_group['jobs'].select { |job| job['name'] == 'rabbitmq-service-broker' }.first
         rabbitmq_go_broker_service = rabbitmq_service_broker_job['properties']['rabbitmq-service-broker']['service']
         rabbitmq_go_broker_service['name'] = 'service-name'
         rabbitmq_go_broker_service['display_name'] = 'apps-manager-test-name'

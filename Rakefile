@@ -30,17 +30,7 @@ namespace :spec do
     execute_cmd('./scripts/run-basht-tests')
   end
 
-  desc 'runs broker tests'
-  task :broker do
-    host_os = RbConfig::CONFIG['host_os']
-    if host_os =~ /linux/
-      execute_cmd('./src/rabbitmq-broker/bin/test')
-    else
-      puts "Skipping broker tests when the host OS is #{host_os}"
-    end
-  end
-
-  task :unit => [:bash_unit, :rspec_unit, :broker]
+  task :unit => [:bash_unit, :rspec_unit]
 end
 
 def execute_cmd(cmd)

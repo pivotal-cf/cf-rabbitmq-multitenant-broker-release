@@ -8,6 +8,8 @@ import (
 )
 
 func (b *RabbitMQServiceBroker) Services(ctx context.Context) ([]brokerapi.Service, error) {
+	b.logger.Session("catalog").Info("entry")
+
 	return []brokerapi.Service{
 		brokerapi.Service{
 			ID:          b.cfg.Service.UUID,

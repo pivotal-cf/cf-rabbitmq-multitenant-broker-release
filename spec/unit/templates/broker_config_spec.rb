@@ -2,8 +2,8 @@ require 'yaml'
 
 RSpec.describe 'rabbitmq broker config template', template: true do
   let(:output) do
-    template = compiled_template('rabbitmq-broker', 'broker_config.yml', {}, {
-      'rabbitmq-broker' => { 'instances' => [{ 'address' => '1.2.3.4' }] },
+    template = compiled_template('rabbitmq-service-broker', 'broker_config.yml', {}, {
+      'rabbitmq-service-broker' => { 'instances' => [{ 'address' => '1.2.3.4' }] },
       'rabbitmq-haproxy' => {
         'instances' => [
           { 'address' => '1.1.1.1' },
