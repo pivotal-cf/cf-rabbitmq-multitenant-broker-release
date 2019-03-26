@@ -24,7 +24,6 @@ var _ = Describe("Binding a RMQ service instance", func() {
 	})
 
 	Describe("ProtocolPorts()", func() {
-
 		It("reads the protocol ports", func() {
 			rabbitClient.ProtocolPortsReturns(fakeProtocolPorts(), nil)
 

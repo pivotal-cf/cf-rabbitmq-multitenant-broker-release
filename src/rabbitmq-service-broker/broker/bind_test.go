@@ -56,19 +56,19 @@ var _ = Describe("Binding a RMQ service instance", func() {
 	When("the SI exists", func() {
 		Describe("the user", func() {
 			It("creates a user", func() {
-				rabbithutch.CreateUserReturns("fake-password", nil)
+				rabbithutch.CreateUserAndGrantPermissionsReturns("fake-password", nil)
 				_, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
 				Expect(err).NotTo(HaveOccurred())
 
-				Expect(rabbithutch.CreateUserCallCount()).To(Equal(1))
-				username, vhost, tags := rabbithutch.CreateUserArgsForCall(0)
+				Expect(rabbithutch.CreateUserAndGrantPermissionsCallCount()).To(Equal(1))
+				username, vhost, tags := rabbithutch.CreateUserAndGrantPermissionsArgsForCall(0)
 				Expect(username).To(Equal("binding-id"))
 				Expect(vhost).To(Equal("my-service-instance-id"))
 				Expect(tags).To(Equal(""))
 			})
 
 			It("fails with an error if it cannot create a user", func() {
-				rabbithutch.CreateUserReturns("fake-password", errors.New("foo"))
+				rabbithutch.CreateUserAndGrantPermissionsReturns("fake-password", errors.New("foo"))
 				_, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
 				Expect(err).To(MatchError("foo"))
 			})
@@ -82,13 +82,13 @@ var _ = Describe("Binding a RMQ service instance", func() {
 				})
 
 				It("creates a user with the tags", func() {
-					rabbithutch.CreateUserReturns("fake-password", nil)
+					rabbithutch.CreateUserAndGrantPermissionsReturns("fake-password", nil)
 					_, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
 
 					Expect(err).NotTo(HaveOccurred())
 
-					Expect(rabbithutch.CreateUserCallCount()).To(Equal(1))
-					username, vhost, tags := rabbithutch.CreateUserArgsForCall(0)
+					Expect(rabbithutch.CreateUserAndGrantPermissionsCallCount()).To(Equal(1))
+					username, vhost, tags := rabbithutch.CreateUserAndGrantPermissionsArgsForCall(0)
 					Expect(username).To(Equal("binding-id"))
 					Expect(vhost).To(Equal("my-service-instance-id"))
 					Expect(tags).To(Equal("administrator"))
@@ -109,7 +109,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 			When("it reads the protocol ports", func() {
 				BeforeEach(func() {
 					rabbithutch.ProtocolPortsReturns(fakeProtocolPorts(), nil)
-					rabbithutch.CreateUserReturns("fake-password", nil)
+					rabbithutch.CreateUserAndGrantPermissionsReturns("fake-password", nil)
 				})
 
 				It("generates the right binding", func() {
@@ -136,7 +136,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 			When("using an external load balancer", func() {
 				BeforeEach(func() {
 					rabbithutch.ProtocolPortsReturns(fakeProtocolPorts(), nil)
-					rabbithutch.CreateUserReturns("fake-password", nil)
+					rabbithutch.CreateUserAndGrantPermissionsReturns("fake-password", nil)
 				})
 
 				It("uses the right hosts", func() {

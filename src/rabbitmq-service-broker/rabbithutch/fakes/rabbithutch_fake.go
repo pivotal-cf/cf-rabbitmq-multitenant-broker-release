@@ -7,18 +7,18 @@ import (
 )
 
 type FakeRabbitHutch struct {
-	CreateUserStub        func(string, string, string) (string, error)
-	createUserMutex       sync.RWMutex
-	createUserArgsForCall []struct {
+	CreateUserAndGrantPermissionsStub        func(string, string, string) (string, error)
+	createUserAndGrantPermissionsMutex       sync.RWMutex
+	createUserAndGrantPermissionsArgsForCall []struct {
 		arg1 string
 		arg2 string
 		arg3 string
 	}
-	createUserReturns struct {
+	createUserAndGrantPermissionsReturns struct {
 		result1 string
 		result2 error
 	}
-	createUserReturnsOnCall map[int]struct {
+	createUserAndGrantPermissionsReturnsOnCall map[int]struct {
 		result1 string
 		result2 error
 	}
@@ -60,66 +60,66 @@ type FakeRabbitHutch struct {
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeRabbitHutch) CreateUser(arg1 string, arg2 string, arg3 string) (string, error) {
-	fake.createUserMutex.Lock()
-	ret, specificReturn := fake.createUserReturnsOnCall[len(fake.createUserArgsForCall)]
-	fake.createUserArgsForCall = append(fake.createUserArgsForCall, struct {
+func (fake *FakeRabbitHutch) CreateUserAndGrantPermissions(arg1 string, arg2 string, arg3 string) (string, error) {
+	fake.createUserAndGrantPermissionsMutex.Lock()
+	ret, specificReturn := fake.createUserAndGrantPermissionsReturnsOnCall[len(fake.createUserAndGrantPermissionsArgsForCall)]
+	fake.createUserAndGrantPermissionsArgsForCall = append(fake.createUserAndGrantPermissionsArgsForCall, struct {
 		arg1 string
 		arg2 string
 		arg3 string
 	}{arg1, arg2, arg3})
-	fake.recordInvocation("CreateUser", []interface{}{arg1, arg2, arg3})
-	fake.createUserMutex.Unlock()
-	if fake.CreateUserStub != nil {
-		return fake.CreateUserStub(arg1, arg2, arg3)
+	fake.recordInvocation("CreateUserAndGrantPermissions", []interface{}{arg1, arg2, arg3})
+	fake.createUserAndGrantPermissionsMutex.Unlock()
+	if fake.CreateUserAndGrantPermissionsStub != nil {
+		return fake.CreateUserAndGrantPermissionsStub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.createUserReturns
+	fakeReturns := fake.createUserAndGrantPermissionsReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
-func (fake *FakeRabbitHutch) CreateUserCallCount() int {
-	fake.createUserMutex.RLock()
-	defer fake.createUserMutex.RUnlock()
-	return len(fake.createUserArgsForCall)
+func (fake *FakeRabbitHutch) CreateUserAndGrantPermissionsCallCount() int {
+	fake.createUserAndGrantPermissionsMutex.RLock()
+	defer fake.createUserAndGrantPermissionsMutex.RUnlock()
+	return len(fake.createUserAndGrantPermissionsArgsForCall)
 }
 
-func (fake *FakeRabbitHutch) CreateUserCalls(stub func(string, string, string) (string, error)) {
-	fake.createUserMutex.Lock()
-	defer fake.createUserMutex.Unlock()
-	fake.CreateUserStub = stub
+func (fake *FakeRabbitHutch) CreateUserAndGrantPermissionsCalls(stub func(string, string, string) (string, error)) {
+	fake.createUserAndGrantPermissionsMutex.Lock()
+	defer fake.createUserAndGrantPermissionsMutex.Unlock()
+	fake.CreateUserAndGrantPermissionsStub = stub
 }
 
-func (fake *FakeRabbitHutch) CreateUserArgsForCall(i int) (string, string, string) {
-	fake.createUserMutex.RLock()
-	defer fake.createUserMutex.RUnlock()
-	argsForCall := fake.createUserArgsForCall[i]
+func (fake *FakeRabbitHutch) CreateUserAndGrantPermissionsArgsForCall(i int) (string, string, string) {
+	fake.createUserAndGrantPermissionsMutex.RLock()
+	defer fake.createUserAndGrantPermissionsMutex.RUnlock()
+	argsForCall := fake.createUserAndGrantPermissionsArgsForCall[i]
 	return argsForCall.arg1, argsForCall.arg2, argsForCall.arg3
 }
 
-func (fake *FakeRabbitHutch) CreateUserReturns(result1 string, result2 error) {
-	fake.createUserMutex.Lock()
-	defer fake.createUserMutex.Unlock()
-	fake.CreateUserStub = nil
-	fake.createUserReturns = struct {
+func (fake *FakeRabbitHutch) CreateUserAndGrantPermissionsReturns(result1 string, result2 error) {
+	fake.createUserAndGrantPermissionsMutex.Lock()
+	defer fake.createUserAndGrantPermissionsMutex.Unlock()
+	fake.CreateUserAndGrantPermissionsStub = nil
+	fake.createUserAndGrantPermissionsReturns = struct {
 		result1 string
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeRabbitHutch) CreateUserReturnsOnCall(i int, result1 string, result2 error) {
-	fake.createUserMutex.Lock()
-	defer fake.createUserMutex.Unlock()
-	fake.CreateUserStub = nil
-	if fake.createUserReturnsOnCall == nil {
-		fake.createUserReturnsOnCall = make(map[int]struct {
+func (fake *FakeRabbitHutch) CreateUserAndGrantPermissionsReturnsOnCall(i int, result1 string, result2 error) {
+	fake.createUserAndGrantPermissionsMutex.Lock()
+	defer fake.createUserAndGrantPermissionsMutex.Unlock()
+	fake.CreateUserAndGrantPermissionsStub = nil
+	if fake.createUserAndGrantPermissionsReturnsOnCall == nil {
+		fake.createUserAndGrantPermissionsReturnsOnCall = make(map[int]struct {
 			result1 string
 			result2 error
 		})
 	}
-	fake.createUserReturnsOnCall[i] = struct {
+	fake.createUserAndGrantPermissionsReturnsOnCall[i] = struct {
 		result1 string
 		result2 error
 	}{result1, result2}
@@ -303,8 +303,8 @@ func (fake *FakeRabbitHutch) ProtocolPortsReturnsOnCall(i int, result1 map[strin
 func (fake *FakeRabbitHutch) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
-	fake.createUserMutex.RLock()
-	defer fake.createUserMutex.RUnlock()
+	fake.createUserAndGrantPermissionsMutex.RLock()
+	defer fake.createUserAndGrantPermissionsMutex.RUnlock()
 	fake.deleteUserAndConnectionsMutex.RLock()
 	defer fake.deleteUserAndConnectionsMutex.RUnlock()
 	fake.ensureVHostExistsMutex.RLock()

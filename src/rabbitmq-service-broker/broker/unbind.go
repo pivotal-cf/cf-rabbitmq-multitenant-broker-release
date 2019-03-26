@@ -13,6 +13,7 @@ func (b *RabbitMQServiceBroker) Unbind(ctx context.Context, instanceID, bindingI
 		"binding_id":          bindingID,
 	})
 	logger.Info("entry")
+
 	err := b.rabbithutch.DeleteUserAndConnections(bindingID)
 	if err != nil {
 		logger.Error("unbind-error", err)

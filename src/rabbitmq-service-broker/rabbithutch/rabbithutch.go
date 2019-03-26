@@ -1,6 +1,7 @@
 package rabbithutch
 
 import (
+	"fmt"
 	"net/http"
 
 	rabbithole "github.com/michaelklishin/rabbit-hole"
@@ -26,7 +27,7 @@ type APIClient interface {
 
 type RabbitHutch interface {
 	EnsureVHostExists(string) error
-	CreateUser(string, string, string) (string, error)
+	CreateUserAndGrantPermissions(string, string, string) (string, error)
 	ProtocolPorts() (map[string]int, error)
 	DeleteUserAndConnections(string) error
 }
@@ -37,4 +38,16 @@ type rabbitHutch struct {
 
 func New(client APIClient) RabbitHutch {
 	return &rabbitHutch{client}
+}
+
+func validateResponse(resp *http.Response, err error) error {
+	if err != nil {
+		return err
+	}
+
+	if resp != nil && (resp.StatusCode < http.StatusOK || resp.StatusCode > 299) {
+		return fmt.Errorf("http request failed with status code: %v", resp.StatusCode)
+	}
+
+	return nil
 }

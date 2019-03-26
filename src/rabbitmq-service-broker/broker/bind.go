@@ -30,7 +30,7 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 		return brokerapi.Binding{}, err
 	}
 
-	password, err := b.rabbithutch.CreateUser(username, vhost, b.cfg.RabbitMQ.RegularUserTags)
+	password, err := b.rabbithutch.CreateUserAndGrantPermissions(username, vhost, b.cfg.RabbitMQ.RegularUserTags)
 	if err != nil {
 		logger.Error("bind-error-creating-user", err)
 		return brokerapi.Binding{}, err
