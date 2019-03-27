@@ -159,6 +159,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
       let(:broker_catalog) do
         catalog_uri = URI.join(rmq_broker_host, '/v2/catalog')
         req = Net::HTTP::Get.new(catalog_uri)
+        req['X-Broker-API-Version'] = '2.14'
         req.basic_auth(rmq_broker_username, rmq_broker_password)
         response = Net::HTTP.start(rmq_broker_host.hostname, rmq_broker_host.port, use_ssl: rmq_broker_host.scheme == 'https', verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
           http.request(req)
