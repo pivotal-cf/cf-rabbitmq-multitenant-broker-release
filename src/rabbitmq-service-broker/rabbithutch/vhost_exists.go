@@ -4,17 +4,16 @@ import (
 	"net/http"
 
 	rabbithole "github.com/michaelklishin/rabbit-hole"
-	"github.com/pivotal-cf/brokerapi"
 )
 
-func (r *rabbitHutch) EnsureVHostExists(vhost string) error {
+func (r *rabbitHutch) VHostExists(vhost string) (bool, error) {
 	if _, err := r.client.GetVhost(vhost); err != nil {
 		if rabbitErr, ok := err.(rabbithole.ErrorResponse); ok && rabbitErr.StatusCode == http.StatusNotFound {
-			return brokerapi.ErrInstanceDoesNotExist
+			return false, nil
 		}
 
-		return err
+		return false, err
 	}
 
-	return nil
+	return true, nil
 }

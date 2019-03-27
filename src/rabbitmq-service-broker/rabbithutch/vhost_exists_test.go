@@ -10,7 +10,6 @@ import (
 	"rabbitmq-service-broker/rabbithutch/fakes"
 
 	rabbithole "github.com/michaelklishin/rabbit-hole"
-	"github.com/pivotal-cf/brokerapi"
 )
 
 var _ = Describe("Binding a RMQ service instance", func() {
@@ -24,7 +23,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 		rabbithutch = New(rabbitClient)
 	})
 
-	Describe("EnsureVHostExists()", func() {
+	Describe("VHostExists()", func() {
 		AfterEach(func() {
 			Expect(rabbitClient.GetVhostArgsForCall(0)).To(Equal("fake-vhost"))
 		})
@@ -34,9 +33,10 @@ var _ = Describe("Binding a RMQ service instance", func() {
 				rabbitClient.GetVhostReturns(nil, rabbithole.ErrorResponse{StatusCode: http.StatusNotFound})
 			})
 
-			It("fails with an error saying the service instance does not exist", func() {
-				err := rabbithutch.EnsureVHostExists("fake-vhost")
-				Expect(err).To(MatchError(brokerapi.ErrInstanceDoesNotExist))
+			It("returns false", func() {
+				ok, err := rabbithutch.VHostExists("fake-vhost")
+				Expect(ok).To(BeFalse())
+				Expect(err).NotTo(HaveOccurred())
 			})
 		})
 
@@ -46,8 +46,9 @@ var _ = Describe("Binding a RMQ service instance", func() {
 			})
 
 			It("fails with an error saying the vhost could not be retrieved", func() {
-				err := rabbithutch.EnsureVHostExists("fake-vhost")
+				ok, err := rabbithutch.VHostExists("fake-vhost")
 				Expect(err).To(MatchError(rabbithole.ErrorResponse{StatusCode: http.StatusInternalServerError}))
+				Expect(ok).To(BeFalse())
 			})
 		})
 
@@ -56,8 +57,9 @@ var _ = Describe("Binding a RMQ service instance", func() {
 				rabbitClient.GetVhostReturns(&rabbithole.VhostInfo{}, nil)
 			})
 
-			It("returns nil", func() {
-				err := rabbithutch.EnsureVHostExists("fake-vhost")
+			It("returns true", func() {
+				ok, err := rabbithutch.VHostExists("fake-vhost")
+				Expect(ok).To(BeTrue())
 				Expect(err).NotTo(HaveOccurred())
 			})
 		})

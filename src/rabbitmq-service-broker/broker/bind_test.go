@@ -33,7 +33,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 
 	When("the SI does not exist", func() {
 		BeforeEach(func() {
-			rabbithutch.EnsureVHostExistsReturns(brokerapi.ErrInstanceDoesNotExist)
+			rabbithutch.VHostExistsReturns(false, nil)
 		})
 
 		It("fails with an error saying the SI does not exist", func() {
@@ -44,7 +44,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 
 	When("we fail to query the vhost", func() {
 		BeforeEach(func() {
-			rabbithutch.EnsureVHostExistsReturns(rabbithole.ErrorResponse{StatusCode: http.StatusInternalServerError})
+			rabbithutch.VHostExistsReturns(false, rabbithole.ErrorResponse{StatusCode: http.StatusInternalServerError})
 		})
 
 		It("fails with an error saying the vhost could not be retrieved", func() {
@@ -54,6 +54,10 @@ var _ = Describe("Binding a RMQ service instance", func() {
 	})
 
 	When("the SI exists", func() {
+		BeforeEach(func() {
+			rabbithutch.VHostExistsReturns(true, nil)
+		})
+
 		Describe("the user", func() {
 			It("creates a user", func() {
 				rabbithutch.CreateUserAndGrantPermissionsReturns("fake-password", nil)

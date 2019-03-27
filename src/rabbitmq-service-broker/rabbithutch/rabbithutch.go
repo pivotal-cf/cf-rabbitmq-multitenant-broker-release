@@ -26,7 +26,7 @@ type APIClient interface {
 //go:generate counterfeiter -o ./fakes/rabbithutch_fake.go $FILE RabbitHutch
 
 type RabbitHutch interface {
-	EnsureVHostExists(string) error
+	VHostExists(string) (bool, error)
 	CreateUserAndGrantPermissions(string, string, string) (string, error)
 	ProtocolPorts() (map[string]int, error)
 	DeleteUserAndConnections(string) error

@@ -33,17 +33,6 @@ type FakeRabbitHutch struct {
 	deleteUserAndConnectionsReturnsOnCall map[int]struct {
 		result1 error
 	}
-	EnsureVHostExistsStub        func(string) error
-	ensureVHostExistsMutex       sync.RWMutex
-	ensureVHostExistsArgsForCall []struct {
-		arg1 string
-	}
-	ensureVHostExistsReturns struct {
-		result1 error
-	}
-	ensureVHostExistsReturnsOnCall map[int]struct {
-		result1 error
-	}
 	ProtocolPortsStub        func() (map[string]int, error)
 	protocolPortsMutex       sync.RWMutex
 	protocolPortsArgsForCall []struct {
@@ -54,6 +43,19 @@ type FakeRabbitHutch struct {
 	}
 	protocolPortsReturnsOnCall map[int]struct {
 		result1 map[string]int
+		result2 error
+	}
+	VHostExistsStub        func(string) (bool, error)
+	vHostExistsMutex       sync.RWMutex
+	vHostExistsArgsForCall []struct {
+		arg1 string
+	}
+	vHostExistsReturns struct {
+		result1 bool
+		result2 error
+	}
+	vHostExistsReturnsOnCall map[int]struct {
+		result1 bool
 		result2 error
 	}
 	invocations      map[string][][]interface{}
@@ -185,66 +187,6 @@ func (fake *FakeRabbitHutch) DeleteUserAndConnectionsReturnsOnCall(i int, result
 	}{result1}
 }
 
-func (fake *FakeRabbitHutch) EnsureVHostExists(arg1 string) error {
-	fake.ensureVHostExistsMutex.Lock()
-	ret, specificReturn := fake.ensureVHostExistsReturnsOnCall[len(fake.ensureVHostExistsArgsForCall)]
-	fake.ensureVHostExistsArgsForCall = append(fake.ensureVHostExistsArgsForCall, struct {
-		arg1 string
-	}{arg1})
-	fake.recordInvocation("EnsureVHostExists", []interface{}{arg1})
-	fake.ensureVHostExistsMutex.Unlock()
-	if fake.EnsureVHostExistsStub != nil {
-		return fake.EnsureVHostExistsStub(arg1)
-	}
-	if specificReturn {
-		return ret.result1
-	}
-	fakeReturns := fake.ensureVHostExistsReturns
-	return fakeReturns.result1
-}
-
-func (fake *FakeRabbitHutch) EnsureVHostExistsCallCount() int {
-	fake.ensureVHostExistsMutex.RLock()
-	defer fake.ensureVHostExistsMutex.RUnlock()
-	return len(fake.ensureVHostExistsArgsForCall)
-}
-
-func (fake *FakeRabbitHutch) EnsureVHostExistsCalls(stub func(string) error) {
-	fake.ensureVHostExistsMutex.Lock()
-	defer fake.ensureVHostExistsMutex.Unlock()
-	fake.EnsureVHostExistsStub = stub
-}
-
-func (fake *FakeRabbitHutch) EnsureVHostExistsArgsForCall(i int) string {
-	fake.ensureVHostExistsMutex.RLock()
-	defer fake.ensureVHostExistsMutex.RUnlock()
-	argsForCall := fake.ensureVHostExistsArgsForCall[i]
-	return argsForCall.arg1
-}
-
-func (fake *FakeRabbitHutch) EnsureVHostExistsReturns(result1 error) {
-	fake.ensureVHostExistsMutex.Lock()
-	defer fake.ensureVHostExistsMutex.Unlock()
-	fake.EnsureVHostExistsStub = nil
-	fake.ensureVHostExistsReturns = struct {
-		result1 error
-	}{result1}
-}
-
-func (fake *FakeRabbitHutch) EnsureVHostExistsReturnsOnCall(i int, result1 error) {
-	fake.ensureVHostExistsMutex.Lock()
-	defer fake.ensureVHostExistsMutex.Unlock()
-	fake.EnsureVHostExistsStub = nil
-	if fake.ensureVHostExistsReturnsOnCall == nil {
-		fake.ensureVHostExistsReturnsOnCall = make(map[int]struct {
-			result1 error
-		})
-	}
-	fake.ensureVHostExistsReturnsOnCall[i] = struct {
-		result1 error
-	}{result1}
-}
-
 func (fake *FakeRabbitHutch) ProtocolPorts() (map[string]int, error) {
 	fake.protocolPortsMutex.Lock()
 	ret, specificReturn := fake.protocolPortsReturnsOnCall[len(fake.protocolPortsArgsForCall)]
@@ -300,6 +242,69 @@ func (fake *FakeRabbitHutch) ProtocolPortsReturnsOnCall(i int, result1 map[strin
 	}{result1, result2}
 }
 
+func (fake *FakeRabbitHutch) VHostExists(arg1 string) (bool, error) {
+	fake.vHostExistsMutex.Lock()
+	ret, specificReturn := fake.vHostExistsReturnsOnCall[len(fake.vHostExistsArgsForCall)]
+	fake.vHostExistsArgsForCall = append(fake.vHostExistsArgsForCall, struct {
+		arg1 string
+	}{arg1})
+	fake.recordInvocation("VHostExists", []interface{}{arg1})
+	fake.vHostExistsMutex.Unlock()
+	if fake.VHostExistsStub != nil {
+		return fake.VHostExistsStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	fakeReturns := fake.vHostExistsReturns
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeRabbitHutch) VHostExistsCallCount() int {
+	fake.vHostExistsMutex.RLock()
+	defer fake.vHostExistsMutex.RUnlock()
+	return len(fake.vHostExistsArgsForCall)
+}
+
+func (fake *FakeRabbitHutch) VHostExistsCalls(stub func(string) (bool, error)) {
+	fake.vHostExistsMutex.Lock()
+	defer fake.vHostExistsMutex.Unlock()
+	fake.VHostExistsStub = stub
+}
+
+func (fake *FakeRabbitHutch) VHostExistsArgsForCall(i int) string {
+	fake.vHostExistsMutex.RLock()
+	defer fake.vHostExistsMutex.RUnlock()
+	argsForCall := fake.vHostExistsArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeRabbitHutch) VHostExistsReturns(result1 bool, result2 error) {
+	fake.vHostExistsMutex.Lock()
+	defer fake.vHostExistsMutex.Unlock()
+	fake.VHostExistsStub = nil
+	fake.vHostExistsReturns = struct {
+		result1 bool
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeRabbitHutch) VHostExistsReturnsOnCall(i int, result1 bool, result2 error) {
+	fake.vHostExistsMutex.Lock()
+	defer fake.vHostExistsMutex.Unlock()
+	fake.VHostExistsStub = nil
+	if fake.vHostExistsReturnsOnCall == nil {
+		fake.vHostExistsReturnsOnCall = make(map[int]struct {
+			result1 bool
+			result2 error
+		})
+	}
+	fake.vHostExistsReturnsOnCall[i] = struct {
+		result1 bool
+		result2 error
+	}{result1, result2}
+}
+
 func (fake *FakeRabbitHutch) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
@@ -307,10 +312,10 @@ func (fake *FakeRabbitHutch) Invocations() map[string][][]interface{} {
 	defer fake.createUserAndGrantPermissionsMutex.RUnlock()
 	fake.deleteUserAndConnectionsMutex.RLock()
 	defer fake.deleteUserAndConnectionsMutex.RUnlock()
-	fake.ensureVHostExistsMutex.RLock()
-	defer fake.ensureVHostExistsMutex.RUnlock()
 	fake.protocolPortsMutex.RLock()
 	defer fake.protocolPortsMutex.RUnlock()
+	fake.vHostExistsMutex.RLock()
+	defer fake.vHostExistsMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}
 	for key, value := range fake.invocations {
 		copiedInvocations[key] = value
