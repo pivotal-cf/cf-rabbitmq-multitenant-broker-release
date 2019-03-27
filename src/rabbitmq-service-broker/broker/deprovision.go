@@ -3,26 +3,21 @@ package broker
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"strings"
 
 	"code.cloudfoundry.org/lager"
-	rabbithole "github.com/michaelklishin/rabbit-hole"
 	"github.com/pivotal-cf/brokerapi"
 )
 
-func (b *RabbitMQServiceBroker) Deprovision(ctx context.Context, instanceID string, details brokerapi.DeprovisionDetails, asyncAllowed bool) (spec brokerapi.DeprovisionServiceSpec, err error) {
+func (b *RabbitMQServiceBroker) Deprovision(ctx context.Context, instanceID string, details brokerapi.DeprovisionDetails, asyncAllowed bool) (brokerapi.DeprovisionServiceSpec, error) {
 	logger := b.logger.Session("deprovision")
-	if _, err := b.client.GetVhost(instanceID); err != nil {
-		if rabbitErr, ok := err.(rabbithole.ErrorResponse); ok && rabbitErr.StatusCode == http.StatusNotFound {
-			logger.Info("vhost-not-found")
-			return spec, brokerapi.ErrInstanceDoesNotExist
-		}
-		logger.Info("get-vhost-failed")
-		return spec, err
+
+	if err := b.ensureServiceInstanceExists(logger, instanceID); err != nil {
+		return brokerapi.DeprovisionServiceSpec{}, err
 	}
+
 	if err := b.deleteVhost(instanceID); err != nil {
-		return spec, err
+		return brokerapi.DeprovisionServiceSpec{}, err
 	}
 
 	// Users upgrading from before the introduction of the Go broker may have some dummy users still present on
@@ -33,7 +28,7 @@ func (b *RabbitMQServiceBroker) Deprovision(ctx context.Context, instanceID stri
 	}
 
 	logger.Info("deprovision-succeeded")
-	return spec, nil
+	return brokerapi.DeprovisionServiceSpec{}, nil
 }
 
 func (b *RabbitMQServiceBroker) deleteUser(username string) error {

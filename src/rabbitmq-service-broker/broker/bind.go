@@ -19,13 +19,8 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 	username := bindingID
 	vhost := instanceID
 
-	ok, err := b.rabbithutch.VHostExists(vhost)
-	if err != nil {
-		logger.Error("bind-error-checking-vhost-present", err)
+	if err := b.ensureServiceInstanceExists(logger, instanceID); err != nil {
 		return brokerapi.Binding{}, err
-	}
-	if !ok {
-		return brokerapi.Binding{}, brokerapi.ErrInstanceDoesNotExist
 	}
 
 	protocolPorts, err := b.rabbithutch.ProtocolPorts()

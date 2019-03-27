@@ -22,12 +22,15 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 		ctx         context.Context
 	)
 
+	BeforeEach(func() {
+		rabbithutch = &fakes.FakeRabbitHutch{}
+	})
+
 	When("the instance exists", func() {
 		BeforeEach(func() {
 			client = &fakes.FakeAPIClient{}
-			rabbithutch = &fakes.FakeRabbitHutch{}
 			broker = defaultServiceBroker(defaultConfig(), client, rabbithutch)
-			client.GetVhostReturns(&rabbithole.VhostInfo{}, nil)
+			rabbithutch.VHostExistsReturns(true, nil)
 			ctx = context.TODO()
 		})
 
@@ -42,9 +45,9 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 		})
 
 		It("fails if it cannot delete the vhost", func() {
-			client.DeleteVhostReturns(nil, errors.New("oops"))
+			client.DeleteVhostReturns(nil, errors.New("fake failure to delete vhost"))
 			_, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
-			Expect(err).To(HaveOccurred())
+			Expect(err).To(MatchError("fake failure to delete vhost"))
 		})
 
 		It("deletes the management user if it exists", func() {
@@ -90,11 +93,9 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 		})
 	})
 
-	When("the instance does not exist", func() {
+	When("the SI does not exist", func() {
 		BeforeEach(func() {
-			client = new(fakes.FakeAPIClient)
-			client.GetVhostReturns(nil, rabbithole.ErrorResponse{StatusCode: 404})
-
+			rabbithutch.VHostExistsReturns(false, nil)
 			broker = defaultServiceBroker(defaultConfig(), client, rabbithutch)
 			ctx = context.TODO()
 		})
@@ -105,18 +106,16 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 		})
 	})
 
-	When("there is a problem checking if the vhost exists", func() {
+	When("we fail to query the vhost", func() {
 		BeforeEach(func() {
-			client = new(fakes.FakeAPIClient)
-			client.GetVhostReturns(nil, errors.New("oops"))
-
+			rabbithutch.VHostExistsReturns(false, errors.New("fake failure to query vhost"))
 			broker = defaultServiceBroker(defaultConfig(), client, rabbithutch)
 			ctx = context.TODO()
 		})
 
-		It("returns an error", func() {
+		It("fails with an error saying the vhost could not be retrieved", func() {
 			_, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
-			Expect(err).To(MatchError(ContainSubstring("oops")))
+			Expect(err).To(MatchError("fake failure to query vhost"))
 		})
 	})
 })

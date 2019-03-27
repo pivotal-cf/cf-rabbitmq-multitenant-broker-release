@@ -23,3 +23,18 @@ func New(cfg config.Config, client rabbithutch.APIClient, rabbithutch rabbithutc
 		rabbithutch: rabbithutch,
 	}
 }
+
+func (b *RabbitMQServiceBroker) ensureServiceInstanceExists(logger lager.Logger, serviceInstanceID string) error {
+	ok, err := b.rabbithutch.VHostExists(serviceInstanceID)
+	if err != nil {
+		logger.Error("get-vhost-failed", err)
+		return err
+	}
+
+	if !ok {
+		logger.Info("vhost-not-found")
+		return brokerapi.ErrInstanceDoesNotExist
+	}
+
+	return nil
+}
