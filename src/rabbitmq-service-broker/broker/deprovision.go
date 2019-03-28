@@ -16,7 +16,8 @@ func (b *RabbitMQServiceBroker) Deprovision(ctx context.Context, instanceID stri
 		return brokerapi.DeprovisionServiceSpec{}, err
 	}
 
-	if err := b.deleteVhost(instanceID); err != nil {
+	if err := b.rabbithutch.VHostDelete(instanceID); err != nil {
+		logger.Error("delete-vhost-failed", err)
 		return brokerapi.DeprovisionServiceSpec{}, err
 	}
 

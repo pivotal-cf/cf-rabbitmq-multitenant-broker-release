@@ -35,17 +35,16 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 		})
 
 		It("deletes a vhost", func() {
-			client.DeleteVhostReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
 			spec, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(spec.IsAsync).To(BeFalse())
 
-			Expect(client.DeleteVhostCallCount()).To(Equal(1))
-			Expect(client.DeleteVhostArgsForCall(0)).To(Equal("my-service-instance-id"))
+			Expect(rabbithutch.VHostDeleteCallCount()).To(Equal(1))
+			Expect(rabbithutch.VHostDeleteArgsForCall(0)).To(Equal("my-service-instance-id"))
 		})
 
 		It("fails if it cannot delete the vhost", func() {
-			client.DeleteVhostReturns(nil, errors.New("fake failure to delete vhost"))
+			rabbithutch.VHostDeleteReturns(errors.New("fake failure to delete vhost"))
 			_, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
 			Expect(err).To(MatchError("fake failure to delete vhost"))
 		})
@@ -66,9 +65,6 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 			Expect(err).NotTo(HaveOccurred())
 			Expect(spec.IsAsync).To(BeFalse())
 
-			Expect(client.DeleteVhostCallCount()).To(Equal(1))
-			Expect(client.DeleteVhostArgsForCall(0)).To(Equal("my-service-instance-id"))
-
 			Expect(client.DeleteUserCallCount()).To(Equal(1))
 			Expect(client.DeleteUserArgsForCall(0)).To(Equal("mu-my-service-instance-id-qweqweqwe"))
 
@@ -85,9 +81,6 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 			spec, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(spec.IsAsync).To(BeFalse())
-
-			Expect(client.DeleteVhostCallCount()).To(Equal(1))
-			Expect(client.DeleteVhostArgsForCall(0)).To(Equal("my-service-instance-id"))
 
 			Expect(client.DeleteUserCallCount()).To(Equal(0))
 		})

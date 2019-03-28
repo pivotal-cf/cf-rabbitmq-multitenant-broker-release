@@ -45,6 +45,17 @@ type FakeRabbitHutch struct {
 		result1 map[string]int
 		result2 error
 	}
+	VHostDeleteStub        func(string) error
+	vHostDeleteMutex       sync.RWMutex
+	vHostDeleteArgsForCall []struct {
+		arg1 string
+	}
+	vHostDeleteReturns struct {
+		result1 error
+	}
+	vHostDeleteReturnsOnCall map[int]struct {
+		result1 error
+	}
 	VHostExistsStub        func(string) (bool, error)
 	vHostExistsMutex       sync.RWMutex
 	vHostExistsArgsForCall []struct {
@@ -242,6 +253,66 @@ func (fake *FakeRabbitHutch) ProtocolPortsReturnsOnCall(i int, result1 map[strin
 	}{result1, result2}
 }
 
+func (fake *FakeRabbitHutch) VHostDelete(arg1 string) error {
+	fake.vHostDeleteMutex.Lock()
+	ret, specificReturn := fake.vHostDeleteReturnsOnCall[len(fake.vHostDeleteArgsForCall)]
+	fake.vHostDeleteArgsForCall = append(fake.vHostDeleteArgsForCall, struct {
+		arg1 string
+	}{arg1})
+	fake.recordInvocation("VHostDelete", []interface{}{arg1})
+	fake.vHostDeleteMutex.Unlock()
+	if fake.VHostDeleteStub != nil {
+		return fake.VHostDeleteStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.vHostDeleteReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeRabbitHutch) VHostDeleteCallCount() int {
+	fake.vHostDeleteMutex.RLock()
+	defer fake.vHostDeleteMutex.RUnlock()
+	return len(fake.vHostDeleteArgsForCall)
+}
+
+func (fake *FakeRabbitHutch) VHostDeleteCalls(stub func(string) error) {
+	fake.vHostDeleteMutex.Lock()
+	defer fake.vHostDeleteMutex.Unlock()
+	fake.VHostDeleteStub = stub
+}
+
+func (fake *FakeRabbitHutch) VHostDeleteArgsForCall(i int) string {
+	fake.vHostDeleteMutex.RLock()
+	defer fake.vHostDeleteMutex.RUnlock()
+	argsForCall := fake.vHostDeleteArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeRabbitHutch) VHostDeleteReturns(result1 error) {
+	fake.vHostDeleteMutex.Lock()
+	defer fake.vHostDeleteMutex.Unlock()
+	fake.VHostDeleteStub = nil
+	fake.vHostDeleteReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeRabbitHutch) VHostDeleteReturnsOnCall(i int, result1 error) {
+	fake.vHostDeleteMutex.Lock()
+	defer fake.vHostDeleteMutex.Unlock()
+	fake.VHostDeleteStub = nil
+	if fake.vHostDeleteReturnsOnCall == nil {
+		fake.vHostDeleteReturnsOnCall = make(map[int]struct {
+			result1 error
+		})
+	}
+	fake.vHostDeleteReturnsOnCall[i] = struct {
+		result1 error
+	}{result1}
+}
+
 func (fake *FakeRabbitHutch) VHostExists(arg1 string) (bool, error) {
 	fake.vHostExistsMutex.Lock()
 	ret, specificReturn := fake.vHostExistsReturnsOnCall[len(fake.vHostExistsArgsForCall)]
@@ -314,6 +385,8 @@ func (fake *FakeRabbitHutch) Invocations() map[string][][]interface{} {
 	defer fake.deleteUserAndConnectionsMutex.RUnlock()
 	fake.protocolPortsMutex.RLock()
 	defer fake.protocolPortsMutex.RUnlock()
+	fake.vHostDeleteMutex.RLock()
+	defer fake.vHostDeleteMutex.RUnlock()
 	fake.vHostExistsMutex.RLock()
 	defer fake.vHostExistsMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}

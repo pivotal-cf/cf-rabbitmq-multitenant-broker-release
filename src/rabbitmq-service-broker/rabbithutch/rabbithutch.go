@@ -27,6 +27,7 @@ type APIClient interface {
 
 type RabbitHutch interface {
 	VHostExists(string) (bool, error)
+	VHostDelete(string) error
 	CreateUserAndGrantPermissions(string, string, string) (string, error)
 	ProtocolPorts() (map[string]int, error)
 	DeleteUserAndConnections(string) error
