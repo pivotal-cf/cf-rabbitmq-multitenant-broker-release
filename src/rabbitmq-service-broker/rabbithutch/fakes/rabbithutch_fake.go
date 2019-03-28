@@ -22,6 +22,17 @@ type FakeRabbitHutch struct {
 		result1 string
 		result2 error
 	}
+	DeleteUserStub        func(string) error
+	deleteUserMutex       sync.RWMutex
+	deleteUserArgsForCall []struct {
+		arg1 string
+	}
+	deleteUserReturns struct {
+		result1 error
+	}
+	deleteUserReturnsOnCall map[int]struct {
+		result1 error
+	}
 	DeleteUserAndConnectionsStub        func(string) error
 	deleteUserAndConnectionsMutex       sync.RWMutex
 	deleteUserAndConnectionsArgsForCall []struct {
@@ -43,6 +54,18 @@ type FakeRabbitHutch struct {
 	}
 	protocolPortsReturnsOnCall map[int]struct {
 		result1 map[string]int
+		result2 error
+	}
+	UserListStub        func() ([]string, error)
+	userListMutex       sync.RWMutex
+	userListArgsForCall []struct {
+	}
+	userListReturns struct {
+		result1 []string
+		result2 error
+	}
+	userListReturnsOnCall map[int]struct {
+		result1 []string
 		result2 error
 	}
 	VHostDeleteStub        func(string) error
@@ -136,6 +159,66 @@ func (fake *FakeRabbitHutch) CreateUserAndGrantPermissionsReturnsOnCall(i int, r
 		result1 string
 		result2 error
 	}{result1, result2}
+}
+
+func (fake *FakeRabbitHutch) DeleteUser(arg1 string) error {
+	fake.deleteUserMutex.Lock()
+	ret, specificReturn := fake.deleteUserReturnsOnCall[len(fake.deleteUserArgsForCall)]
+	fake.deleteUserArgsForCall = append(fake.deleteUserArgsForCall, struct {
+		arg1 string
+	}{arg1})
+	fake.recordInvocation("DeleteUser", []interface{}{arg1})
+	fake.deleteUserMutex.Unlock()
+	if fake.DeleteUserStub != nil {
+		return fake.DeleteUserStub(arg1)
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	fakeReturns := fake.deleteUserReturns
+	return fakeReturns.result1
+}
+
+func (fake *FakeRabbitHutch) DeleteUserCallCount() int {
+	fake.deleteUserMutex.RLock()
+	defer fake.deleteUserMutex.RUnlock()
+	return len(fake.deleteUserArgsForCall)
+}
+
+func (fake *FakeRabbitHutch) DeleteUserCalls(stub func(string) error) {
+	fake.deleteUserMutex.Lock()
+	defer fake.deleteUserMutex.Unlock()
+	fake.DeleteUserStub = stub
+}
+
+func (fake *FakeRabbitHutch) DeleteUserArgsForCall(i int) string {
+	fake.deleteUserMutex.RLock()
+	defer fake.deleteUserMutex.RUnlock()
+	argsForCall := fake.deleteUserArgsForCall[i]
+	return argsForCall.arg1
+}
+
+func (fake *FakeRabbitHutch) DeleteUserReturns(result1 error) {
+	fake.deleteUserMutex.Lock()
+	defer fake.deleteUserMutex.Unlock()
+	fake.DeleteUserStub = nil
+	fake.deleteUserReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakeRabbitHutch) DeleteUserReturnsOnCall(i int, result1 error) {
+	fake.deleteUserMutex.Lock()
+	defer fake.deleteUserMutex.Unlock()
+	fake.DeleteUserStub = nil
+	if fake.deleteUserReturnsOnCall == nil {
+		fake.deleteUserReturnsOnCall = make(map[int]struct {
+			result1 error
+		})
+	}
+	fake.deleteUserReturnsOnCall[i] = struct {
+		result1 error
+	}{result1}
 }
 
 func (fake *FakeRabbitHutch) DeleteUserAndConnections(arg1 string) error {
@@ -249,6 +332,61 @@ func (fake *FakeRabbitHutch) ProtocolPortsReturnsOnCall(i int, result1 map[strin
 	}
 	fake.protocolPortsReturnsOnCall[i] = struct {
 		result1 map[string]int
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeRabbitHutch) UserList() ([]string, error) {
+	fake.userListMutex.Lock()
+	ret, specificReturn := fake.userListReturnsOnCall[len(fake.userListArgsForCall)]
+	fake.userListArgsForCall = append(fake.userListArgsForCall, struct {
+	}{})
+	fake.recordInvocation("UserList", []interface{}{})
+	fake.userListMutex.Unlock()
+	if fake.UserListStub != nil {
+		return fake.UserListStub()
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	fakeReturns := fake.userListReturns
+	return fakeReturns.result1, fakeReturns.result2
+}
+
+func (fake *FakeRabbitHutch) UserListCallCount() int {
+	fake.userListMutex.RLock()
+	defer fake.userListMutex.RUnlock()
+	return len(fake.userListArgsForCall)
+}
+
+func (fake *FakeRabbitHutch) UserListCalls(stub func() ([]string, error)) {
+	fake.userListMutex.Lock()
+	defer fake.userListMutex.Unlock()
+	fake.UserListStub = stub
+}
+
+func (fake *FakeRabbitHutch) UserListReturns(result1 []string, result2 error) {
+	fake.userListMutex.Lock()
+	defer fake.userListMutex.Unlock()
+	fake.UserListStub = nil
+	fake.userListReturns = struct {
+		result1 []string
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeRabbitHutch) UserListReturnsOnCall(i int, result1 []string, result2 error) {
+	fake.userListMutex.Lock()
+	defer fake.userListMutex.Unlock()
+	fake.UserListStub = nil
+	if fake.userListReturnsOnCall == nil {
+		fake.userListReturnsOnCall = make(map[int]struct {
+			result1 []string
+			result2 error
+		})
+	}
+	fake.userListReturnsOnCall[i] = struct {
+		result1 []string
 		result2 error
 	}{result1, result2}
 }
@@ -381,10 +519,14 @@ func (fake *FakeRabbitHutch) Invocations() map[string][][]interface{} {
 	defer fake.invocationsMutex.RUnlock()
 	fake.createUserAndGrantPermissionsMutex.RLock()
 	defer fake.createUserAndGrantPermissionsMutex.RUnlock()
+	fake.deleteUserMutex.RLock()
+	defer fake.deleteUserMutex.RUnlock()
 	fake.deleteUserAndConnectionsMutex.RLock()
 	defer fake.deleteUserAndConnectionsMutex.RUnlock()
 	fake.protocolPortsMutex.RLock()
 	defer fake.protocolPortsMutex.RUnlock()
+	fake.userListMutex.RLock()
+	defer fake.userListMutex.RUnlock()
 	fake.vHostDeleteMutex.RLock()
 	defer fake.vHostDeleteMutex.RUnlock()
 	fake.vHostExistsMutex.RLock()

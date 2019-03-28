@@ -31,6 +31,8 @@ type RabbitHutch interface {
 	CreateUserAndGrantPermissions(string, string, string) (string, error)
 	ProtocolPorts() (map[string]int, error)
 	DeleteUserAndConnections(string) error
+	DeleteUser(string) error
+	UserList() ([]string, error)
 }
 
 type rabbitHutch struct {

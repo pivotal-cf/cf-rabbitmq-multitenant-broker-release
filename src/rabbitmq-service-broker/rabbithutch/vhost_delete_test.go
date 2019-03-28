@@ -21,6 +21,7 @@ var _ = Describe("VhostDelete", func() {
 		rabbitClient = new(fakes.FakeAPIClient)
 		rabbithutch = New(rabbitClient)
 	})
+
 	It("deletes a vhost", func() {
 		rabbitClient.DeleteVhostReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
 		err := rabbithutch.VHostDelete("my-vhost")

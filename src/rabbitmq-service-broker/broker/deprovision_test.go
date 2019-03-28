@@ -3,11 +3,9 @@ package broker_test
 import (
 	"context"
 	"errors"
-	"net/http"
 
 	"rabbitmq-service-broker/rabbithutch/fakes"
 
-	rabbithole "github.com/michaelklishin/rabbit-hole"
 	"github.com/pivotal-cf/brokerapi"
 
 	. "github.com/onsi/ginkgo"
@@ -49,40 +47,41 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 			Expect(err).To(MatchError("fake failure to delete vhost"))
 		})
 
-		It("deletes the management user if it exists", func() {
-			client.DeleteVhostReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
-			client.ListUsersReturns([]rabbithole.UserInfo{
-				rabbithole.UserInfo{
-					Name: "mu-not-my-service-instance-asdasdasd",
-				},
-				rabbithole.UserInfo{
-					Name: "mu-my-service-instance-id-qweqweqwe",
-				},
-			},
-				nil)
-			client.DeleteUserReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
+		It("deletes any management users if they exists", func() {
+			rabbithutch.UserListReturns([]string{
+				"mu-not-my-service-instance-asdasdasd",
+				"mu-my-service-instance-id-qweqweqwe",
+				"mu-my-service-instance-id-lfdsahjhh",
+			}, nil)
+
 			spec, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(spec.IsAsync).To(BeFalse())
 
-			Expect(client.DeleteUserCallCount()).To(Equal(1))
-			Expect(client.DeleteUserArgsForCall(0)).To(Equal("mu-my-service-instance-id-qweqweqwe"))
-
+			Expect(rabbithutch.DeleteUserCallCount()).To(Equal(2))
+			Expect(rabbithutch.DeleteUserArgsForCall(0)).To(Equal("mu-my-service-instance-id-qweqweqwe"))
+			Expect(rabbithutch.DeleteUserArgsForCall(1)).To(Equal("mu-my-service-instance-id-lfdsahjhh"))
 		})
 
-		It("ignores the error when the management user doesn't exist", func() {
-			client.DeleteVhostReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
-			client.ListUsersReturns([]rabbithole.UserInfo{
-				rabbithole.UserInfo{
-					Name: "mu-not-my-service-instance-asdasdasd",
-				},
-			},
-				nil)
-			spec, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
-			Expect(err).NotTo(HaveOccurred())
-			Expect(spec.IsAsync).To(BeFalse())
+		When("the management user doesn't exist", func() {
+			It("does not try to delete it", func() {
+				rabbithutch.UserListReturns([]string{"mu-not-my-service-instance-asdasdasd"}, nil)
 
-			Expect(client.DeleteUserCallCount()).To(Equal(0))
+				_, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
+				Expect(err).NotTo(HaveOccurred())
+
+				Expect(rabbithutch.DeleteUserCallCount()).To(Equal(0))
+			})
+		})
+
+		When("deleting the management user fails", func() {
+			It("returns an error", func() {
+				rabbithutch.UserListReturns([]string{"mu-my-service-instance-id-qweqweqwe"}, nil)
+				rabbithutch.DeleteUserReturns(errors.New("fake delete user error"))
+
+				_, err := broker.Deprovision(ctx, "my-service-instance-id", brokerapi.DeprovisionDetails{}, false)
+				Expect(err).To(MatchError("fake delete user error"))
+			})
 		})
 	})
 

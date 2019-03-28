@@ -16,10 +16,10 @@ func (r *rabbitHutch) DeleteUserAndConnections(username string) error {
 		}
 	}()
 
-	return r.deleteUser(username)
+	return r.DeleteUser(username)
 }
 
-func (r *rabbitHutch) deleteUser(username string) error {
+func (r *rabbitHutch) DeleteUser(username string) error {
 	resp, err := r.client.DeleteUser(username)
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return brokerapi.ErrBindingDoesNotExist
