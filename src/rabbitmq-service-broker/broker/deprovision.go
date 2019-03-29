@@ -11,6 +11,10 @@ import (
 
 func (b *RabbitMQServiceBroker) Deprovision(ctx context.Context, instanceID string, details brokerapi.DeprovisionDetails, asyncAllowed bool) (brokerapi.DeprovisionServiceSpec, error) {
 	logger := b.logger.Session("deprovision")
+	logger.Info("entry", lager.Data{
+		"service_instance_id": instanceID,
+	})
+	defer logger.Info("exit")
 
 	if err := b.ensureServiceInstanceExists(logger, instanceID); err != nil {
 		return brokerapi.DeprovisionServiceSpec{}, err
@@ -40,6 +44,6 @@ func (b *RabbitMQServiceBroker) Deprovision(ctx context.Context, instanceID stri
 		}
 	}
 
-	logger.Info("deprovision-succeeded")
+	logger.Info("ok")
 	return brokerapi.DeprovisionServiceSpec{}, nil
 }

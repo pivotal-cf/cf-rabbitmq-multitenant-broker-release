@@ -4,11 +4,17 @@ import (
 	"context"
 	"fmt"
 
+	"code.cloudfoundry.org/lager"
 	"github.com/pivotal-cf/brokerapi"
 )
 
 func (b *RabbitMQServiceBroker) Provision(ctx context.Context, instanceID string, details brokerapi.ProvisionDetails, asyncAllowed bool) (spec brokerapi.ProvisionedServiceSpec, err error) {
 	logger := b.logger.Session("provision")
+	logger.Info("entry", lager.Data{
+		"service_instance_id": instanceID,
+	})
+	defer logger.Info("exit")
+
 	vhost := instanceID
 
 	ok, existsErr := b.rabbithutch.VHostExists(vhost)
@@ -56,7 +62,7 @@ func (b *RabbitMQServiceBroker) Provision(ctx context.Context, instanceID string
 		}
 	}
 
-	logger.Info("provision-succeeded")
+	logger.Info("ok")
 	url := fmt.Sprintf("https://%s/#/login/", b.cfg.RabbitMQ.ManagementDomain)
 	return brokerapi.ProvisionedServiceSpec{DashboardURL: url}, nil
 }

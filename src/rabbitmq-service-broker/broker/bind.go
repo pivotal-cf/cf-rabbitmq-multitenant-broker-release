@@ -10,11 +10,12 @@ import (
 )
 
 func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID string, details brokerapi.BindDetails, asyncAllowed bool) (brokerapi.Binding, error) {
-	logger := b.logger.Session("bind", lager.Data{
+	logger := b.logger.Session("bind")
+	logger.Info("entry", lager.Data{
 		"service_instance_id": instanceID,
 		"binding_id":          bindingID,
 	})
-	logger.Info("entry")
+	defer logger.Info("exit")
 
 	username := bindingID
 	vhost := instanceID
@@ -51,5 +52,6 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 		return brokerapi.Binding{}, err
 	}
 
+	logger.Info("ok")
 	return brokerapi.Binding{Credentials: credentials}, nil
 }

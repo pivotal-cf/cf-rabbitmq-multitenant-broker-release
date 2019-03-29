@@ -8,11 +8,12 @@ import (
 )
 
 func (b *RabbitMQServiceBroker) Unbind(ctx context.Context, instanceID, bindingID string, details brokerapi.UnbindDetails, asyncAllowed bool) (brokerapi.UnbindSpec, error) {
-	logger := b.logger.Session("unbind", lager.Data{
+	logger := b.logger.Session("unbind")
+	logger.Info("entry", lager.Data{
 		"service_instance_id": instanceID,
 		"binding_id":          bindingID,
 	})
-	logger.Info("entry")
+	defer logger.Info("exit")
 
 	err := b.rabbithutch.DeleteUserAndConnections(bindingID)
 	if err != nil {
@@ -20,6 +21,6 @@ func (b *RabbitMQServiceBroker) Unbind(ctx context.Context, instanceID, bindingI
 		return brokerapi.UnbindSpec{}, err
 	}
 
-	logger.Info("exit")
+	logger.Info("ok")
 	return brokerapi.UnbindSpec{}, nil
 }
