@@ -29,9 +29,8 @@ var _ = Describe("Service Broker", func() {
 				Shareable:           false,
 			},
 		}
-		rabbitClient := &fakes.FakeAPIClient{}
 		rabbithutch := &fakes.FakeRabbitHutch{}
-		broker := defaultServiceBroker(cfg, rabbitClient, rabbithutch)
+		broker := defaultServiceBroker(cfg, rabbithutch)
 		services, err := broker.Services(context.Background())
 		Expect(err).NotTo(HaveOccurred())
 

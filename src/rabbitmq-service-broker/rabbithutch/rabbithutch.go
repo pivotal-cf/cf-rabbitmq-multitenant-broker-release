@@ -28,11 +28,14 @@ type APIClient interface {
 type RabbitHutch interface {
 	VHostExists(string) (bool, error)
 	VHostDelete(string) error
+	VHostCreate(string) error
 	CreateUserAndGrantPermissions(string, string, string) (string, error)
 	ProtocolPorts() (map[string]int, error)
 	DeleteUserAndConnections(string) error
 	DeleteUser(string) error
 	UserList() ([]string, error)
+	AssignPermissionsTo(string, string) error
+	CreatePolicy(string, string, int, map[string]interface{}) error
 }
 
 type rabbitHutch struct {

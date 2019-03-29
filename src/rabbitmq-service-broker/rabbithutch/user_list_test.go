@@ -37,6 +37,7 @@ var _ = Describe("Deleting the user", func() {
 
 		Expect(err).NotTo(HaveOccurred())
 		Expect(users).To(Equal([]string{"fake-user-1", "fake-user-2"}))
+		Expect(rabbitClient.ListUsersCallCount()).To(Equal(1))
 	})
 
 	It("returns an error if it cannot list users", func() {

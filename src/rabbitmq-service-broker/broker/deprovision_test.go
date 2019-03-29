@@ -14,7 +14,6 @@ import (
 
 var _ = Describe("Deprovisioning a RMQ service instance", func() {
 	var (
-		client      *fakes.FakeAPIClient
 		rabbithutch *fakes.FakeRabbitHutch
 		broker      brokerapi.ServiceBroker
 		ctx         context.Context
@@ -26,8 +25,7 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 
 	When("the instance exists", func() {
 		BeforeEach(func() {
-			client = &fakes.FakeAPIClient{}
-			broker = defaultServiceBroker(defaultConfig(), client, rabbithutch)
+			broker = defaultServiceBroker(defaultConfig(), rabbithutch)
 			rabbithutch.VHostExistsReturns(true, nil)
 			ctx = context.TODO()
 		})
@@ -88,7 +86,7 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 	When("the SI does not exist", func() {
 		BeforeEach(func() {
 			rabbithutch.VHostExistsReturns(false, nil)
-			broker = defaultServiceBroker(defaultConfig(), client, rabbithutch)
+			broker = defaultServiceBroker(defaultConfig(), rabbithutch)
 			ctx = context.TODO()
 		})
 
@@ -101,7 +99,7 @@ var _ = Describe("Deprovisioning a RMQ service instance", func() {
 	When("we fail to query the vhost", func() {
 		BeforeEach(func() {
 			rabbithutch.VHostExistsReturns(false, errors.New("fake failure to query vhost"))
-			broker = defaultServiceBroker(defaultConfig(), client, rabbithutch)
+			broker = defaultServiceBroker(defaultConfig(), rabbithutch)
 			ctx = context.TODO()
 		})
 

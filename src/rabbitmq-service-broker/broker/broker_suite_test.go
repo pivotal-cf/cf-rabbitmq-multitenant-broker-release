@@ -46,6 +46,6 @@ func defaultConfigWithExternalLoadBalancer() config.Config {
 	return cfg
 }
 
-func defaultServiceBroker(conf config.Config, client *fakes.FakeAPIClient, rabbithutch *fakes.FakeRabbitHutch) brokerapi.ServiceBroker {
-	return broker.New(conf, client, rabbithutch, lagertest.NewTestLogger("test"))
+func defaultServiceBroker(conf config.Config, rabbithutch *fakes.FakeRabbitHutch) brokerapi.ServiceBroker {
+	return broker.New(conf, rabbithutch, lagertest.NewTestLogger("test"))
 }

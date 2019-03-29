@@ -17,18 +17,15 @@ import (
 
 var _ = Describe("Binding a RMQ service instance", func() {
 	var (
-		rabbitClient *fakes.FakeAPIClient
-		broker       brokerapi.ServiceBroker
-		ctx          context.Context
-		rabbithutch  *fakes.FakeRabbitHutch
+		broker      brokerapi.ServiceBroker
+		ctx         context.Context
+		rabbithutch *fakes.FakeRabbitHutch
 	)
 
 	BeforeEach(func() {
-		rabbitClient = &fakes.FakeAPIClient{}
 		rabbithutch = &fakes.FakeRabbitHutch{}
-		broker = defaultServiceBroker(defaultConfig(), rabbitClient, rabbithutch)
+		broker = defaultServiceBroker(defaultConfig(), rabbithutch)
 		ctx = context.TODO()
-		rabbitClient.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusOK}, nil)
 	})
 
 	When("the SI does not exist", func() {
@@ -79,10 +76,8 @@ var _ = Describe("Binding a RMQ service instance", func() {
 
 			When("user tags are set in the config", func() {
 				BeforeEach(func() {
-					rabbitClient = new(fakes.FakeAPIClient)
-					broker = defaultServiceBroker(defaultConfigWithUserTags(), rabbitClient, rabbithutch)
+					broker = defaultServiceBroker(defaultConfigWithUserTags(), rabbithutch)
 					ctx = context.TODO()
-					rabbitClient.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusOK}, nil)
 				})
 
 				It("creates a user with the tags", func() {
@@ -144,7 +139,7 @@ var _ = Describe("Binding a RMQ service instance", func() {
 				})
 
 				It("uses the right hosts", func() {
-					broker = defaultServiceBroker(defaultConfigWithExternalLoadBalancer(), rabbitClient, rabbithutch)
+					broker = defaultServiceBroker(defaultConfigWithExternalLoadBalancer(), rabbithutch)
 					binding, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
 					Expect(err).NotTo(HaveOccurred())
 

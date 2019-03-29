@@ -10,15 +10,13 @@ import (
 
 type RabbitMQServiceBroker struct {
 	cfg         config.Config
-	client      rabbithutch.APIClient
 	logger      lager.Logger
 	rabbithutch rabbithutch.RabbitHutch
 }
 
-func New(cfg config.Config, client rabbithutch.APIClient, rabbithutch rabbithutch.RabbitHutch, logger lager.Logger) brokerapi.ServiceBroker {
+func New(cfg config.Config, rabbithutch rabbithutch.RabbitHutch, logger lager.Logger) brokerapi.ServiceBroker {
 	return &RabbitMQServiceBroker{
 		cfg:         cfg,
-		client:      client,
 		logger:      logger,
 		rabbithutch: rabbithutch,
 	}

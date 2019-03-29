@@ -44,7 +44,7 @@ func main() {
 		cfg.RabbitMQ.Administrator.Password,
 	)
 
-	broker := broker.New(cfg, client, rabbithutch.New(client), logger)
+	broker := broker.New(cfg, rabbithutch.New(client), logger)
 	credentials := brokerapi.BrokerCredentials{
 		Username: cfg.Service.Username,
 		Password: cfg.Service.Password,

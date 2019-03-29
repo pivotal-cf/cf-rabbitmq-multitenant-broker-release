@@ -13,16 +13,14 @@ import (
 var _ = Describe("Last Binding Operation", func() {
 
 	var (
-		rabbitClient *fakes.FakeAPIClient
-		broker       brokerapi.ServiceBroker
-		ctx          context.Context
-		rabbithutch  *fakes.FakeRabbitHutch
+		broker      brokerapi.ServiceBroker
+		ctx         context.Context
+		rabbithutch *fakes.FakeRabbitHutch
 	)
 
 	BeforeEach(func() {
-		rabbitClient = &fakes.FakeAPIClient{}
 		rabbithutch = &fakes.FakeRabbitHutch{}
-		broker = defaultServiceBroker(defaultConfig(), rabbitClient, rabbithutch)
+		broker = defaultServiceBroker(defaultConfig(), rabbithutch)
 		ctx = context.TODO()
 	})
 

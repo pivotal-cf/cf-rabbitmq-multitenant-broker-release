@@ -32,9 +32,7 @@ func (r *rabbitHutch) CreateUserAndGrantPermissions(username, vhost, tags string
 		return "", brokerapi.ErrBindingAlreadyExists
 	}
 
-	permissions := rabbithole.Permissions{Configure: ".*", Write: ".*", Read: ".*"}
-	err = validateResponse(r.client.UpdatePermissionsIn(vhost, username, permissions))
-	if err != nil {
+	if err = r.AssignPermissionsTo(vhost, username); err != nil {
 		r.DeleteUser(username)
 		return "", err
 	}

@@ -2,12 +2,10 @@ package broker_test
 
 import (
 	"context"
+	"errors"
 	"fmt"
-	"net/http"
 
 	"rabbitmq-service-broker/rabbithutch/fakes"
-
-	rabbithole "github.com/michaelklishin/rabbit-hole"
 
 	"github.com/pivotal-cf/brokerapi"
 
@@ -17,46 +15,39 @@ import (
 
 var _ = Describe("Provisioning a RMQ service instance", func() {
 	var (
-		client      *fakes.FakeAPIClient
 		rabbithutch *fakes.FakeRabbitHutch
 		broker      brokerapi.ServiceBroker
 		ctx         context.Context
 	)
 
 	BeforeEach(func() {
-		client = &fakes.FakeAPIClient{}
 		rabbithutch = &fakes.FakeRabbitHutch{}
-		broker = defaultServiceBroker(defaultConfig(), client, rabbithutch)
+		broker = defaultServiceBroker(defaultConfig(), rabbithutch)
 		ctx = context.TODO()
-		client.GetVhostReturns(nil, fmt.Errorf("vhost does not exist"))
-		client.PutVhostReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
-		client.DeleteVhostReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
-		client.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
-		client.PutPolicyReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
+		rabbithutch.VHostCreateReturns(nil)
+		rabbithutch.VHostDeleteReturns(nil)
+		rabbithutch.AssignPermissionsToReturns(nil)
 	})
 
 	It("creates a vhost", func() {
 		_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 		Expect(err).NotTo(HaveOccurred())
 
-		Expect(client.PutVhostCallCount()).To(Equal(1))
-		Expect(client.PutVhostArgsForCall(0)).To(Equal("my-service-instance-id"))
+		Expect(rabbithutch.VHostCreateCallCount()).To(Equal(1))
+		Expect(rabbithutch.VHostCreateArgsForCall(0)).To(Equal("my-service-instance-id"))
 	})
 
 	It("grants permissions on the vhost to the service broker RMQ admin user", func() {
 		_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 		Expect(err).NotTo(HaveOccurred())
 
-		Expect(client.UpdatePermissionsInCallCount()).To(Equal(1))
-		vhost, username, permissions := client.UpdatePermissionsInArgsForCall(0)
+		Expect(rabbithutch.AssignPermissionsToCallCount()).To(Equal(1))
+		vhost, username := rabbithutch.AssignPermissionsToArgsForCall(0)
 		Expect(vhost).To(Equal("my-service-instance-id"))
 		Expect(username).To(Equal("default-admin-username"))
-		Expect(permissions.Configure).To(Equal(".*"))
-		Expect(permissions.Read).To(Equal(".*"))
-		Expect(permissions.Write).To(Equal(".*"))
 	})
 
-	It("return the dashboard URL", func() {
+	It("returns the dashboard URL", func() {
 		spec, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 		Expect(err).NotTo(HaveOccurred())
 
@@ -67,13 +58,13 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 
 	When("granting permissions fails", func() {
 		BeforeEach(func() {
-			client.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusForbidden}, nil)
+			rabbithutch.AssignPermissionsToReturns(fmt.Errorf("fake-error"))
 		})
 
 		It("cleans up the vhost", func() {
 			_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
-			Expect(err).To(MatchError("http request failed with status code: 403"))
-			Expect(client.DeleteVhostCallCount()).To(Equal(1))
+			Expect(err).To(MatchError("fake-error"))
+			Expect(rabbithutch.VHostDeleteCallCount()).To(Equal(1))
 		})
 	})
 
@@ -82,36 +73,24 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 			BeforeEach(func() {
 				cfg := defaultConfig()
 				cfg.RabbitMQ.Management.Username = "default-management-username"
-				broker = defaultServiceBroker(cfg, client, rabbithutch)
+				broker = defaultServiceBroker(cfg, rabbithutch)
 			})
 
 			It("grants permissions on the vhost to the management RMQ user", func() {
 				_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 				Expect(err).NotTo(HaveOccurred())
 
-				Expect(client.UpdatePermissionsInCallCount()).To(Equal(2))
-				vhost, username, permissions := client.UpdatePermissionsInArgsForCall(1)
+				Expect(rabbithutch.AssignPermissionsToCallCount()).To(Equal(2))
+				vhost, username := rabbithutch.AssignPermissionsToArgsForCall(0)
 				Expect(vhost).To(Equal("my-service-instance-id"))
-				Expect(username).To(Equal("default-management-username"))
-				Expect(permissions.Configure).To(Equal(".*"))
-				Expect(permissions.Read).To(Equal(".*"))
-				Expect(permissions.Write).To(Equal(".*"))
+				Expect(username).To(Equal("default-admin-username"))
 			})
 
 			When("granting permissions fails", func() {
-				BeforeEach(func() {
-					client.UpdatePermissionsInStub = func(vhost, username string, permissions rabbithole.Permissions) (*http.Response, error) {
-						if username == "default-management-username" {
-							return &http.Response{StatusCode: http.StatusForbidden}, nil
-						}
-						return &http.Response{StatusCode: http.StatusNoContent}, nil
-					}
-				})
-
 				It("ignores the error", func() {
 					_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 					Expect(err).NotTo(HaveOccurred())
-					Expect(client.DeleteVhostCallCount()).To(Equal(0))
+					Expect(rabbithutch.VHostDeleteCallCount()).To(Equal(0))
 				})
 			})
 		})
@@ -120,7 +99,7 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 			It("does not attempt to grant it permissions", func() {
 				_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 				Expect(err).NotTo(HaveOccurred())
-				Expect(client.UpdatePermissionsInCallCount()).To(Equal(1))
+				Expect(rabbithutch.AssignPermissionsToCallCount()).To(Equal(1))
 			})
 		})
 	})
@@ -133,30 +112,30 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 				cfg.RabbitMQ.OperatorSetPolicy.Name = "fake-policy-name"
 				cfg.RabbitMQ.OperatorSetPolicy.Definition = map[string]interface{}{"fake-policy-key": "fake-policy-value"}
 				cfg.RabbitMQ.OperatorSetPolicy.Priority = 42
-				broker = defaultServiceBroker(cfg, client, rabbithutch)
+				broker = defaultServiceBroker(cfg, rabbithutch)
 			})
 
 			It("sets policies for the new instance", func() {
 				_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 				Expect(err).NotTo(HaveOccurred())
 
-				Expect(client.PutPolicyCallCount()).To(Equal(1))
-				vhost, policyName, policy := client.PutPolicyArgsForCall(0)
+				Expect(rabbithutch.CreatePolicyCallCount()).To(Equal(1))
+				vhost, policyName, priority, definition := rabbithutch.CreatePolicyArgsForCall(0)
 				Expect(vhost).To(Equal("my-service-instance-id"))
 				Expect(policyName).To(Equal("fake-policy-name"))
-				Expect(policy.Definition).To(BeEquivalentTo(map[string]interface{}{"fake-policy-key": "fake-policy-value"}))
-				Expect(policy.Priority).To(Equal(42))
+				Expect(definition).To(BeEquivalentTo(map[string]interface{}{"fake-policy-key": "fake-policy-value"}))
+				Expect(priority).To(Equal(42))
 			})
 
 			When("setting policies fails", func() {
 				BeforeEach(func() {
-					client.PutPolicyReturns(&http.Response{StatusCode: http.StatusForbidden}, nil)
+					rabbithutch.CreatePolicyReturns(fmt.Errorf("some-error"))
 				})
 
 				It("cleans up the vhost", func() {
 					_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
-					Expect(err).To(MatchError("http request failed with status code: 403"))
-					Expect(client.DeleteVhostCallCount()).To(Equal(1))
+					Expect(err).To(MatchError("some-error"))
+					Expect(rabbithutch.VHostDeleteCallCount()).To(Equal(1))
 				})
 			})
 		})
@@ -166,37 +145,40 @@ var _ = Describe("Provisioning a RMQ service instance", func() {
 				_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 				Expect(err).NotTo(HaveOccurred())
 
-				Expect(client.PutPolicyCallCount()).To(Equal(0))
+				Expect(rabbithutch.CreatePolicyCallCount()).To(Equal(0))
 			})
 		})
 	})
 
 	When("the vhost already exists", func() {
 		It("returns ErrInstanceAlreadyExists error", func() {
-			client.GetVhostReturns(&rabbithole.VhostInfo{}, nil)
+			rabbithutch.VHostExistsReturns(true, nil)
 
 			_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
-			Expect(err).To(Equal(brokerapi.ErrInstanceAlreadyExists))
+			Expect(err).To(MatchError(brokerapi.ErrInstanceAlreadyExists))
 
-			Expect(client.GetVhostCallCount()).To(Equal(1))
-			Expect(client.GetVhostArgsForCall(0)).To(Equal("my-service-instance-id"))
-			Expect(client.PutVhostCallCount()).To(Equal(0))
+			Expect(rabbithutch.VHostExistsCallCount()).To(Equal(1))
+			Expect(rabbithutch.VHostExistsArgsForCall(0)).To(Equal("my-service-instance-id"))
+			Expect(rabbithutch.VHostCreateCallCount()).To(Equal(0))
+		})
+	})
+
+	When("checking whether the VHost exists fails", func() {
+		It("returns an error", func() {
+			rabbithutch.VHostExistsReturns(false, errors.New("fake check vhost error"))
+
+			_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
+
+			Expect(err).To(MatchError("fake check vhost error"))
 		})
 	})
 
 	When("the vhost creation fails", func() {
 		It("returns an error when the RMQ API returns an error", func() {
-			client.PutVhostReturns(nil, fmt.Errorf("vhost-creation-failed"))
+			rabbithutch.VHostCreateReturns(fmt.Errorf("vhost-creation-failed"))
 
 			_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
 			Expect(err).To(MatchError("vhost-creation-failed"))
-		})
-
-		It("returns an error when the RMQ API returns a bad HTTP response code", func() {
-			client.PutVhostReturns(&http.Response{StatusCode: http.StatusInternalServerError}, nil)
-
-			_, err := broker.Provision(ctx, "my-service-instance-id", brokerapi.ProvisionDetails{}, false)
-			Expect(err).To(MatchError("http request failed with status code: 500"))
 		})
 	})
 })
