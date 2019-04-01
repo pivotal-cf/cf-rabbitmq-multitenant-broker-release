@@ -25,6 +25,12 @@ var _ = Describe("the lifecycle of a service instance", func() {
 		provisionResponse, provisionBody := provision(serviceInstanceID, serviceID, planID)
 		Expect(provisionResponse.StatusCode).To(Equal(http.StatusCreated), string(provisionBody))
 
+		By("creating a management user")
+		managementUsername := fmt.Sprintf("mu-%v-8912348912389123", serviceInstanceID)
+		rmqClient.PutUser(managementUsername, rabbithole.UserSettings{})
+		user, _ := rmqClient.GetUser(managementUsername)
+		Expect(user.Name).To(Equal(managementUsername))
+
 		By("checking that a dashboard URL is returned")
 		var spec map[string]interface{}
 		Expect(json.Unmarshal(provisionBody, &spec)).To(Succeed())
@@ -89,6 +95,10 @@ var _ = Describe("the lifecycle of a service instance", func() {
 		By("sending a deprovision request")
 		deprovisionResponse, deprovisionBody := doRequest(http.MethodDelete, deprovisionURL(serviceInstanceID, serviceID, planID), nil)
 		Expect(deprovisionResponse.StatusCode).To(Equal(http.StatusOK), string(deprovisionBody))
+
+		By("checking that the management user has been deleted")
+		_, userErr = rmqClient.GetUser(managementUsername)
+		Expect(userErr).To(MatchError(ContainSubstring("Error 404")))
 
 		By("checking that the vhost has been deleted")
 		_, err = rmqClient.GetVhost(serviceInstanceID)
