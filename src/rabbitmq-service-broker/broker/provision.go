@@ -62,7 +62,6 @@ func (b *RabbitMQServiceBroker) Provision(ctx context.Context, instanceID string
 		}
 	}
 
-	logger.Info("ok")
 	url := fmt.Sprintf("https://%s/#/login/", b.cfg.RabbitMQ.ManagementDomain)
 	return brokerapi.ProvisionedServiceSpec{DashboardURL: url}, nil
 }

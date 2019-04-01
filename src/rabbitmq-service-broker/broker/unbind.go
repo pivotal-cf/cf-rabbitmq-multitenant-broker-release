@@ -21,6 +21,5 @@ func (b *RabbitMQServiceBroker) Unbind(ctx context.Context, instanceID, bindingI
 		return brokerapi.UnbindSpec{}, err
 	}
 
-	logger.Info("ok")
 	return brokerapi.UnbindSpec{}, nil
 }

@@ -17,6 +17,7 @@ func (b *RabbitMQServiceBroker) Deprovision(ctx context.Context, instanceID stri
 	defer logger.Info("exit")
 
 	if err := b.ensureServiceInstanceExists(logger, instanceID); err != nil {
+		logger.Error("error-checking-service-instance-exists", err)
 		return brokerapi.DeprovisionServiceSpec{}, err
 	}
 
@@ -44,6 +45,5 @@ func (b *RabbitMQServiceBroker) Deprovision(ctx context.Context, instanceID stri
 		}
 	}
 
-	logger.Info("ok")
 	return brokerapi.DeprovisionServiceSpec{}, nil
 }
