@@ -4,14 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"net/http"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
 	"rabbitmq-service-broker/rabbithutch/fakes"
 
-	rabbithole "github.com/michaelklishin/rabbit-hole"
 	"github.com/pivotal-cf/brokerapi"
 )
 
@@ -41,12 +39,12 @@ var _ = Describe("Binding a RMQ service instance", func() {
 
 	When("we fail to query the vhost", func() {
 		BeforeEach(func() {
-			rabbithutch.VHostExistsReturns(false, rabbithole.ErrorResponse{StatusCode: http.StatusInternalServerError})
+			rabbithutch.VHostExistsReturns(false, errors.New("fake vhost error"))
 		})
 
 		It("fails with an error saying the vhost could not be retrieved", func() {
 			_, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
-			Expect(err).To(MatchError(rabbithole.ErrorResponse{StatusCode: http.StatusInternalServerError}))
+			Expect(err).To(MatchError("fake vhost error"))
 		})
 	})
 
