@@ -59,11 +59,11 @@ github.com/pivotal-cf/brokerapi/auth
 github.com/pivotal-cf/brokerapi/middlewares/originating_identity_header
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
-# golang.org/x/net v0.0.0-20190324223953-e3b2ff56ed87
+# golang.org/x/net v0.0.0-20190328230028-74de082e2cca
 golang.org/x/net/html/charset
 golang.org/x/net/html
 golang.org/x/net/html/atom
-# golang.org/x/sys v0.0.0-20190322080309-f49334f85ddc
+# golang.org/x/sys v0.0.0-20190329044733-9eb1bfa1ce65
 golang.org/x/sys/unix
 # golang.org/x/text v0.3.0
 golang.org/x/text/encoding
@@ -83,7 +83,7 @@ golang.org/x/text/runes
 golang.org/x/text/internal/tag
 # gopkg.in/fsnotify.v1 v1.4.7
 gopkg.in/fsnotify.v1
-# gopkg.in/go-playground/validator.v9 v9.27.0
+# gopkg.in/go-playground/validator.v9 v9.28.0
 gopkg.in/go-playground/validator.v9
 # gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7
 gopkg.in/tomb.v1
