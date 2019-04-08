@@ -17,3 +17,13 @@
       common_name: ((tls.common_name))
       alternative_names: ((tls.alternative_names))
 
+- type: replace
+  path: /instance_groups/name=rabbitmq-server/jobs/name=rabbitmq-server/properties?/rabbitmq-server/ports/-
+  value: 15671
+
+- type: remove
+  path: /instance_groups/name=rabbitmq-server/jobs/name=route_registrar/properties?/route_registrar/routes/0/port?
+
+- type: replace
+  path: /instance_groups/name=rabbitmq-server/jobs/name=route_registrar/properties?/route_registrar/routes/0/tls_port?
+  value: 15671
