@@ -59,13 +59,13 @@ github.com/pivotal-cf/brokerapi/auth
 github.com/pivotal-cf/brokerapi/middlewares/originating_identity_header
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
-# golang.org/x/net v0.0.0-20190424024845-afe8014c977f
+# golang.org/x/net v0.0.0-20190424112056-4829fb13d2c6
 golang.org/x/net/html/charset
 golang.org/x/net/html
 golang.org/x/net/html/atom
-# golang.org/x/sys v0.0.0-20190422165155-953cdadca894
+# golang.org/x/sys v0.0.0-20190428183149-804c0c7841b5
 golang.org/x/sys/unix
-# golang.org/x/text v0.3.0
+# golang.org/x/text v0.3.2
 golang.org/x/text/encoding
 golang.org/x/text/encoding/charmap
 golang.org/x/text/encoding/htmlindex
@@ -80,6 +80,8 @@ golang.org/x/text/encoding/unicode
 golang.org/x/text/language
 golang.org/x/text/internal/utf8internal
 golang.org/x/text/runes
+golang.org/x/text/internal/language
+golang.org/x/text/internal/language/compact
 golang.org/x/text/internal/tag
 # gopkg.in/fsnotify.v1 v1.4.7
 gopkg.in/fsnotify.v1
