@@ -10,13 +10,24 @@ export PATH=$PATH:/var/vcap/packages/cf-cli-6-linux/bin
 
 export CF_DIAL_TIMEOUT=11
 
-cf --version
+set +x
+<% if p("cf.admin_client").empty? %>
+CF_ADMIN_USERNAME='<%= p("cf.admin_username") %>'
+CF_ADMIN_PASSWORD='<%= p("cf.admin_password") %>'
+CF_AUTH_COMMAND="$CF_ADMIN_USERNAME $CF_ADMIN_PASSWORD"
+<% else %>
+CF_ADMIN_CLIENT='<%= p("cf.admin_client") %>'
+CF_ADMIN_CLIENT_SECRET='<%= p("cf.admin_client_secret") %>'
+CF_AUTH_COMMAND="--client-credentials $CF_ADMIN_CLIENT $CF_ADMIN_CLIENT_SECRET"
+<% end %>
+set -x
 
+cf --version
 <% if p("cf.skip_ssl_validation") %>
 cf api --skip-ssl-validation '<%= p("cf.api_url") %>'
 <% else %>
 cf api '<%= p("cf.api_url") %>'
 <% end %>
-cf auth '<%= p("cf.admin_username") %>' '<%= p("cf.admin_password") %>'
+cf auth "$CF_AUTH_COMMAND"
 cf purge-service-offering -f '<%= p("broker.service.name") %>'
 cf delete-service-broker -f '<%= p("broker.name") %>'

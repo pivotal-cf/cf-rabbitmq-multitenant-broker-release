@@ -11,10 +11,18 @@ export PATH=$PATH:/var/vcap/packages/cf-cli-6-linux/bin
 CF_API_URL='<%= p("cf.api_url") %>'
 
 set +x
-CF_ADMIN_USERNAME='<%= p("cf.admin_username") %>'
-CF_ADMIN_PASSWORD='<%= p("cf.admin_password") %>'
 BROKER_USERNAME='<%= p("broker.username") %>'
 BROKER_PASSWORD='<%= p("broker.password") %>'
+
+<% if p("cf.admin_client").empty? %>
+CF_ADMIN_USERNAME='<%= p("cf.admin_username") %>'
+CF_ADMIN_PASSWORD='<%= p("cf.admin_password") %>'
+CF_AUTH_COMMAND="$CF_ADMIN_USERNAME $CF_ADMIN_PASSWORD"
+<% else %>
+CF_ADMIN_CLIENT='<%= p("cf.admin_client") %>'
+CF_ADMIN_CLIENT_SECRET='<%= p("cf.admin_client_secret") %>'
+CF_AUTH_COMMAND="--client-credentials $CF_ADMIN_CLIENT $CF_ADMIN_CLIENT_SECRET"
+<% end %>
 set -x
 
 BROKER_NAME='<%= p("broker.name") %>'
@@ -29,7 +37,7 @@ cf api --skip-ssl-validation "$CF_API_URL"
 <% else %>
 cf api "$CF_API_URL"
 <% end %>
-cf auth "$CF_ADMIN_USERNAME" "$CF_ADMIN_PASSWORD"
+cf auth "$CF_AUTH_COMMAND"
 cf create-service-broker "$BROKER_NAME" "$BROKER_USERNAME" "$BROKER_PASSWORD" "$BROKER_URL" \
   || cf update-service-broker "$BROKER_NAME" "$BROKER_USERNAME" "$BROKER_PASSWORD" "$BROKER_URL"
 

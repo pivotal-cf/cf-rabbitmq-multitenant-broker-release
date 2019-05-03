@@ -7,6 +7,10 @@ templates:
 properties:
   cf.api_url:
     description: 'Full URL of Cloud Foundry API'
+  cf.admin_client:
+    description: 'Admin client'
+  cf.admin_client_secret:
+    description: 'Admin client secret'
   cf.admin_username:
     description: 'Username of the admin user'
   cf.admin_password:
