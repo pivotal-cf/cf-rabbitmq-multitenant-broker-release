@@ -37,7 +37,7 @@ cf api --skip-ssl-validation "$CF_API_URL"
 <% else %>
 cf api "$CF_API_URL"
 <% end %>
-cf auth "$CF_AUTH_COMMAND"
+cf auth $CF_AUTH_COMMAND
 cf create-service-broker "$BROKER_NAME" "$BROKER_USERNAME" "$BROKER_PASSWORD" "$BROKER_URL" \
   || cf update-service-broker "$BROKER_NAME" "$BROKER_USERNAME" "$BROKER_PASSWORD" "$BROKER_URL"
 
