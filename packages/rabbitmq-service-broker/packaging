@@ -7,6 +7,8 @@ export GOROOT=$(readlink -nf /var/vcap/packages/cf-rabbitmq-multitenant-broker-g
 export GOPATH=${BOSH_INSTALL_TARGET}
 export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
+export GOCACHE=$PWD/cache
+
 pushd ${BOSH_INSTALL_TARGET}/src/rabbitmq-service-broker
   go install rabbitmq-service-broker
 popd
