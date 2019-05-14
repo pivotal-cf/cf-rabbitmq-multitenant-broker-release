@@ -2,6 +2,7 @@ package rabbithutch_test
 
 import (
 	"errors"
+	"net/http"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -16,15 +17,23 @@ var _ = Describe("Deleting the user", func() {
 	var (
 		rabbitClient *fakes.FakeAPIClient
 		rabbithutch  RabbitHutch
+		body         *fakeBody
 	)
 
 	BeforeEach(func() {
 		rabbitClient = new(fakes.FakeAPIClient)
 		rabbithutch = New(rabbitClient)
+		body = &fakeBody{}
+	})
+
+	AfterEach(func() {
+		Expect(body.Closed).To(BeTrue())
 	})
 
 	Describe("DeleteUserAndConnections()", func() {
 		It("deletes the user", func() {
+			rabbitClient.DeleteUserReturns(&http.Response{StatusCode: http.StatusOK, Body: body}, nil)
+
 			err := rabbithutch.DeleteUserAndConnections("fake-user")
 			Expect(err).NotTo(HaveOccurred())
 
@@ -49,6 +58,7 @@ var _ = Describe("Deleting the user", func() {
 			}
 
 			rabbitClient.ListConnectionsReturns(connections, nil)
+			rabbitClient.DeleteUserReturns(&http.Response{StatusCode: http.StatusOK, Body: body}, nil)
 
 			err := rabbithutch.DeleteUserAndConnections("fake-user")
 			Expect(err).NotTo(HaveOccurred())
@@ -61,7 +71,7 @@ var _ = Describe("Deleting the user", func() {
 
 		It("returns an error if it cannot delete the user", func() {
 			rabbitClient.ListConnectionsReturns([]rabbithole.ConnectionInfo{}, nil)
-			rabbitClient.DeleteUserReturns(nil, errors.New("fake user error"))
+			rabbitClient.DeleteUserReturns(&http.Response{Body: body}, errors.New("fake user error"))
 
 			respErr := rabbithutch.DeleteUserAndConnections("fake-user")
 
@@ -78,7 +88,7 @@ var _ = Describe("Deleting the user", func() {
 				},
 			}
 			rabbitClient.ListConnectionsReturns(connections, nil)
-			rabbitClient.DeleteUserReturns(nil, errors.New("fake user error"))
+			rabbitClient.DeleteUserReturns(&http.Response{Body: body}, errors.New("fake user error"))
 
 			respErr := rabbithutch.DeleteUserAndConnections("fake-user")
 
@@ -89,6 +99,7 @@ var _ = Describe("Deleting the user", func() {
 
 	Describe("DeleteUser()", func() {
 		It("deletes the user", func() {
+			rabbitClient.DeleteUserReturns(&http.Response{StatusCode: http.StatusOK, Body: body}, nil)
 			err := rabbithutch.DeleteUser("fake-user")
 			Expect(err).NotTo(HaveOccurred())
 
@@ -97,7 +108,7 @@ var _ = Describe("Deleting the user", func() {
 		})
 
 		It("returns an error if it cannot delete the user", func() {
-			rabbitClient.DeleteUserReturns(nil, errors.New("fake user error"))
+			rabbitClient.DeleteUserReturns(&http.Response{Body: body}, errors.New("fake user error"))
 
 			respErr := rabbithutch.DeleteUser("fake-user")
 

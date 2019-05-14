@@ -22,11 +22,8 @@ func (r *rabbitHutch) DeleteUserAndConnections(username string) error {
 func (r *rabbitHutch) DeleteUser(username string) error {
 	resp, err := r.client.DeleteUser(username)
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return brokerapi.ErrBindingDoesNotExist
+		err = brokerapi.ErrBindingDoesNotExist
 	}
 
-	if err := validateResponse(resp, err); err != nil {
-		return err
-	}
-	return nil
+	return validateResponse(resp, err)
 }

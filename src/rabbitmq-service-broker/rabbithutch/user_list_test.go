@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "rabbitmq-service-broker/rabbithutch"
-	"rabbitmq-service-broker/rabbithutch/fakes"
+	fakes "rabbitmq-service-broker/rabbithutch/fakes"
 )
 
 var _ = Describe("Deleting the user", func() {

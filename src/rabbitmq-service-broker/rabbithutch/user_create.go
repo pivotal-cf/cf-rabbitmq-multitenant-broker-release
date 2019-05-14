@@ -25,6 +25,12 @@ func (r *rabbitHutch) CreateUserAndGrantPermissions(username, vhost, tags string
 	}
 
 	response, err := r.client.PutUser(username, userSettings)
+	defer func() {
+		if response != nil && response.Body != nil {
+			response.Body.Close()
+		}
+	}()
+
 	if err != nil {
 		return "", err
 	}

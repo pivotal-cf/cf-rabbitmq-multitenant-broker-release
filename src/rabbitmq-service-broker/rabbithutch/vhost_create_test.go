@@ -15,14 +15,22 @@ var _ = Describe("VhostCreate", func() {
 	var (
 		rabbitClient *fakes.FakeAPIClient
 		rabbithutch  RabbitHutch
+		body         *fakeBody
 	)
 
 	BeforeEach(func() {
 		rabbitClient = new(fakes.FakeAPIClient)
 		rabbithutch = New(rabbitClient)
+		body = &fakeBody{}
+	})
+
+	AfterEach(func() {
+		Expect(body.Closed).To(BeTrue())
 	})
 
 	It("creates a vhost", func() {
+		rabbitClient.PutVhostReturns(&http.Response{StatusCode: http.StatusOK, Body: body}, nil)
+
 		err := rabbithutch.VHostCreate("fake-vhost")
 		Expect(err).NotTo(HaveOccurred())
 
@@ -32,18 +40,21 @@ var _ = Describe("VhostCreate", func() {
 
 	When("the vhost creation fails", func() {
 		It("returns an error when the RMQ API returns an error", func() {
-			rabbitClient.PutVhostReturns(nil, fmt.Errorf("vhost-creation-failed"))
+			rabbitClient.PutVhostReturns(&http.Response{StatusCode: http.StatusInternalServerError, Body: body}, fmt.Errorf("vhost-creation-failed"))
 
 			err := rabbithutch.VHostCreate("fake-vhost")
 			Expect(err).To(MatchError("vhost-creation-failed"))
 		})
 
-		It("returns an error when the RMQ API returns a bad HTTP response code", func() {
-			rabbitClient.PutVhostReturns(&http.Response{StatusCode: http.StatusInternalServerError}, nil)
+		When("the rabbit client successfully responds", func() {
 
-			err := rabbithutch.VHostCreate("fake-vhost")
+			It("returns an error when the RMQ API returns a bad HTTP response code", func() {
+				rabbitClient.PutVhostReturns(&http.Response{StatusCode: http.StatusInternalServerError, Body: body}, nil)
 
-			Expect(err).To(MatchError("http request failed with status code: 500"))
+				err := rabbithutch.VHostCreate("fake-vhost")
+
+				Expect(err).To(MatchError("http request failed with status code: 500"))
+			})
 		})
 	})
 })

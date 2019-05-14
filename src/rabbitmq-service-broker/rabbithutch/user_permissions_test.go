@@ -16,14 +16,21 @@ var _ = Describe("UserPermissions", func() {
 	var (
 		rabbitClient *fakes.FakeAPIClient
 		rabbithutch  RabbitHutch
+		body         *fakeBody
 	)
 
 	BeforeEach(func() {
 		rabbitClient = new(fakes.FakeAPIClient)
 		rabbithutch = New(rabbitClient)
+		body = &fakeBody{}
 	})
+
+	AfterEach(func() {
+		Expect(body.Closed).To(BeTrue())
+	})
+
 	It("grants permissions on the vhost  user", func() {
-		rabbitClient.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusNoContent}, nil)
+		rabbitClient.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusNoContent, Body: body}, nil)
 		err := rabbithutch.AssignPermissionsTo("fake-vhost", "fake-user")
 		Expect(err).NotTo(HaveOccurred())
 
@@ -38,7 +45,7 @@ var _ = Describe("UserPermissions", func() {
 
 	When("granting permissions fails", func() {
 		BeforeEach(func() {
-			rabbitClient.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusForbidden}, nil)
+			rabbitClient.UpdatePermissionsInReturns(&http.Response{StatusCode: http.StatusForbidden, Body: body}, nil)
 		})
 
 		It("returns an error", func() {
