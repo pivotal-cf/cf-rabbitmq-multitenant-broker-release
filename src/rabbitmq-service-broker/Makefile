@@ -16,7 +16,8 @@ run: ## starts the broker for testing
 	go run -mod=vendor main.go -configPath ${config_path}
 
 integration_tests: ## runs integration tests in Docker (for development)
-	docker run --rm -v "${PWD}:/rabbitmq-service-broker" cflondonservices/london-services-ci-rabbitmq /rabbitmq-service-broker/ci/run_integration_tests.sh
+	@echo "$$(lpass show --password "Shared-PCF RabbitMQ/DockerHub - PCF RabbitMQ")" | docker login -u "$$(lpass show --username "Shared-PCF RabbitMQ/DockerHub - PCF RabbitMQ")" --password-stdin
+	docker run --rm -v "${PWD}:/rabbitmq-service-broker" pcfrabbitmq/pcf-rabbitmq-ci /rabbitmq-service-broker/ci/run_integration_tests.sh
 
 unit_tests: ## runs the unit tests
 	GOFLAGS='-mod=vendor' ginkgo -r --skipPackage=integrationtests
