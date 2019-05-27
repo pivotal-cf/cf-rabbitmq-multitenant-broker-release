@@ -63,11 +63,11 @@ github.com/pivotal-cf/brokerapi/middlewares
 github.com/pivotal-cf/brokerapi/utils
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
-# golang.org/x/net v0.0.0-20190514140710-3ec191127204
+# golang.org/x/net v0.0.0-20190522155817-f3200d17e092
 golang.org/x/net/html/charset
 golang.org/x/net/html
 golang.org/x/net/html/atom
-# golang.org/x/sys v0.0.0-20190516110030-61b9204099cb
+# golang.org/x/sys v0.0.0-20190526052359-791d8a0f4d09
 golang.org/x/sys/unix
 # golang.org/x/text v0.3.2
 golang.org/x/text/encoding
@@ -89,7 +89,7 @@ golang.org/x/text/internal/language/compact
 golang.org/x/text/internal/tag
 # gopkg.in/fsnotify.v1 v1.4.7
 gopkg.in/fsnotify.v1
-# gopkg.in/go-playground/validator.v9 v9.28.0
+# gopkg.in/go-playground/validator.v9 v9.29.0
 gopkg.in/go-playground/validator.v9
 # gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7
 gopkg.in/tomb.v1
