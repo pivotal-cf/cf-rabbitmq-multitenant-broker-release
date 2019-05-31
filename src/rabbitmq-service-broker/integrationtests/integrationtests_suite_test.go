@@ -1,11 +1,15 @@
 package integrationtests_test
 
 import (
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
+	"strings"
 	"testing"
 
 	rabbithole "github.com/michaelklishin/rabbit-hole"
@@ -48,6 +52,17 @@ var _ = BeforeSuite(func() {
 })
 
 var _ = AfterSuite(func() {
+	// Check TCP connections for any CLOSE_WAIT connections
+	// 3D38 is hex for 15672 (3D37 is 15671), a two digit number next to it means it's in the remote_address column
+	// 08 is the index of CLOSE_WAIT in the tcp_states enum. See https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp_states.h
+	cmd := "cat /proc/net/tcp | grep -e ':3D38 08 ' -e ':3D37 08 ' | wc -l"
+	out, err := exec.Command("bash", "-c", cmd).Output()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "There was an error checking for tcp connections in CLOSE_WAIT state: ", err)
+	}
+	number, _ := strconv.Atoi(strings.TrimSuffix(string(out), "\n"))
+	Expect(number).To(Equal(0))
+
 	session.Kill().Wait()
 	gexec.CleanupBuildArtifacts()
 })

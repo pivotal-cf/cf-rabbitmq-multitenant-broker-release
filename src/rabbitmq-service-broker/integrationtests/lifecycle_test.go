@@ -9,6 +9,7 @@ import (
 	rabbithole "github.com/michaelklishin/rabbit-hole"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	client "github.com/streadway/amqp"
 )
 
 var _ = Describe("the lifecycle of a service instance", func() {
@@ -27,7 +28,10 @@ var _ = Describe("the lifecycle of a service instance", func() {
 
 		By("creating a management user")
 		managementUsername := fmt.Sprintf("mu-%v-8912348912389123", serviceInstanceID)
-		rmqClient.PutUser(managementUsername, rabbithole.UserSettings{})
+		res, err := rmqClient.PutUser(managementUsername, rabbithole.UserSettings{})
+		if err == nil {
+			res.Body.Close()
+		}
 		user, _ := rmqClient.GetUser(managementUsername)
 		Expect(user.Name).To(Equal(managementUsername))
 
@@ -39,7 +43,7 @@ var _ = Describe("the lifecycle of a service instance", func() {
 		}))
 
 		By("checking that a vhost is created")
-		_, err := rmqClient.GetVhost(serviceInstanceID)
+		_, err = rmqClient.GetVhost(serviceInstanceID)
 		Expect(err).NotTo(HaveOccurred())
 
 		By("checking that that rmq admin has access to the vhost")
@@ -83,6 +87,20 @@ var _ = Describe("the lifecycle of a service instance", func() {
 		Expect(perms.Configure).To(Equal(".*"))
 		Expect(perms.Write).To(Equal(".*"))
 		Expect(perms.Read).To(Equal(".*"))
+
+		By("creating a connection")
+		creds := binding["credentials"].(map[string]interface{})
+		protocols := creds["protocols"].(map[string]interface{})
+		amqp := protocols["amqp"].(map[string]interface{})
+		uris := amqp["uris"].([]interface{})
+		conn, err := client.Dial(fmt.Sprintf(uris[0].(string)))
+		Expect(err).NotTo(HaveOccurred())
+		_, err = conn.Channel()
+		Expect(err).NotTo(HaveOccurred())
+		Eventually(func() int {
+			conns, _ := rmqClient.ListConnections()
+			return len(conns)
+		}, 5).Should(Equal(1))
 
 		By("sending an unbind request")
 		unbindResponse, unbindBody := doRequest(http.MethodDelete, unbindURL(serviceInstanceID, bindingID, serviceID, planID), nil)

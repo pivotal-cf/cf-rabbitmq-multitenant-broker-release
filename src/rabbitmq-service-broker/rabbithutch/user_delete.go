@@ -11,7 +11,10 @@ func (r *rabbitHutch) DeleteUserAndConnections(username string) error {
 		conns, _ := r.client.ListConnections()
 		for _, conn := range conns {
 			if conn.User == username {
-				r.client.CloseConnection(conn.Name)
+				resp, err := r.client.CloseConnection(conn.Name)
+				if err == nil {
+					resp.Body.Close()
+				}
 			}
 		}
 	}()
@@ -21,9 +24,14 @@ func (r *rabbitHutch) DeleteUserAndConnections(username string) error {
 
 func (r *rabbitHutch) DeleteUser(username string) error {
 	resp, err := r.client.DeleteUser(username)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = brokerapi.ErrBindingDoesNotExist
+		return brokerapi.ErrBindingDoesNotExist
 	}
 
-	return validateResponse(resp, err)
+	return validateResponse(resp)
 }

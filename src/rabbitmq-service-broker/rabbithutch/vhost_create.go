@@ -5,5 +5,11 @@ import (
 )
 
 func (r *rabbitHutch) VHostCreate(vhost string) error {
-	return validateResponse(r.client.PutVhost(vhost, rabbithole.VhostSettings{}))
+	resp, err := r.client.PutVhost(vhost, rabbithole.VhostSettings{})
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	return validateResponse(resp)
 }

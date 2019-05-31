@@ -24,10 +24,6 @@ var _ = Describe("VhostCreate", func() {
 		body = &fakeBody{}
 	})
 
-	AfterEach(func() {
-		Expect(body.Closed).To(BeTrue())
-	})
-
 	It("creates a vhost", func() {
 		rabbitClient.PutVhostReturns(&http.Response{StatusCode: http.StatusOK, Body: body}, nil)
 
@@ -36,11 +32,12 @@ var _ = Describe("VhostCreate", func() {
 
 		Expect(rabbitClient.PutVhostCallCount()).To(Equal(1))
 		Expect(rabbitClient.PutVhostArgsForCall(0)).To(Equal("fake-vhost"))
+		Expect(body.Closed).To(BeTrue())
 	})
 
 	When("the vhost creation fails", func() {
 		It("returns an error when the RMQ API returns an error", func() {
-			rabbitClient.PutVhostReturns(&http.Response{StatusCode: http.StatusInternalServerError, Body: body}, fmt.Errorf("vhost-creation-failed"))
+			rabbitClient.PutVhostReturns(nil, fmt.Errorf("vhost-creation-failed"))
 
 			err := rabbithutch.VHostCreate("fake-vhost")
 			Expect(err).To(MatchError("vhost-creation-failed"))
@@ -54,6 +51,7 @@ var _ = Describe("VhostCreate", func() {
 				err := rabbithutch.VHostCreate("fake-vhost")
 
 				Expect(err).To(MatchError("http request failed with status code: 500"))
+				Expect(body.Closed).To(BeTrue())
 			})
 		})
 	})
