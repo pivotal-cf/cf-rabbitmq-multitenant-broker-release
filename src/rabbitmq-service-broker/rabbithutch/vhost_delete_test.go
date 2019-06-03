@@ -15,20 +15,15 @@ var _ = Describe("VhostDelete", func() {
 	var (
 		rabbitClient *fakes.FakeAPIClient
 		rabbithutch  RabbitHutch
-		body         *fakeBody
 	)
 
 	BeforeEach(func() {
 		rabbitClient = new(fakes.FakeAPIClient)
 		rabbithutch = New(rabbitClient)
-		body = &fakeBody{}
-	})
-
-	AfterEach(func() {
-		Expect(body.Closed).To(BeTrue())
 	})
 
 	It("deletes a vhost and closes the body", func() {
+		body := &fakeBody{}
 		rabbitClient.DeleteVhostReturns(&http.Response{StatusCode: http.StatusNoContent, Body: body}, nil)
 		err := rabbithutch.VHostDelete("my-vhost")
 
@@ -36,10 +31,11 @@ var _ = Describe("VhostDelete", func() {
 
 		Expect(rabbitClient.DeleteVhostCallCount()).To(Equal(1))
 		Expect(rabbitClient.DeleteVhostArgsForCall(0)).To(Equal("my-vhost"))
+		Expect(body.Closed).To(BeTrue())
 	})
 
 	It("fails if it cannot delete the vhost", func() {
-		rabbitClient.DeleteVhostReturns(&http.Response{StatusCode: http.StatusBadRequest, Body: body}, errors.New("fake failure to delete vhost"))
+		rabbitClient.DeleteVhostReturns(nil, errors.New("fake failure to delete vhost"))
 		err := rabbithutch.VHostDelete("my-vhost")
 
 		Expect(err).To(MatchError("fake failure to delete vhost"))

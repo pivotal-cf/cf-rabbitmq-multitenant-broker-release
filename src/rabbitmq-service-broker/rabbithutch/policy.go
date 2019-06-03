@@ -14,10 +14,11 @@ func (r *rabbitHutch) CreatePolicy(vhost, name string, priority int, definition 
 		Name:       name,
 	}
 
-	err := validateResponse(r.client.PutPolicy(vhost, name, policy))
+	resp, err := r.client.PutPolicy(vhost, name, policy)
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
 
-	return nil
+	return validateResponse(resp)
 }

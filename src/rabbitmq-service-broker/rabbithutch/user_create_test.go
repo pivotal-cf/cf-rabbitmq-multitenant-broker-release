@@ -24,6 +24,14 @@ var _ = Describe("Creating Users", func() {
 	})
 
 	When("the rabbit client successfully responds", func() {
+		var (
+			updatePermissionBody *fakeBody
+			putUserBody          *fakeBody
+		)
+		BeforeEach(func() {
+			updatePermissionBody = &fakeBody{}
+			putUserBody = &fakeBody{}
+		})
 		When("the user does not exist", func() {
 			var (
 				updatePermissionBody *fakeBody
@@ -72,18 +80,6 @@ var _ = Describe("Creating Users", func() {
 				Expect(permissions.Write).To(Equal(".*"))
 			})
 
-			It("deletes the user if setting permissions fails", func() {
-				rabbitClient.PutUserReturns(&http.Response{StatusCode: http.StatusOK, Body: putUserBody}, nil)
-				rabbitClient.UpdatePermissionsInReturns(&http.Response{Body: updatePermissionBody}, errors.New("cannot update permissions"))
-
-				_, err := rabbithutch.CreateUserAndGrantPermissions("fake-user", "fake-vhost", "")
-
-				Expect(putUserBody.Closed).To(BeTrue())
-				Expect(err).To(MatchError("cannot update permissions"))
-				Expect(rabbitClient.DeleteUserCallCount()).To(Equal(1))
-				user := rabbitClient.DeleteUserArgsForCall(0)
-				Expect(user).To(Equal("fake-user"))
-			})
 			When("user tags are specified", func() {
 				It("creates a user with the tags", func() {
 					rabbitClient.PutUserReturns(&http.Response{StatusCode: http.StatusOK, Body: putUserBody}, nil)
@@ -98,6 +94,22 @@ var _ = Describe("Creating Users", func() {
 					Expect(info.Password).To(MatchRegexp(`[a-zA-Z0-9\-_]{24}`))
 					Expect(info.Tags).To(Equal("some-tags"))
 				})
+			})
+		})
+		Context("an error is returned", func() {
+			It("deletes the user if setting permissions fails", func() {
+				rabbitClient.PutUserReturns(&http.Response{StatusCode: http.StatusOK, Body: putUserBody}, nil)
+				rabbitClient.UpdatePermissionsInReturns(&http.Response{Body: updatePermissionBody}, errors.New("cannot update permissions"))
+				rabbitClient.DeleteUserReturns(&http.Response{StatusCode: http.StatusOK, Body: &fakeBody{}}, nil)
+
+				_, err := rabbithutch.CreateUserAndGrantPermissions("fake-user", "fake-vhost", "")
+
+				Expect(putUserBody.Closed).To(BeTrue())
+				Expect(err).To(MatchError("cannot update permissions"))
+				Expect(rabbitClient.DeleteUserCallCount()).To(Equal(1))
+				user := rabbitClient.DeleteUserArgsForCall(0)
+				Expect(user).To(Equal("fake-user"))
+				Expect(putUserBody.Closed).To(BeTrue())
 			})
 		})
 	})

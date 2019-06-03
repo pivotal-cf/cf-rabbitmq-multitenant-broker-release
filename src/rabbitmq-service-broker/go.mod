@@ -17,7 +17,7 @@ require (
 	github.com/pborman/uuid v1.2.0 // indirect
 	github.com/pivotal-cf/brokerapi v5.0.0+incompatible
 	github.com/pkg/errors v0.8.1 // indirect
-	github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94 // indirect
+	github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
 	github.com/stretchr/objx v0.2.0 // indirect
 	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f // indirect
 	golang.org/x/net v0.0.0-20190522155817-f3200d17e092 // indirect

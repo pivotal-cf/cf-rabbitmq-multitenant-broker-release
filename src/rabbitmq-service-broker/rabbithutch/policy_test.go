@@ -19,6 +19,7 @@ var _ = Describe("CreatePolicy", func() {
 		definition   map[string]interface{}
 		rabbitClient *fakes.FakeAPIClient
 		rabbithutch  RabbitHutch
+		body         *fakeBody
 	)
 
 	BeforeEach(func() {
@@ -27,10 +28,11 @@ var _ = Describe("CreatePolicy", func() {
 		name = "fake-policy-name"
 		definition = map[string]interface{}{"fake-policy-key": "fake-policy-value"}
 		priority = 42
-
+		body = &fakeBody{}
 	})
 
 	It("creates a policy", func() {
+		rabbitClient.PutPolicyReturns(&http.Response{StatusCode: http.StatusOK, Body: body}, nil)
 		err := rabbithutch.CreatePolicy("my-service-instance-id", name, priority, definition)
 		Expect(err).NotTo(HaveOccurred())
 
@@ -44,7 +46,7 @@ var _ = Describe("CreatePolicy", func() {
 
 	When("setting policies fails", func() {
 		BeforeEach(func() {
-			rabbitClient.PutPolicyReturns(&http.Response{StatusCode: http.StatusForbidden}, nil)
+			rabbitClient.PutPolicyReturns(&http.Response{StatusCode: http.StatusForbidden, Body: body}, nil)
 		})
 
 		It("returns an error", func() {

@@ -46,17 +46,7 @@ func New(client APIClient) RabbitHutch {
 	return &rabbitHutch{client}
 }
 
-func validateResponse(resp *http.Response, err error) error {
-	defer func() {
-		if resp != nil && resp.Body != nil {
-			resp.Body.Close()
-		}
-	}()
-
-	if err != nil {
-		return err
-	}
-
+func validateResponse(resp *http.Response) error {
 	if resp != nil && (resp.StatusCode < http.StatusOK || resp.StatusCode > 299) {
 		return fmt.Errorf("http request failed with status code: %v", resp.StatusCode)
 	}
