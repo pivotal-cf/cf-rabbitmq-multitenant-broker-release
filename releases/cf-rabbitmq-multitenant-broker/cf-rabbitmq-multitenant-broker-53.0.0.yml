@@ -1,0 +1,38 @@
+name: cf-rabbitmq-multitenant-broker
+version: 53.0.0
+commit_hash: 8ccc5cb
+uncommitted_changes: false
+jobs:
+- name: broker-deregistrar
+  version: 259f8494353bda083a01c5e771c474d5d0c4cd8231d1cebb8dcad1b1175c138f
+  fingerprint: 259f8494353bda083a01c5e771c474d5d0c4cd8231d1cebb8dcad1b1175c138f
+  sha1: sha256:fabfc3f9ed88d4084c850efec65a7babf643100976077ae9d40225e0be260ef5
+- name: broker-registrar
+  version: 317fe64021bca92fc50c0b4633f3070184d94d2f73aa9b31802920d2c99ff836
+  fingerprint: 317fe64021bca92fc50c0b4633f3070184d94d2f73aa9b31802920d2c99ff836
+  sha1: sha256:a024f56568bc172bd10261ba8a2daed60a0230ad68f91e114becd5dcb370d970
+- name: rabbitmq-service-broker
+  version: b3ff2f1df9303f928f39879280e8ea9ad6ef77f283bc3d31adbb2a4de80723ad
+  fingerprint: b3ff2f1df9303f928f39879280e8ea9ad6ef77f283bc3d31adbb2a4de80723ad
+  sha1: sha256:0592178d95e834b7714469657d51a7acfc6caeae82cce7aabf3d853fb7768bee
+packages:
+- name: cf-rabbitmq-multitenant-broker-golang
+  version: 60958d7c524e33502646f2a49d2cb513f41532bf921dd09106680d5ffe4e2dc2
+  fingerprint: 60958d7c524e33502646f2a49d2cb513f41532bf921dd09106680d5ffe4e2dc2
+  sha1: sha256:1b6c22a2f54c98e4fc37e07ff9885fdb52a9e7ce3242fc29c4c163b6a2fef18c
+  dependencies: []
+- name: rabbitmq-common
+  version: c7b701f8368c5f7d76569d43187eeed4bb32513e071a4cd3964bf62f04cc2dbb
+  fingerprint: c7b701f8368c5f7d76569d43187eeed4bb32513e071a4cd3964bf62f04cc2dbb
+  sha1: sha256:b181d6d9e40d8169324ac44d7d987cf8ad3c7e7adab2e2bfc419ee1d7bb9d149
+  dependencies: []
+- name: rabbitmq-service-broker
+  version: 0d13251029414a5ca495fc4e334f54ab12a161243249cf341a03a516724e8686
+  fingerprint: 0d13251029414a5ca495fc4e334f54ab12a161243249cf341a03a516724e8686
+  sha1: sha256:66b0d13efdbd16e6e196445c2b1e4bdc83d3baf588a654a8ffded5a81ae1b6d3
+  dependencies:
+  - cf-rabbitmq-multitenant-broker-golang
+license:
+  version: b4740f86c352379435cbacb22afa730c723bb12317c12b9ea8b77907226c88bc
+  fingerprint: b4740f86c352379435cbacb22afa730c723bb12317c12b9ea8b77907226c88bc
+  sha1: sha256:3b0b05935c1b495e18e2fe8c6e9258e5b9f6bfb9a71684fd266af8a7bd96e088
