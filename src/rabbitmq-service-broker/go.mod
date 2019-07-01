@@ -7,23 +7,23 @@ require (
 	github.com/go-playground/universal-translator v0.16.0 // indirect
 	github.com/golang/protobuf v1.3.1 // indirect
 	github.com/google/uuid v1.1.1 // indirect
-	github.com/gorilla/mux v1.7.2 // indirect
+	github.com/gorilla/mux v1.7.3 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
-	github.com/kr/pty v1.1.4 // indirect
+	github.com/kr/pty v1.1.7 // indirect
 	github.com/leodido/go-urn v1.1.0 // indirect
 	github.com/michaelklishin/rabbit-hole v1.5.0
 	github.com/onsi/ginkgo v1.8.0
 	github.com/onsi/gomega v1.5.0
 	github.com/pborman/uuid v1.2.0 // indirect
-	github.com/pivotal-cf/brokerapi v5.0.0+incompatible
+	github.com/pivotal-cf/brokerapi v5.1.0+incompatible
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
 	github.com/stretchr/objx v0.2.0 // indirect
-	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f // indirect
-	golang.org/x/net v0.0.0-20190522155817-f3200d17e092 // indirect
-	golang.org/x/sys v0.0.0-20190526052359-791d8a0f4d09 // indirect
+	golang.org/x/crypto v0.0.0-20190621222207-cc06ce4a13d4 // indirect
+	golang.org/x/net v0.0.0-20190628185345-da137c7871d7 // indirect
+	golang.org/x/sys v0.0.0-20190626221950-04f50cda93cb // indirect
 	golang.org/x/text v0.3.2 // indirect
-	golang.org/x/tools v0.0.0-20190525145741-7be61e1b0e51 // indirect
+	golang.org/x/tools v0.0.0-20190628222527-fb37f6ba8261 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.29.0
