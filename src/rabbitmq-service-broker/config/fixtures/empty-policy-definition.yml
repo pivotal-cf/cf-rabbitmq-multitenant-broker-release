@@ -1,0 +1,32 @@
+---
+service:
+  username: "p1-rabbit"
+  password: "p1-rabbit-test"
+  name: "p-rabbitmq"
+  offering_description: "this is a description"
+  uuid: 00000000-0000-0000-0000-000000000000
+  display_name: "WhiteRabbitMQ"
+  plan_uuid: 11111111-1111-1111-1111-111111111111
+  long_description: "this is a long description"
+  provider_display_name: SomeCompany
+  documentation_url: https://example.com
+  support_url: https://support.example.com
+  icon_image: image_icon_base64
+  shareable: true
+rabbitmq:
+  regular_user_tags: "policymaker,management"
+  management_domain: pivotal-rabbitmq.127.0.0.1
+  hosts:
+    - 127.0.0.1
+    - 127.0.0.2
+  management:
+    username: management-username
+  administrator:
+    username: fake-rmq-user
+    password: fake-rmq-password
+  operator_set_policy:
+    enabled: true
+    policy_name: operator_set_policy
+    policy_definition: null
+    policy_priority: 50
+  ssl: "fake-certificate"

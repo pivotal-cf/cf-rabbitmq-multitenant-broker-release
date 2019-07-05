@@ -73,6 +73,11 @@ var _ = Describe("Config", func() {
 		Expect(err).To(MatchError("Config file has missing fields: service.uuid"))
 	})
 
+	It("fails when the policy definition is empty", func() {
+		_, err := Read(fixture("empty-policy-definition.yml"))
+		Expect(err).To(MatchError("Config file has missing field: operator_set_policy.policy_definition must be provided when operator_set_policy.enabled is true"))
+	})
+
 	It("fails when many required fields are missing", func() {
 		_, err := Read(fixture("missing-everything.yml"))
 		Expect(err).To(MatchError(ContainSubstring("missing fields:")))

@@ -165,6 +165,10 @@ func validateConfig(config Config) error {
 		return err
 	}
 
+	if config.RabbitMQ.OperatorSetPolicy.Enabled && config.RabbitMQ.OperatorSetPolicy.Definition == nil {
+		return fmt.Errorf("Config file has missing field: operator_set_policy.policy_definition must be provided when operator_set_policy.enabled is true")
+	}
+
 	if nodeHosts := config.NodeHosts(); len(nodeHosts) == 0 {
 		return fmt.Errorf("Config file has missing fields: at least one of rabbitmq.hosts or rabbitmq.dns_host must be specified")
 	}
