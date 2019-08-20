@@ -63,13 +63,13 @@ github.com/pivotal-cf/brokerapi/middlewares
 github.com/pivotal-cf/brokerapi/utils
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
-# github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
+# github.com/streadway/amqp v0.0.0-20190815230801-eade30b20f1d
 github.com/streadway/amqp
-# golang.org/x/net v0.0.0-20190628185345-da137c7871d7
+# golang.org/x/net v0.0.0-20190813141303-74dc4d7220e7
 golang.org/x/net/html/charset
 golang.org/x/net/html
 golang.org/x/net/html/atom
-# golang.org/x/sys v0.0.0-20190712062909-fae7ac547cb7
+# golang.org/x/sys v0.0.0-20190813064441-fde4db37ae7a
 golang.org/x/sys/unix
 # golang.org/x/text v0.3.2
 golang.org/x/text/encoding
