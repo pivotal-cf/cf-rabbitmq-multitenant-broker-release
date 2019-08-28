@@ -53,7 +53,7 @@ github.com/onsi/gomega/matchers/support/goraph/bipartitegraph
 github.com/onsi/gomega/matchers/support/goraph/edge
 github.com/onsi/gomega/matchers/support/goraph/node
 github.com/onsi/gomega/matchers/support/goraph/util
-# github.com/pivotal-cf/brokerapi v6.1.1+incompatible
+# github.com/pivotal-cf/brokerapi v6.1.2+incompatible
 github.com/pivotal-cf/brokerapi
 github.com/pivotal-cf/brokerapi/auth
 github.com/pivotal-cf/brokerapi/domain
@@ -63,13 +63,13 @@ github.com/pivotal-cf/brokerapi/middlewares
 github.com/pivotal-cf/brokerapi/utils
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
-# github.com/streadway/amqp v0.0.0-20190815230801-eade30b20f1d
+# github.com/streadway/amqp v0.0.0-20190827072141-edfb9018d271
 github.com/streadway/amqp
-# golang.org/x/net v0.0.0-20190813141303-74dc4d7220e7
+# golang.org/x/net v0.0.0-20190827160401-ba9fcec4b297
 golang.org/x/net/html/charset
 golang.org/x/net/html
 golang.org/x/net/html/atom
-# golang.org/x/sys v0.0.0-20190825160603-fb81701db80f
+# golang.org/x/sys v0.0.0-20190826190057-c7b8b68b1456
 golang.org/x/sys/unix
 # golang.org/x/text v0.3.2
 golang.org/x/text/encoding
