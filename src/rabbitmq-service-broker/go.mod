@@ -15,22 +15,22 @@ require (
 	github.com/kr/pty v1.1.8 // indirect
 	github.com/leodido/go-urn v1.1.0 // indirect
 	github.com/michaelklishin/rabbit-hole v1.5.0
-	github.com/onsi/ginkgo v1.10.1
+	github.com/onsi/ginkgo v1.10.2
 	github.com/onsi/gomega v1.7.0
 	github.com/pborman/uuid v1.2.0 // indirect
-	github.com/pivotal-cf/brokerapi v6.4.1+incompatible
+	github.com/pivotal-cf/brokerapi v6.4.2+incompatible
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/streadway/amqp v0.0.0-20190827072141-edfb9018d271
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
-	golang.org/x/crypto v0.0.0-20190927123631-a832865fa7ad // indirect
-	golang.org/x/net v0.0.0-20190926025831-c00fd9afed17 // indirect
+	golang.org/x/crypto v0.0.0-20191002192127-34f69633bfdc // indirect
+	golang.org/x/net v0.0.0-20191003171128-d98b1b443823 // indirect
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e // indirect
-	golang.org/x/sys v0.0.0-20190927073244-c990c680b611 // indirect
+	golang.org/x/sys v0.0.0-20191003212358-c178f38b412c // indirect
 	golang.org/x/text v0.3.2 // indirect
-	golang.org/x/tools v0.0.0-20190929041059-e7abfedfabcf // indirect
+	golang.org/x/tools v0.0.0-20191004055002-72853e10c5a3 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.30.0
-	gopkg.in/yaml.v2 v2.2.2
+	gopkg.in/yaml.v2 v2.2.4
 )
