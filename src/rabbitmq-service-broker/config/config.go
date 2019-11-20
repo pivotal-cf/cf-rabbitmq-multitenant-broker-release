@@ -42,14 +42,15 @@ type Service struct {
 }
 
 type RabbitMQ struct {
-	Hosts             Hosts                 `yaml:"hosts"`
-	DNSHost           string                `yaml:"dns_host"`
-	Administrator     AdminCredentials      `yaml:"administrator" validate:"required"`
-	Management        ManagementCredentials `yaml:"management"`
-	ManagementDomain  string                `yaml:"management_domain" validate:"required"`
-	OperatorSetPolicy RabbitMQPolicy        `yaml:"operator_set_policy"`
-	RegularUserTags   string                `yaml:"regular_user_tags"`
-	TLS               TLSEnabled            `yaml:"ssl"`
+	Hosts                              Hosts                 `yaml:"hosts"`
+	DNSHost                            string                `yaml:"dns_host"`
+	Administrator                      AdminCredentials      `yaml:"administrator" validate:"required"`
+	Management                         ManagementCredentials `yaml:"management"`
+	ManagementDomain                   string                `yaml:"management_domain" validate:"required"`
+	OperatorSetPolicy                  RabbitMQPolicy        `yaml:"operator_set_policy"`
+	RegularUserTags                    string                `yaml:"regular_user_tags"`
+	TLS                                TLSEnabled            `yaml:"ssl"`
+	RemoveDirectLoginFromManagementURL bool                  `yaml:"remove_direct_login_from_management_url"`
 }
 
 type ManagementCredentials struct {

@@ -21,13 +21,14 @@ type binding struct {
 }
 
 type Builder struct {
-	MgmtDomain    string
-	Hostnames     []string
-	VHost         string
-	Username      string
-	Password      string
-	TLS           bool
-	ProtocolPorts map[string]int // key=protocol, value=port, e.g. "amqp": 4567
+	MgmtDomain                         string
+	Hostnames                          []string
+	VHost                              string
+	Username                           string
+	Password                           string
+	TLS                                bool
+	ProtocolPorts                      map[string]int // key=protocol, value=port, e.g. "amqp": 4567
+	RemoveDirectLoginFromManagementURL bool
 }
 
 func (b Builder) Build() (output interface{}, err error) {
@@ -56,6 +57,9 @@ func (b Builder) Build() (output interface{}, err error) {
 }
 
 func (b Builder) dashboardURL() string {
+	if b.RemoveDirectLoginFromManagementURL {
+		return fmt.Sprintf("https://%s", b.MgmtDomain)
+	}
 	return fmt.Sprintf("https://%s/#/login/%s/%s", b.MgmtDomain, b.Username, b.Password)
 }
 

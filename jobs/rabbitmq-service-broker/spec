@@ -29,6 +29,9 @@ properties:
     description: "Set to true if RabbitMQ cluster is configured to use TLS/SSL"
   rabbitmq-service-broker.rabbitmq.management_domain:
     description: "Domain that will be used to access RabbitMQ management UI, typically the system CF/CC domain."
+  rabbitmq-service-broker.rabbitmq.remove_direct_login_from_management_url:
+    default: false
+    description: "Set to true to remove username and password from the RabbitMQ management URL."
   rabbitmq-service-broker.logging.level:
     default: "info"
     description: "Logging level"
