@@ -6,8 +6,7 @@ require (
 	code.cloudfoundry.org/lager v2.0.0+incompatible
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/drewolson/testflight v1.0.0 // indirect
-	github.com/go-playground/locales v0.13.0 // indirect
-	github.com/go-playground/universal-translator v0.16.0 // indirect
+	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/google/uuid v1.1.1 // indirect
 	github.com/gorilla/mux v1.7.3 // indirect
@@ -20,8 +19,8 @@ require (
 	github.com/pivotal-cf/brokerapi v6.4.2+incompatible
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/streadway/amqp v0.0.0-20190827072141-edfb9018d271
-	golang.org/x/net v0.0.0-20191105084925-a882066a44e0 // indirect
-	golang.org/x/sys v0.0.0-20191105231009-c1f44814a5cd // indirect
+	golang.org/x/net v0.0.0-20191116160921-f9c825593386 // indirect
+	golang.org/x/sys v0.0.0-20191118013547-6254a7c3cac6 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.30.0
