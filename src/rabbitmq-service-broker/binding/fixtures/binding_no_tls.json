@@ -1,5 +1,5 @@
 {
- "dashboard_url": "https://pivotal-rabbitmq.sys.philippinebrown.cf-app.com/#/login/ce294862-03cc-4f4e-a6a8-69cb36e4f96e/2143rkcobrqhdej1ke5ds5p8u6",
+ "dashboard_url": "https://pivotal-rabbitmq.sys.philippinebrown.cf-app.com",
  "hostname": "10.0.4.100",
  "hostnames": [
   "10.0.4.100",

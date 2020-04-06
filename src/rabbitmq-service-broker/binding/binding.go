@@ -56,7 +56,7 @@ func (b Builder) Build() (output interface{}, err error) {
 }
 
 func (b Builder) dashboardURL() string {
-	return fmt.Sprintf("https://%s/#/login/%s/%s", b.MgmtDomain, b.Username, b.Password)
+	return fmt.Sprintf("https://%s", b.MgmtDomain)
 }
 
 func (b Builder) uriForBinding(hostname string) string {
