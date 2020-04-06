@@ -30,4 +30,3 @@ rabbitmq:
     policy_definition: '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'
     policy_priority: 50
   ssl: "fake-certificate"
-  remove_direct_login_from_management_url: true

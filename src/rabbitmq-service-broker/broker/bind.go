@@ -38,14 +38,13 @@ func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID 
 	}
 
 	credsBuilder := binding.Builder{
-		MgmtDomain:                         b.cfg.RabbitMQ.ManagementDomain,
-		Hostnames:                          b.cfg.NodeHosts(),
-		VHost:                              vhost,
-		Username:                           username,
-		Password:                           password,
-		TLS:                                bool(b.cfg.RabbitMQ.TLS),
-		ProtocolPorts:                      protocolPorts,
-		RemoveDirectLoginFromManagementURL: b.cfg.RabbitMQ.RemoveDirectLoginFromManagementURL,
+		MgmtDomain:    b.cfg.RabbitMQ.ManagementDomain,
+		Hostnames:     b.cfg.NodeHosts(),
+		VHost:         vhost,
+		Username:      username,
+		Password:      password,
+		TLS:           bool(b.cfg.RabbitMQ.TLS),
+		ProtocolPorts: protocolPorts,
 	}
 
 	credentials, err := credsBuilder.Build()

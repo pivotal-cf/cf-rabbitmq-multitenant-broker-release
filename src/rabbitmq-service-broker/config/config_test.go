@@ -20,11 +20,10 @@ var _ = Describe("Config", func() {
 				Password: "fake-service-password",
 			},
 			RabbitMQ: RabbitMQ{
-				ManagementDomain:                   "fake-management-domain",
-				Hosts:                              []string{"fake-host-1", "fake-host-2"},
-				Administrator:                      AdminCredentials{"fake-rmq-user", "fake-rmq-password"},
-				TLS:                                false,
-				RemoveDirectLoginFromManagementURL: false,
+				ManagementDomain: "fake-management-domain",
+				Hosts:            []string{"fake-host-1", "fake-host-2"},
+				Administrator:    AdminCredentials{"fake-rmq-user", "fake-rmq-password"},
+				TLS:              false,
 			},
 		}))
 	})
@@ -49,13 +48,12 @@ var _ = Describe("Config", func() {
 				Shareable:           true,
 			},
 			RabbitMQ: RabbitMQ{
-				RegularUserTags:                    "policymaker,management",
-				Hosts:                              []string{"127.0.0.1", "127.0.0.2"},
-				Administrator:                      AdminCredentials{"fake-rmq-user", "fake-rmq-password"},
-				Management:                         ManagementCredentials{"management-username"},
-				ManagementDomain:                   "pivotal-rabbitmq.127.0.0.1",
-				TLS:                                true,
-				RemoveDirectLoginFromManagementURL: true,
+				RegularUserTags:  "policymaker,management",
+				Hosts:            []string{"127.0.0.1", "127.0.0.2"},
+				Administrator:    AdminCredentials{"fake-rmq-user", "fake-rmq-password"},
+				Management:       ManagementCredentials{"management-username"},
+				ManagementDomain: "pivotal-rabbitmq.127.0.0.1",
+				TLS:              true,
 				OperatorSetPolicy: RabbitMQPolicy{
 					Enabled: true,
 					Name:    "operator_set_policy",

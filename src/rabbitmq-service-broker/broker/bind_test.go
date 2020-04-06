@@ -53,24 +53,6 @@ var _ = Describe("Binding a RMQ service instance", func() {
 			rabbithutch.VHostExistsReturns(true, nil)
 		})
 
-		When("RemoveDirectLoginFromManagementURL is set to true", func() {
-			BeforeEach(func() {
-				cfg := defaultConfig()
-				cfg.RabbitMQ.RemoveDirectLoginFromManagementURL = true
-				broker = defaultServiceBroker(cfg, rabbithutch)
-			})
-			It("removes direct login from management URL", func() {
-				binding, err := broker.Bind(ctx, "my-service-instance-id", "binding-id", brokerapi.BindDetails{}, false)
-				Expect(err).To(Not(HaveOccurred()))
-
-				credentials, ok := binding.Credentials.(map[string]interface{})
-				Expect(ok).To(BeTrue())
-				dashboardURL, ok := credentials["dashboard_url"].(string)
-				Expect(ok).To(BeTrue())
-				Expect(dashboardURL).To(Equal("https://foo.bar.com"))
-			})
-		})
-
 		Describe("the user", func() {
 			It("creates a user", func() {
 				rabbithutch.CreateUserAndGrantPermissionsReturns("fake-password", nil)

@@ -56,25 +56,6 @@ var _ = Describe("Binding", func() {
 
 		Expect(string(creds)).To(MatchJSON(expected))
 	})
-
-	When("RemoveDirectLoginFromManagementURL is set to true", func() {
-		It("removes direct login from management URL", func() {
-			b := binding.Builder{
-				MgmtDomain:                         "pivotal-rabbitmq.sys.philippinebrown.cf-app.com",
-				Hostnames:                          []string{"10.0.4.100", "10.0.4.101"},
-				RemoveDirectLoginFromManagementURL: true,
-			}
-			binding, err := b.Build()
-			Expect(err).NotTo(HaveOccurred())
-
-			bindingMap, ok := binding.(map[string]interface{})
-			Expect(ok).To(BeTrue())
-
-			dashboardURL, ok := bindingMap["dashboard_url"].(string)
-			Expect(ok).To(BeTrue())
-			Expect(dashboardURL).To(Equal("https://pivotal-rabbitmq.sys.philippinebrown.cf-app.com"))
-		})
-	})
 })
 
 func fakeNonTLSProtocolPorts() map[string]int {
