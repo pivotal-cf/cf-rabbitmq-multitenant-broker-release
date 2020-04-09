@@ -5,7 +5,7 @@
     enabled: true
     key: "((tls_certificate.private_key))"
     cert: "((tls_certificate.certificate))"
-    cacert: "((/services/tls_ca.certificate))"
+    cacert: "((tls_certificate.ca))"
 
 - type: replace
   path: /variables?/-
