@@ -1,7 +1,7 @@
 ---
 name: cf-rabbitmq-multitenant-broker-golang
 metadata:
-  version: '1.14.3'
+  version: '1.14.4'
 
 files:
-  - cf-rabbitmq-multitenant-broker-golang/go1.14.3.linux-amd64.tar.gz
+  - cf-rabbitmq-multitenant-broker-golang/go1.14.4.linux-amd64.tar.gz
