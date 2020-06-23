@@ -29,6 +29,14 @@ properties:
     description: "Set to true if RabbitMQ cluster is configured to use TLS/SSL"
   rabbitmq-service-broker.rabbitmq.management_domain:
     description: "Domain that will be used to access RabbitMQ management UI, typically the system CF/CC domain."
+  rabbitmq-service-broker.rabbitmq.management_tls.enabled:
+    default: false
+    description: "Set to true if the RabbitMQ management plugin is configured to use TLS/SSL"
+  rabbitmq-service-broker.rabbitmq.management_tls.cacert:
+    description: "PEM-encoded CA/intermediate certificate chain to trust when connecting to the management plugin over TLS. Uses system cert pool if not provided."
+  rabbitmq-service-broker.rabbitmq.management_tls.skip_verify:
+    default: false
+    description: "Set to true to skip verifying the certificate served by the management plugin. Not recommended for production."
   rabbitmq-service-broker.logging.level:
     default: "info"
     description: "Logging level"
