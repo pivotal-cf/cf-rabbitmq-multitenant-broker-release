@@ -3,6 +3,7 @@
   value:
     name: syslog
     version: latest
+    url: "https://bosh.io/d/github.com/cloudfoundry/syslog-release"
 
 - type: replace
   path: /instance_groups/name=haproxy/jobs/name=rabbitmq-haproxy/properties?/rabbitmq-haproxy/do-not-configure-syslog
