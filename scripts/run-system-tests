@@ -7,36 +7,43 @@ MY_DIR="$(dirname "$0")"
 
 cd "${MY_DIR}/.." || exit
 
-BOSH_MANIFEST=${BOSH_MANIFEST:-$(./scripts/interpolate-manifest-for-bosh-lite)}
 
-BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT:-vbox}"
-BOSH_CLIENT="${BOSH_CLIENT:-admin}"
-BOSH_CLIENT_SECRET="${BOSH_CLIENT_SECRET:-admin}"
-BOSH_CA_CERT=${BOSH_CA_CERT:-"$($BOSH_CLI int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"}
+ENVIRONMENT_LOCK_METADATA=${ENVIRONMENT_LOCK_METADATA:-$(cat environment-lock/metadata)}
 
+ENVIRONMENT=${ENVIRONMENT:-$(cat environment-lock/name)}
 
-if [[ -n $JUMPBOX_SSH_KEY ]] && [[ -n $JUMPBOX_URL ]]
-then
-  export JUMPBOX_SSH_KEY="${JUMPBOX_SSH_KEY:-"$(bosh int ~/deployments/vbox/creds.yml --path /jumpbox_ssh/private_key)"}"
-  export JUMPBOX_URL="${JUMPBOX_URL:-192.168.50.6}"
-  export JUMPBOX_PORT="${JUMPBOX_PORT:-22}"
+BOSH_MANIFEST=${BOSH_MANIFEST:-$(./manifests/ci/create-manifest.sh)}
 
-  # Jumpbox configuraiton for bosh-cli
-  export JUMPBOX_PRIVATE_KEY
-  JUMPBOX_PRIVATE_KEY="$(mktemp -t jumpbox.pem.XXX)"
-  echo "$JUMPBOX_SSH_KEY" > "$JUMPBOX_PRIVATE_KEY"
+eval "$(smith bosh)"
 
-  # pcf-tile-pipeline currently exports BOSH_ALL_PROXY, but it seems not to be working properly.
-  # We are then overwriting it here.
-  unset BOSH_ALL_PROXY
-  export BOSH_ALL_PROXY="ssh+socks5://jumpbox@$JUMPBOX_URL:$JUMPBOX_PORT?private-key=$JUMPBOX_PRIVATE_KEY"
-fi
-
-export BOSH_ENVIRONMENT
-export BOSH_CLIENT
-export BOSH_CLIENT_SECRET
-export BOSH_CA_CERT
-export BOSH_MANIFEST
+# BOSH_ENVIRONMENT="${BOSH_ENVIRONMENT:-vbox}"
+# BOSH_CLIENT="${BOSH_CLIENT:-admin}"
+# BOSH_CLIENT_SECRET="${BOSH_CLIENT_SECRET:-admin}"
+# BOSH_CA_CERT=${BOSH_CA_CERT:-"$($BOSH_CLI int ~/deployments/vbox/creds.yml --path /director_ssl/ca)"}
+#
+#
+# if [[ -n $JUMPBOX_SSH_KEY ]] && [[ -n $JUMPBOX_URL ]]
+# then
+#   export JUMPBOX_SSH_KEY="${JUMPBOX_SSH_KEY:-"$(bosh int ~/deployments/vbox/creds.yml --path /jumpbox_ssh/private_key)"}"
+#   export JUMPBOX_URL="${JUMPBOX_URL:-192.168.50.6}"
+#   export JUMPBOX_PORT="${JUMPBOX_PORT:-22}"
+#
+#   # Jumpbox configuraiton for bosh-cli
+#   export JUMPBOX_PRIVATE_KEY
+#   JUMPBOX_PRIVATE_KEY="$(mktemp -t jumpbox.pem.XXX)"
+#   echo "$JUMPBOX_SSH_KEY" > "$JUMPBOX_PRIVATE_KEY"
+#
+#   # pcf-tile-pipeline currently exports BOSH_ALL_PROXY, but it seems not to be working properly.
+#   # We are then overwriting it here.
+#   unset BOSH_ALL_PROXY
+#   export BOSH_ALL_PROXY="ssh+socks5://jumpbox@$JUMPBOX_URL:$JUMPBOX_PORT?private-key=$JUMPBOX_PRIVATE_KEY"
+# fi
+#
+# export BOSH_ENVIRONMENT
+# export BOSH_CLIENT
+# export BOSH_CLIENT_SECRET
+# export BOSH_CA_CERT
+# export BOSH_MANIFEST
 
 export CF_DIAL_TIMEOUT=30
 
