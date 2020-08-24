@@ -9,7 +9,7 @@ require (
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/google/go-cmp v0.5.1 // indirect
 	github.com/google/uuid v1.1.1 // indirect
-	github.com/gorilla/mux v1.7.4 // indirect
+	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
@@ -22,8 +22,8 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/streadway/amqp v1.0.0
 	github.com/stretchr/testify v1.6.1 // indirect
-	golang.org/x/net v0.0.0-20200813134508-3edf25e44fcc // indirect
-	golang.org/x/sys v0.0.0-20200814200057-3d37ad5750ed // indirect
+	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
+	golang.org/x/sys v0.0.0-20200821140526-fda516888d29 // indirect
 	golang.org/x/text v0.3.3 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
