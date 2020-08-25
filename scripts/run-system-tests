@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 BOSH_CLI="${BOSH_CLI:-/usr/local/bin/bosh}"
 export BOSH_CLI
 
