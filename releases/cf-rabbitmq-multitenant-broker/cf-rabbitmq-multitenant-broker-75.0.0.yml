@@ -1,0 +1,38 @@
+name: cf-rabbitmq-multitenant-broker
+version: 75.0.0
+commit_hash: 6497a0b
+uncommitted_changes: false
+jobs:
+- name: broker-deregistrar
+  version: 335c8918f2c62309cb203ee66569c0fdd278b01b
+  fingerprint: 335c8918f2c62309cb203ee66569c0fdd278b01b
+  sha1: 930e0ce50a12e10e59a4f0ba20373b240de1e1d3
+- name: broker-registrar
+  version: 2b34f2da09961c03c06d4e03e07e7f2e58cc7e79
+  fingerprint: 2b34f2da09961c03c06d4e03e07e7f2e58cc7e79
+  sha1: ff983304e0a2c427c8316963f3d2aa748dbaddf1
+- name: rabbitmq-service-broker
+  version: 9e59f49455edfb7a6d28674eb4603b827bb8a890
+  fingerprint: 9e59f49455edfb7a6d28674eb4603b827bb8a890
+  sha1: bc653379f40d73a4c5ef919078b5f1136a45c467
+packages:
+- name: cf-rabbitmq-multitenant-broker-golang
+  version: f19f0e890a4465c8c4b2ceef61b678a90c3c873f
+  fingerprint: f19f0e890a4465c8c4b2ceef61b678a90c3c873f
+  sha1: 8655a948d0dfb43a90de662d8d299ccf3a39ad9f
+  dependencies: []
+- name: rabbitmq-common
+  version: da10ce16346cf36941451f309c524686d15b6d9e
+  fingerprint: da10ce16346cf36941451f309c524686d15b6d9e
+  sha1: b66dfe1d7146a6db7006a4dee409d7a7dbb78be1
+  dependencies: []
+- name: rabbitmq-service-broker
+  version: 273e241af1ffb1d655a61072bfb20d8911fa30a0
+  fingerprint: 273e241af1ffb1d655a61072bfb20d8911fa30a0
+  sha1: 01e838dc17f0939f2e2034d95cce6c50c2c3524d
+  dependencies:
+  - cf-rabbitmq-multitenant-broker-golang
+license:
+  version: 8dad09a902a9c930ef358d1b671dc1fc058f39b1
+  fingerprint: 8dad09a902a9c930ef358d1b671dc1fc058f39b1
+  sha1: 5a09a3168306efbc35023c95eacb78444433b3a5
