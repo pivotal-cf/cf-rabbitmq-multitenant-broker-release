@@ -1,0 +1,43 @@
+name: cf-rabbitmq-multitenant-broker
+version: 79.0.0
+commit_hash: a97cb1a
+uncommitted_changes: false
+jobs:
+- name: broker-deregistrar
+  version: 259f8494353bda083a01c5e771c474d5d0c4cd8231d1cebb8dcad1b1175c138f
+  fingerprint: 259f8494353bda083a01c5e771c474d5d0c4cd8231d1cebb8dcad1b1175c138f
+  sha1: sha256:fabfc3f9ed88d4084c850efec65a7babf643100976077ae9d40225e0be260ef5
+  packages: []
+- name: broker-registrar
+  version: 317fe64021bca92fc50c0b4633f3070184d94d2f73aa9b31802920d2c99ff836
+  fingerprint: 317fe64021bca92fc50c0b4633f3070184d94d2f73aa9b31802920d2c99ff836
+  sha1: sha256:a024f56568bc172bd10261ba8a2daed60a0230ad68f91e114becd5dcb370d970
+  packages: []
+- name: rabbitmq-service-broker
+  version: b3ff2f1df9303f928f39879280e8ea9ad6ef77f283bc3d31adbb2a4de80723ad
+  fingerprint: b3ff2f1df9303f928f39879280e8ea9ad6ef77f283bc3d31adbb2a4de80723ad
+  sha1: sha256:0592178d95e834b7714469657d51a7acfc6caeae82cce7aabf3d853fb7768bee
+  packages:
+  - rabbitmq-service-broker
+  - rabbitmq-common
+packages:
+- name: cf-rabbitmq-multitenant-broker-golang
+  version: dcf92985433d163ee45af436e8842c9b6efad25152b9aef5dafeb1190392c777
+  fingerprint: dcf92985433d163ee45af436e8842c9b6efad25152b9aef5dafeb1190392c777
+  sha1: sha256:2e9749621c949339a290bfbbf0259a24407b16d9bea3e8e4e0f70ebbdbab9903
+  dependencies: []
+- name: rabbitmq-common
+  version: c7b701f8368c5f7d76569d43187eeed4bb32513e071a4cd3964bf62f04cc2dbb
+  fingerprint: c7b701f8368c5f7d76569d43187eeed4bb32513e071a4cd3964bf62f04cc2dbb
+  sha1: sha256:b181d6d9e40d8169324ac44d7d987cf8ad3c7e7adab2e2bfc419ee1d7bb9d149
+  dependencies: []
+- name: rabbitmq-service-broker
+  version: 1541c686c25f143e2b7a27cff30beb1eba0b77807f619aad5aff8dadc33633f4
+  fingerprint: 1541c686c25f143e2b7a27cff30beb1eba0b77807f619aad5aff8dadc33633f4
+  sha1: sha256:905fffc3628e2fbb2b62d9785e17c13e279bf26126cfb2945b603fb277fbca1c
+  dependencies:
+  - cf-rabbitmq-multitenant-broker-golang
+license:
+  version: b4740f86c352379435cbacb22afa730c723bb12317c12b9ea8b77907226c88bc
+  fingerprint: b4740f86c352379435cbacb22afa730c723bb12317c12b9ea8b77907226c88bc
+  sha1: sha256:3b0b05935c1b495e18e2fe8c6e9258e5b9f6bfb9a71684fd266af8a7bd96e088
