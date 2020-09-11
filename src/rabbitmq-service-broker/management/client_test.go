@@ -52,22 +52,47 @@ var _ = Describe("NewClient", func() {
 	})
 
 	When("The broker is configured with an external load balancer", func() {
-		BeforeEach(func() {
-			brokerConfig = config.Config{RabbitMQ: config.RabbitMQ{
-				Hosts:   []string{"127.0.0.1", "127.0.0.2"},
-				DNSHost: "abc.123.com",
-				Administrator: config.AdminCredentials{
-					Username: "alexandra",
-					Password: "ardnaxela",
-				},
-			}}
+		When("Management over TLS is not configured", func() {
+			BeforeEach(func() {
+				brokerConfig = config.Config{RabbitMQ: config.RabbitMQ{
+					Hosts:   []string{"127.0.0.1", "127.0.0.2"},
+					DNSHost: "abc.123.com",
+					Administrator: config.AdminCredentials{
+						Username: "alexandra",
+						Password: "ardnaxela",
+					},
+				}}
+			})
+			It("uses the URL of the load balancer in the client endpoint", func() {
+				client, err := NewClient(brokerConfig)
+				Expect(err).NotTo(HaveOccurred())
+				Expect(client.Endpoint).To(Equal("http://abc.123.com:15672"))
+				Expect(client.Username).To(Equal("alexandra"))
+				Expect(client.Password).To(Equal("ardnaxela"))
+			})
 		})
-		It("uses the URL of the load balancer in the client endpoint", func() {
-			client, err := NewClient(brokerConfig)
-			Expect(err).NotTo(HaveOccurred())
-			Expect(client.Endpoint).To(Equal("http://abc.123.com:15672"))
-			Expect(client.Username).To(Equal("alexandra"))
-			Expect(client.Password).To(Equal("ardnaxela"))
+
+		When("Management over TLS is configured", func() {
+			BeforeEach(func() {
+				brokerConfig = config.Config{RabbitMQ: config.RabbitMQ{
+					Hosts:   []string{"127.0.0.1", "127.0.0.2"},
+					DNSHost: "abc.123.com",
+					Administrator: config.AdminCredentials{
+						Username: "alexandra",
+						Password: "ardnaxela",
+					},
+					ManagementTLS: config.ManagementTLS{
+						Enabled: true,
+					},
+				}}
+			})
+			It("uses the URL of the load balancer in the client endpoint", func() {
+				client, err := NewClient(brokerConfig)
+				Expect(err).NotTo(HaveOccurred())
+				Expect(client.Endpoint).To(Equal("https://abc.123.com:15671"))
+				Expect(client.Username).To(Equal("alexandra"))
+				Expect(client.Password).To(Equal("ardnaxela"))
+			})
 		})
 	})
 
