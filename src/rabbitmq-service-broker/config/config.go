@@ -46,6 +46,7 @@ type RabbitMQ struct {
 	DNSHost           string                `yaml:"dns_host"`
 	Administrator     AdminCredentials      `yaml:"administrator" validate:"required"`
 	Management        ManagementCredentials `yaml:"management"`
+	ManagementTLS     ManagementTLS         `yaml:"management_tls"`
 	ManagementDomain  string                `yaml:"management_domain" validate:"required"`
 	OperatorSetPolicy RabbitMQPolicy        `yaml:"operator_set_policy"`
 	RegularUserTags   string                `yaml:"regular_user_tags"`
@@ -54,6 +55,12 @@ type RabbitMQ struct {
 
 type ManagementCredentials struct {
 	Username string `yaml:"username"`
+}
+
+type ManagementTLS struct {
+	Enabled    bool   `yaml:"enabled"`
+	CACert     string `yaml:"cacert"`
+	SkipVerify bool   `yaml:"skip_verify"`
 }
 
 type AdminCredentials struct {
