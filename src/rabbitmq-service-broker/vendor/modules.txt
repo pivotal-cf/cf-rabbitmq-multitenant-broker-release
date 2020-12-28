@@ -17,7 +17,7 @@ github.com/gorilla/mux
 github.com/leodido/go-urn
 # github.com/michaelklishin/rabbit-hole v1.5.0
 github.com/michaelklishin/rabbit-hole
-# github.com/nxadm/tail v1.4.5
+# github.com/nxadm/tail v1.4.6
 github.com/nxadm/tail
 github.com/nxadm/tail/ratelimiter
 github.com/nxadm/tail/util
@@ -72,11 +72,11 @@ github.com/pivotal-cf/brokerapi/utils
 github.com/pkg/errors
 # github.com/streadway/amqp v1.0.0
 github.com/streadway/amqp
-# golang.org/x/net v0.0.0-20201209123823-ac852fbbde11
+# golang.org/x/net v0.0.0-20201224014010-6772e930b67b
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
-# golang.org/x/sys v0.0.0-20201211090839-8ad439b19e0f
+# golang.org/x/sys v0.0.0-20201223074533-0d417f636930
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 # golang.org/x/text v0.3.4
