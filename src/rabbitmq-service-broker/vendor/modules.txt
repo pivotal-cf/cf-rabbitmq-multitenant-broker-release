@@ -9,7 +9,7 @@ github.com/go-playground/locales
 github.com/go-playground/locales/currency
 # github.com/go-playground/universal-translator v0.17.0
 github.com/go-playground/universal-translator
-# github.com/google/uuid v1.1.2
+# github.com/google/uuid v1.1.3
 github.com/google/uuid
 # github.com/gorilla/mux v1.8.0
 github.com/gorilla/mux
@@ -76,7 +76,7 @@ github.com/streadway/amqp
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
-# golang.org/x/sys v0.0.0-20201223074533-0d417f636930
+# golang.org/x/sys v0.0.0-20201231184435-2d18734c6014
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 # golang.org/x/text v0.3.4
