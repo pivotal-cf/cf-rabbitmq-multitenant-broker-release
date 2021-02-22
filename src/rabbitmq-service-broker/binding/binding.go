@@ -60,7 +60,7 @@ func (b Builder) dashboardURL() string {
 }
 
 func (b Builder) uriForBinding(hostname string) string {
-	return fmt.Sprintf("%s://%s:%s@%s/%s", b.amqpScheme(), b.Username, b.Password, hostname, b.VHost)
+	return fmt.Sprintf("%s://%s:%s@%s/%s", b.amqpScheme(b.TLS), b.Username, b.Password, hostname, b.VHost)
 }
 
 func (b Builder) urisForBinding() []string {
