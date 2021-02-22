@@ -72,6 +72,7 @@ func fakeNonTLSProtocolPorts() map[string]int {
 
 func fakeTLSProtocolPorts() map[string]int {
 	return map[string]int{
+		"amqp":           5672,
 		"amqp/ssl":       5671,
 		"clustering":     25672,
 		"http":           15672,

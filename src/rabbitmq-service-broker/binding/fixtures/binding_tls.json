@@ -11,6 +11,23 @@
  ],
  "password": "cfrnvvjtr6t803ilrdhgbe8mn7",
  "protocols": {
+  "amqp": {
+   "host": "10.0.4.100",
+   "hosts": [
+    "10.0.4.100",
+    "10.0.4.101"
+   ],
+   "password": "cfrnvvjtr6t803ilrdhgbe8mn7",
+   "port": 5672,
+   "ssl": false,
+   "uri": "amqp://b2a5de47-796b-414d-bab4-eb299c268653:cfrnvvjtr6t803ilrdhgbe8mn7@10.0.4.100:5672/6418d19f-e9e8-4c8b-9c92-5087c89cbc46",
+   "uris": [
+    "amqp://b2a5de47-796b-414d-bab4-eb299c268653:cfrnvvjtr6t803ilrdhgbe8mn7@10.0.4.100:5672/6418d19f-e9e8-4c8b-9c92-5087c89cbc46",
+    "amqp://b2a5de47-796b-414d-bab4-eb299c268653:cfrnvvjtr6t803ilrdhgbe8mn7@10.0.4.101:5672/6418d19f-e9e8-4c8b-9c92-5087c89cbc46"
+   ],
+   "username": "b2a5de47-796b-414d-bab4-eb299c268653",
+   "vhost": "6418d19f-e9e8-4c8b-9c92-5087c89cbc46"
+  },
   "amqp+ssl": {
    "host": "10.0.4.100",
    "hosts": [
