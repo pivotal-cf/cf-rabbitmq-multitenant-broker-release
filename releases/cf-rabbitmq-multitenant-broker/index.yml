@@ -9,12 +9,16 @@ builds:
     version: 62.0.0
   0ad5bc6f-7638-4ddd-6a9a-d23f8e2331e4:
     version: 4.0.0
+  0aec5d8e-fa3e-4db6-5f0b-a4b8d606d94b:
+    version: 91.0.0
   0c13a327-5461-4682-6670-0ee120ea6635:
     version: 39.0.0
   14ced530-9bf6-427c-72f3-83252ef89266:
     version: 59.0.0
   17a1761a-9137-4988-5f8b-64c55033f85d:
     version: 30.0.0
+  1cef3722-c312-4b8f-5d2e-13aa6b230f3f:
+    version: 92.0.0
   1d6b247a-21e9-46e5-4b35-34ea37d03127:
     version: 1.0.0
   1dc46708-bcc7-4cab-67a1-e974aaef8665:
@@ -29,6 +33,8 @@ builds:
     version: 76.0.0
   315dab15-15db-44d7-55dd-7d35de8469c7:
     version: 47.0.0
+  33a6c566-b5a2-46c0-6af9-9f249dd1b3e1:
+    version: 85.0.0
   37d52e8f-a5e0-44b3-4661-c890947e8fbc:
     version: 26.0.0
   3977fe5b-a002-4c07-4ab4-5474783dc686:
@@ -41,8 +47,12 @@ builds:
     version: 6.0.1
   41f78897-fbdd-48a2-53b1-63cc84782d6a:
     version: 41.0.0
+  44305233-645f-4943-62c0-a9e020baaedb:
+    version: 86.0.0
   47133e71-5ce2-4506-6a4b-77b61b5013d7:
     version: 38.0.0
+  4aec856a-b519-4c77-4d8a-1b4ebc8ba8ce:
+    version: 87.0.0
   4ce74ea8-d691-46e0-6313-dc05b753219c:
     version: 42.0.0
   4ce7e74a-cc4c-45f3-50f6-ac21fb36c158:
@@ -101,6 +111,10 @@ builds:
     version: 74.0.0
   9ae4e7aa-7c97-435a-691f-5bbcbe19703f:
     version: 66.0.0
+  9eb9594e-2a0f-4e41-694a-426277a7c429:
+    version: 89.0.0
+  9ef90ba5-79f2-4282-6276-50edf69dd8cd:
+    version: 90.0.0
   a39fd66e-2882-4862-59b7-40fbf0ed1d14:
     version: 6.0.0
   a55cbf16-9872-41f0-4b96-633b8c70ffb6:
@@ -141,6 +155,8 @@ builds:
     version: 75.0.0
   d5676de2-ba97-43a7-6f9e-c15d637e5a05:
     version: 19.0.0
+  d882c8a1-2b6b-442c-72ad-d538363f77f2:
+    version: 84.0.0
   dcd069fb-8ade-4df8-6058-794931432444:
     version: 22.0.0
   dd4e0a8e-3e81-4ef7-7425-3793db743a15:
@@ -153,6 +169,8 @@ builds:
     version: 11.0.0
   e00e7a99-c57b-4cb0-5539-c33a04e0501f:
     version: 77.0.0
+  e94f405d-7972-4f8d-73df-6de8efbbc6b0:
+    version: 88.0.0
   ecc9fc36-a265-4492-4ab9-29404938376d:
     version: 7.0.0
   ee87144e-50ec-4d09-709b-d7276d5fe248:
