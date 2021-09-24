@@ -3,6 +3,10 @@
 This repository contains the release for a multi-tenant RabbitMQ service broker
 for Cloud Foundry. It's deployable by BOSH in the usual way.
 
+## Contributing
+
+Even though the default branch is `release`, you should push changes to `master`. [The `release` branch is the default so that bosh.io can find our releases](https://github.com/bosh-io/releases#how-does-boshio-find-my-release).
+
 ## Dependencies
 
 In order to test this release locally you will need:
