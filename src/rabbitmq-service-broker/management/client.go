@@ -8,7 +8,7 @@ import (
 
 	"rabbitmq-service-broker/config"
 
-	rabbithole "github.com/michaelklishin/rabbit-hole"
+	rabbithole "github.com/michaelklishin/rabbit-hole/v2"
 )
 
 func NewClient(cfg config.Config) (*rabbithole.Client, error) {

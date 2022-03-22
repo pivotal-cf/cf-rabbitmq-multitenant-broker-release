@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	rabbithole "github.com/michaelklishin/rabbit-hole"
+	rabbithole "github.com/michaelklishin/rabbit-hole/v2"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	client "github.com/streadway/amqp"
