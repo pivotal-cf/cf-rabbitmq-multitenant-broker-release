@@ -3,7 +3,7 @@ package rabbithutch
 import (
 	"net/http"
 
-	rabbithole "github.com/michaelklishin/rabbit-hole/v2"
+	rabbithole "github.com/michaelklishin/rabbit-hole"
 )
 
 func (r *rabbitHutch) VHostExists(vhost string) (bool, error) {

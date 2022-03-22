@@ -10,7 +10,7 @@ import (
 	. "rabbitmq-service-broker/rabbithutch"
 	"rabbitmq-service-broker/rabbithutch/fakes"
 
-	rabbithole "github.com/michaelklishin/rabbit-hole/v2"
+	rabbithole "github.com/michaelklishin/rabbit-hole"
 )
 
 var _ = Describe("Deleting the user", func() {

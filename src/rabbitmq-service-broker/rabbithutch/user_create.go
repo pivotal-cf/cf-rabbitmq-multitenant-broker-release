@@ -4,9 +4,8 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"net/http"
-	"strings"
 
-	rabbithole "github.com/michaelklishin/rabbit-hole/v2"
+	rabbithole "github.com/michaelklishin/rabbit-hole"
 	"github.com/pivotal-cf/brokerapi"
 )
 
@@ -22,7 +21,7 @@ func (r *rabbitHutch) CreateUserAndGrantPermissions(username, vhost, tags string
 
 	userSettings := rabbithole.UserSettings{
 		Password: password,
-		Tags:     strings.Split(tags, ","),
+		Tags:     tags,
 	}
 
 	response, err := r.client.PutUser(username, userSettings)

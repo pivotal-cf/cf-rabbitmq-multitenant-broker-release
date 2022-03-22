@@ -3,9 +3,6 @@ package rabbithole
 import (
 	"encoding/json"
 	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
 )
 
 //
@@ -43,8 +40,6 @@ import (
 //       "rate": 0
 //     },
 //     "name": "\/",
-//	   "description": "myvhost",
-//     "tags": "production,eu-west-1",
 //     "tracing": false
 //   },
 //   {
@@ -53,14 +48,9 @@ import (
 //   }
 // ]
 
-// VhostInfo represents a virtual host, its properties and key metrics.
 type VhostInfo struct {
 	// Virtual host name
 	Name string `json:"name"`
-	// Virtual host description
-	Description string `json:"description"`
-	// Virtual host tags
-	Tags VhostTags `json:"tags"`
 	// True if tracing is enabled for this virtual host
 	Tracing bool `json:"tracing"`
 
@@ -85,41 +75,9 @@ type VhostInfo struct {
 	SendPending    uint64      `json:"send_pend"`
 	RecvOctDetails RateDetails `json:"recv_oct_details"`
 	SendOctDetails RateDetails `json:"send_oct_details"`
-
-	// Cluster State
-	ClusterState map[string]string `json:"cluster_state"`
 }
 
-type VhostTags []string
-
-// MarshalJSON can marshal an array of strings or a comma-separated list in a string
-func (d VhostTags) MarshalJSON() ([]byte, error) {
-	return json.Marshal(strings.Join(d, ","))
-}
-
-// UnmarshalJSON can unmarshal an array of strings or a comma-separated list in a string
-func (d *VhostTags) UnmarshalJSON(b []byte) error {
-	// the value is a comma-separated string
-	t, _ := strconv.Unquote(string(b))
-	if b[0] == '"' {
-		quotedTags := strings.Split(t, ",")
-		var tags []string
-		for _, qt := range quotedTags {
-			tags = append(tags, qt)
-		}
-		*d = tags
-		return nil
-	}
-	// the value is an array
-	var ary []string
-	if err := json.Unmarshal(b, &ary); err != nil {
-		return err
-	}
-	*d = ary
-	return nil
-}
-
-// ListVhosts returns a list of virtual hosts.
+// Returns a list of virtual hosts.
 func (c *Client) ListVhosts() (rec []VhostInfo, err error) {
 	req, err := newGETRequest(c, "vhosts")
 	if err != nil {
@@ -137,9 +95,9 @@ func (c *Client) ListVhosts() (rec []VhostInfo, err error) {
 // GET /api/vhosts/{name}
 //
 
-// GetVhost returns information about a specific virtual host.
+// Returns information about a specific virtual host.
 func (c *Client) GetVhost(vhostname string) (rec *VhostInfo, err error) {
-	req, err := newGETRequest(c, "vhosts/"+url.PathEscape(vhostname))
+	req, err := newGETRequest(c, "vhosts/"+PathEscape(vhostname))
 	if err != nil {
 		return nil, err
 	}
@@ -155,29 +113,26 @@ func (c *Client) GetVhost(vhostname string) (rec *VhostInfo, err error) {
 // PUT /api/vhosts/{name}
 //
 
-// VhostSettings are properties used to create or modify virtual hosts.
+// Settings used to create or modify virtual hosts.
 type VhostSettings struct {
-	// Virtual host description
-	Description string `json:"description"`
-	// Virtual host tags
-	Tags VhostTags `json:"tags"`
 	// True if tracing should be enabled.
 	Tracing bool `json:"tracing"`
 }
 
-// PutVhost creates or updates a virtual host.
+// Creates or updates a virtual host.
 func (c *Client) PutVhost(vhostname string, settings VhostSettings) (res *http.Response, err error) {
 	body, err := json.Marshal(settings)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := newRequestWithBody(c, "PUT", "vhosts/"+url.PathEscape(vhostname), body)
+	req, err := newRequestWithBody(c, "PUT", "vhosts/"+PathEscape(vhostname), body)
 	if err != nil {
 		return nil, err
 	}
 
-	if res, err = executeRequest(c, req); err != nil {
+	res, err = executeRequest(c, req)
+	if err != nil {
 		return nil, err
 	}
 
@@ -188,14 +143,15 @@ func (c *Client) PutVhost(vhostname string, settings VhostSettings) (res *http.R
 // DELETE /api/vhosts/{name}
 //
 
-// DeleteVhost deletes a virtual host.
+// Deletes a virtual host.
 func (c *Client) DeleteVhost(vhostname string) (res *http.Response, err error) {
-	req, err := newRequestWithBody(c, "DELETE", "vhosts/"+url.PathEscape(vhostname), nil)
+	req, err := newRequestWithBody(c, "DELETE", "vhosts/"+PathEscape(vhostname), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	if res, err = executeRequest(c, req); err != nil {
+	res, err = executeRequest(c, req)
+	if err != nil {
 		return nil, err
 	}
 
