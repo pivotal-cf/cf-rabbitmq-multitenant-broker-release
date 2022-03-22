@@ -1,7 +1,7 @@
 package rabbithutch
 
 import (
-	rabbithole "github.com/michaelklishin/rabbit-hole/v2"
+	rabbithole "github.com/michaelklishin/rabbit-hole"
 )
 
 func (r *rabbitHutch) AssignPermissionsTo(vhost, username string) error {
