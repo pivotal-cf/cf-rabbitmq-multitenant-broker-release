@@ -1,5 +1,5 @@
 /*
-Rabbit Hole is a Go client for the RabbitMQ HTTP API.
+Package rabbithole is a Go client for the RabbitMQ HTTP API.
 
 All HTTP API operations are accessible via `rabbithole.Client`, which
 should be instantiated with `rabbithole.NewClient`.
@@ -173,6 +173,103 @@ Managing Permissions
         // revokes permissions in vhost
         resp, err := rmqc.ClearPermissionsIn("/", "my.user")
         // => *http.Response, err
+
+Managing Topic Permissions
+
+        xs, err := rmqc.ListTopicPermissions()
+        // => []TopicPermissionInfo, err
+
+        // permissions of individual user
+        x, err := rmqc.ListTopicPermissionsOf("my.user")
+        // => []TopicPermissionInfo, err
+
+        // permissions of individual user in vhost
+        x, err := rmqc.GetTopicPermissionsIn("/", "my.user")
+        // => []TopicPermissionInfo, err
+
+        // updates permissions of user in vhost
+        resp, err := rmqc.UpdateTopicPermissionsIn("/", "my.user", Permissions{Exchange: "amq.topic", Write: ".*", Read: ".*"})
+        // => *http.Response, err
+
+        // revokes permissions in vhost
+        resp, err := rmqc.ClearTopicPermissionsIn("/", "my.user")
+        // => *http.Response, err
+
+        // revokes single permissions in vhost
+        resp, err := rmqc.DeleteTopicPermissionsIn("/", "my.user", "exchange")
+        // => *http.Response, err
+
+Managing Runtime Parameters
+
+        // list all runtime parameters
+        params, err := rmqc.ListRuntimeParameters()
+        // => []RuntimeParameter, error
+
+        // list all runtime parameters for a component
+        params, err := rmqc.ListRuntimeParametersFor("federation-upstream")
+        // => []RuntimeParameter, error
+
+        // list runtime parameters in a vhost
+        params, err := rmqc.ListRuntimeParametersIn("federation-upstream", "/")
+        // => []RuntimeParameter, error
+
+        // information about a runtime parameter
+        p, err := rmqc.GetRuntimeParameter("federation-upstream", "/", "name")
+        // => *RuntimeParameter, error
+
+        // declare or update a runtime parameter
+        resp, err := rmqc.PutRuntimeParameter("federation-upstream", "/", "name", FederationDefinition{
+            Uri: "amqp://server-name",
+        })
+        // => *http.Response, error
+
+        // remove a runtime parameter
+        resp, err := rmqc.DeleteRuntimeParameter("federation-upstream", "/", "name")
+        // => *http.Response, error
+
+Managing Federation Upstreams
+
+        // list all federation upstreams
+        ups, err := rmqc.ListFederationUpstreams()
+        // => []FederationUpstream, error
+
+        // list federation upstreams in a vhost
+        ups, err := rmqc.ListFederationUpstreamsIn("/")
+        // => []FederationUpstream, error
+
+        // information about a federated upstream
+        up, err := rmqc.GetFederationUpstream("/", "upstream-name")
+        // => *FederationUpstream, error
+
+        // declare or update a federation upstream
+        resp, err := rmqc.PutFederationUpstream("/", "upstream-name", FederationDefinition{
+          Uri: "amqp://server-name",
+        })
+        // => *http.Response, error
+
+        // delete an upstream
+        resp, err := rmqc.DeleteFederationUpstream("/", "upstream-name")
+        // => *http.Response, error
+
+Managing Global Parameters
+
+        // list all global parameters
+        params, err := rmqc.ListGlobalParameters()
+        // => []GlobalRuntimeParameter, error
+
+        // get a global parameter
+        p, err := rmqc.GetGlobalParameter("name")
+        // => *GlobalRuntimeParameter, error
+
+        // declare or update a global parameter
+        resp, err := rmqc.PutGlobalParameter("name", map[string]interface{
+            endpoints: "amqp://server-name",
+        })
+        // => *http.Response, error
+
+        // delete a global parameter
+        resp, err := rmqc.DeleteGlobalParameter("name")
+        // => *http.Response, error
 
 Operations on cluster name
         // Get cluster name
