@@ -9,7 +9,7 @@ import (
 	. "rabbitmq-service-broker/rabbithutch"
 	"rabbitmq-service-broker/rabbithutch/fakes"
 
-	rabbithole "github.com/michaelklishin/rabbit-hole"
+	rabbithole "github.com/michaelklishin/rabbit-hole/v2"
 )
 
 var _ = Describe("VHostExists()", func() {

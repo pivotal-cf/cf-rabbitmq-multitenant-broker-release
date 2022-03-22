@@ -140,15 +140,16 @@ func (fake *FakeRabbitHutch) AssignPermissionsTo(arg1 string, arg2 string) error
 		arg1 string
 		arg2 string
 	}{arg1, arg2})
+	stub := fake.AssignPermissionsToStub
+	fakeReturns := fake.assignPermissionsToReturns
 	fake.recordInvocation("AssignPermissionsTo", []interface{}{arg1, arg2})
 	fake.assignPermissionsToMutex.Unlock()
-	if fake.AssignPermissionsToStub != nil {
-		return fake.AssignPermissionsToStub(arg1, arg2)
+	if stub != nil {
+		return stub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.assignPermissionsToReturns
 	return fakeReturns.result1
 }
 
@@ -203,15 +204,16 @@ func (fake *FakeRabbitHutch) CreatePolicy(arg1 string, arg2 string, arg3 int, ar
 		arg3 int
 		arg4 map[string]interface{}
 	}{arg1, arg2, arg3, arg4})
+	stub := fake.CreatePolicyStub
+	fakeReturns := fake.createPolicyReturns
 	fake.recordInvocation("CreatePolicy", []interface{}{arg1, arg2, arg3, arg4})
 	fake.createPolicyMutex.Unlock()
-	if fake.CreatePolicyStub != nil {
-		return fake.CreatePolicyStub(arg1, arg2, arg3, arg4)
+	if stub != nil {
+		return stub(arg1, arg2, arg3, arg4)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.createPolicyReturns
 	return fakeReturns.result1
 }
 
@@ -265,15 +267,16 @@ func (fake *FakeRabbitHutch) CreateUserAndGrantPermissions(arg1 string, arg2 str
 		arg2 string
 		arg3 string
 	}{arg1, arg2, arg3})
+	stub := fake.CreateUserAndGrantPermissionsStub
+	fakeReturns := fake.createUserAndGrantPermissionsReturns
 	fake.recordInvocation("CreateUserAndGrantPermissions", []interface{}{arg1, arg2, arg3})
 	fake.createUserAndGrantPermissionsMutex.Unlock()
-	if fake.CreateUserAndGrantPermissionsStub != nil {
-		return fake.CreateUserAndGrantPermissionsStub(arg1, arg2, arg3)
+	if stub != nil {
+		return stub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.createUserAndGrantPermissionsReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -328,15 +331,16 @@ func (fake *FakeRabbitHutch) DeleteUser(arg1 string) error {
 	fake.deleteUserArgsForCall = append(fake.deleteUserArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.DeleteUserStub
+	fakeReturns := fake.deleteUserReturns
 	fake.recordInvocation("DeleteUser", []interface{}{arg1})
 	fake.deleteUserMutex.Unlock()
-	if fake.DeleteUserStub != nil {
-		return fake.DeleteUserStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.deleteUserReturns
 	return fakeReturns.result1
 }
 
@@ -388,15 +392,16 @@ func (fake *FakeRabbitHutch) DeleteUserAndConnections(arg1 string) error {
 	fake.deleteUserAndConnectionsArgsForCall = append(fake.deleteUserAndConnectionsArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.DeleteUserAndConnectionsStub
+	fakeReturns := fake.deleteUserAndConnectionsReturns
 	fake.recordInvocation("DeleteUserAndConnections", []interface{}{arg1})
 	fake.deleteUserAndConnectionsMutex.Unlock()
-	if fake.DeleteUserAndConnectionsStub != nil {
-		return fake.DeleteUserAndConnectionsStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.deleteUserAndConnectionsReturns
 	return fakeReturns.result1
 }
 
@@ -447,15 +452,16 @@ func (fake *FakeRabbitHutch) ProtocolPorts() (map[string]int, error) {
 	ret, specificReturn := fake.protocolPortsReturnsOnCall[len(fake.protocolPortsArgsForCall)]
 	fake.protocolPortsArgsForCall = append(fake.protocolPortsArgsForCall, struct {
 	}{})
+	stub := fake.ProtocolPortsStub
+	fakeReturns := fake.protocolPortsReturns
 	fake.recordInvocation("ProtocolPorts", []interface{}{})
 	fake.protocolPortsMutex.Unlock()
-	if fake.ProtocolPortsStub != nil {
-		return fake.ProtocolPortsStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.protocolPortsReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -502,15 +508,16 @@ func (fake *FakeRabbitHutch) UserList() ([]string, error) {
 	ret, specificReturn := fake.userListReturnsOnCall[len(fake.userListArgsForCall)]
 	fake.userListArgsForCall = append(fake.userListArgsForCall, struct {
 	}{})
+	stub := fake.UserListStub
+	fakeReturns := fake.userListReturns
 	fake.recordInvocation("UserList", []interface{}{})
 	fake.userListMutex.Unlock()
-	if fake.UserListStub != nil {
-		return fake.UserListStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.userListReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -558,15 +565,16 @@ func (fake *FakeRabbitHutch) VHostCreate(arg1 string) error {
 	fake.vHostCreateArgsForCall = append(fake.vHostCreateArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.VHostCreateStub
+	fakeReturns := fake.vHostCreateReturns
 	fake.recordInvocation("VHostCreate", []interface{}{arg1})
 	fake.vHostCreateMutex.Unlock()
-	if fake.VHostCreateStub != nil {
-		return fake.VHostCreateStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.vHostCreateReturns
 	return fakeReturns.result1
 }
 
@@ -618,15 +626,16 @@ func (fake *FakeRabbitHutch) VHostDelete(arg1 string) error {
 	fake.vHostDeleteArgsForCall = append(fake.vHostDeleteArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.VHostDeleteStub
+	fakeReturns := fake.vHostDeleteReturns
 	fake.recordInvocation("VHostDelete", []interface{}{arg1})
 	fake.vHostDeleteMutex.Unlock()
-	if fake.VHostDeleteStub != nil {
-		return fake.VHostDeleteStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1
 	}
-	fakeReturns := fake.vHostDeleteReturns
 	return fakeReturns.result1
 }
 
@@ -678,15 +687,16 @@ func (fake *FakeRabbitHutch) VHostExists(arg1 string) (bool, error) {
 	fake.vHostExistsArgsForCall = append(fake.vHostExistsArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.VHostExistsStub
+	fakeReturns := fake.vHostExistsReturns
 	fake.recordInvocation("VHostExists", []interface{}{arg1})
 	fake.vHostExistsMutex.Unlock()
-	if fake.VHostExistsStub != nil {
-		return fake.VHostExistsStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.vHostExistsReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
