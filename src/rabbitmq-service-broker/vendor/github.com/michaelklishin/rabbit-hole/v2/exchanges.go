@@ -3,32 +3,37 @@ package rabbithole
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 )
 
 //
 // GET /api/exchanges
 //
 
+// IngressEgressStats represents common message flow metrics.
 type IngressEgressStats struct {
-	PublishIn        int         `json:"publish_in"`
-	PublishInDetails RateDetails `json:"publish_in_details"`
+	PublishIn        int          `json:"publish_in,omitempty"`
+	PublishInDetails *RateDetails `json:"publish_in_details,omitempty"`
 
-	PublishOut        int         `json:"publish_out"`
-	PublishOutDetails RateDetails `json:"publish_out_details"`
+	PublishOut        int          `json:"publish_out,omitempty"`
+	PublishOutDetails *RateDetails `json:"publish_out_details,omitempty"`
 }
 
+// ExchangeInfo represents and exchange and its properties.
 type ExchangeInfo struct {
 	Name       string                 `json:"name"`
-	Vhost      string                 `json:"vhost"`
+	Vhost      string                 `json:"vhost,omitempty"`
 	Type       string                 `json:"type"`
 	Durable    bool                   `json:"durable"`
-	AutoDelete bool                   `json:"auto_delete"`
+	AutoDelete AutoDelete             `json:"auto_delete"`
 	Internal   bool                   `json:"internal"`
 	Arguments  map[string]interface{} `json:"arguments"`
 
-	MessageStats IngressEgressStats `json:"message_stats"`
+	MessageStats *IngressEgressStats `json:"message_stats,omitempty"`
 }
 
+// ExchangeSettings is a set of exchange properties. Use this type when declaring
+// an exchange.
 type ExchangeSettings struct {
 	Type       string                 `json:"type"`
 	Durable    bool                   `json:"durable"`
@@ -36,6 +41,8 @@ type ExchangeSettings struct {
 	Arguments  map[string]interface{} `json:"arguments,omitempty"`
 }
 
+// ListExchanges lists all exchanges in a cluster. This only includes exchanges in the
+// virtual hosts accessible to the user.
 func (c *Client) ListExchanges() (rec []ExchangeInfo, err error) {
 	req, err := newGETRequest(c, "exchanges")
 	if err != nil {
@@ -53,8 +60,9 @@ func (c *Client) ListExchanges() (rec []ExchangeInfo, err error) {
 // GET /api/exchanges/{vhost}
 //
 
+// ListExchangesIn lists all exchanges in a virtual host.
 func (c *Client) ListExchangesIn(vhost string) (rec []ExchangeInfo, err error) {
-	req, err := newGETRequest(c, "exchanges/"+PathEscape(vhost))
+	req, err := newGETRequest(c, "exchanges/"+url.PathEscape(vhost))
 	if err != nil {
 		return []ExchangeInfo{}, err
 	}
@@ -124,11 +132,13 @@ func (c *Client) ListExchangesIn(vhost string) (rec []ExchangeInfo, err error) {
 //   }
 // }
 
+// ExchangeIngressDetails represents ingress (inbound) message flow metrics of an exchange.
 type ExchangeIngressDetails struct {
 	Stats          MessageStats      `json:"stats"`
 	ChannelDetails PublishingChannel `json:"channel_details"`
 }
 
+// PublishingChannel represents a channel and its basic properties.
 type PublishingChannel struct {
 	Number         int    `json:"number"`
 	Name           string `json:"name"`
@@ -137,16 +147,19 @@ type PublishingChannel struct {
 	PeerHost       string `json:"peer_host"`
 }
 
+// NameAndVhost repesents a named entity in a virtual host.
 type NameAndVhost struct {
 	Name  string `json:"name"`
 	Vhost string `json:"vhost"`
 }
 
+// ExchangeEgressDetails represents egress (outbound) message flow metrics of an exchange.
 type ExchangeEgressDetails struct {
 	Stats MessageStats `json:"stats"`
 	Queue NameAndVhost `json:"queue"`
 }
 
+// DetailedExchangeInfo represents an exchange with all of its properties and metrics.
 type DetailedExchangeInfo struct {
 	Name       string                 `json:"name"`
 	Vhost      string                 `json:"vhost"`
@@ -156,12 +169,14 @@ type DetailedExchangeInfo struct {
 	Internal   bool                   `json:"internal"`
 	Arguments  map[string]interface{} `json:"arguments"`
 
-	Incoming []ExchangeIngressDetails `json:"incoming"`
-	Outgoing []ExchangeEgressDetails  `json:"outgoing"`
+	Incoming     []ExchangeIngressDetails `json:"incoming"`
+	Outgoing     []ExchangeEgressDetails  `json:"outgoing"`
+	PublishStats IngressEgressStats       `json:"message_stats"`
 }
 
+// GetExchange returns information about an exchange.
 func (c *Client) GetExchange(vhost, exchange string) (rec *DetailedExchangeInfo, err error) {
-	req, err := newGETRequest(c, "exchanges/"+PathEscape(vhost)+"/"+PathEscape(exchange))
+	req, err := newGETRequest(c, "exchanges/"+url.PathEscape(vhost)+"/"+url.PathEscape(exchange))
 	if err != nil {
 		return nil, err
 	}
@@ -177,6 +192,7 @@ func (c *Client) GetExchange(vhost, exchange string) (rec *DetailedExchangeInfo,
 // PUT /api/exchanges/{vhost}/{exchange}
 //
 
+// DeclareExchange declares an exchange.
 func (c *Client) DeclareExchange(vhost, exchange string, info ExchangeSettings) (res *http.Response, err error) {
 	if info.Arguments == nil {
 		info.Arguments = make(map[string]interface{})
@@ -186,13 +202,12 @@ func (c *Client) DeclareExchange(vhost, exchange string, info ExchangeSettings) 
 		return nil, err
 	}
 
-	req, err := newRequestWithBody(c, "PUT", "exchanges/"+PathEscape(vhost)+"/"+PathEscape(exchange), body)
+	req, err := newRequestWithBody(c, "PUT", "exchanges/"+url.PathEscape(vhost)+"/"+url.PathEscape(exchange), body)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err = executeRequest(c, req)
-	if err != nil {
+	if res, err = executeRequest(c, req); err != nil {
 		return nil, err
 	}
 
@@ -203,14 +218,14 @@ func (c *Client) DeclareExchange(vhost, exchange string, info ExchangeSettings) 
 // DELETE /api/exchanges/{vhost}/{name}
 //
 
+// DeleteExchange deletes an exchange.
 func (c *Client) DeleteExchange(vhost, exchange string) (res *http.Response, err error) {
-	req, err := newRequestWithBody(c, "DELETE", "exchanges/"+PathEscape(vhost)+"/"+PathEscape(exchange), nil)
+	req, err := newRequestWithBody(c, "DELETE", "exchanges/"+url.PathEscape(vhost)+"/"+url.PathEscape(exchange), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err = executeRequest(c, req)
-	if err != nil {
+	if res, err = executeRequest(c, req); err != nil {
 		return nil, err
 	}
 

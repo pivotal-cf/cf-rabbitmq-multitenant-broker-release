@@ -6,7 +6,7 @@ import (
 	"rabbitmq-service-broker/rabbithutch"
 	"sync"
 
-	rabbithole "github.com/michaelklishin/rabbit-hole"
+	rabbithole "github.com/michaelklishin/rabbit-hole/v2"
 )
 
 type FakeAPIClient struct {
@@ -166,15 +166,16 @@ func (fake *FakeAPIClient) CloseConnection(arg1 string) (*http.Response, error) 
 	fake.closeConnectionArgsForCall = append(fake.closeConnectionArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.CloseConnectionStub
+	fakeReturns := fake.closeConnectionReturns
 	fake.recordInvocation("CloseConnection", []interface{}{arg1})
 	fake.closeConnectionMutex.Unlock()
-	if fake.CloseConnectionStub != nil {
-		return fake.CloseConnectionStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.closeConnectionReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -229,15 +230,16 @@ func (fake *FakeAPIClient) DeleteUser(arg1 string) (*http.Response, error) {
 	fake.deleteUserArgsForCall = append(fake.deleteUserArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.DeleteUserStub
+	fakeReturns := fake.deleteUserReturns
 	fake.recordInvocation("DeleteUser", []interface{}{arg1})
 	fake.deleteUserMutex.Unlock()
-	if fake.DeleteUserStub != nil {
-		return fake.DeleteUserStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.deleteUserReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -292,15 +294,16 @@ func (fake *FakeAPIClient) DeleteVhost(arg1 string) (*http.Response, error) {
 	fake.deleteVhostArgsForCall = append(fake.deleteVhostArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.DeleteVhostStub
+	fakeReturns := fake.deleteVhostReturns
 	fake.recordInvocation("DeleteVhost", []interface{}{arg1})
 	fake.deleteVhostMutex.Unlock()
-	if fake.DeleteVhostStub != nil {
-		return fake.DeleteVhostStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.deleteVhostReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -355,15 +358,16 @@ func (fake *FakeAPIClient) GetVhost(arg1 string) (*rabbithole.VhostInfo, error) 
 	fake.getVhostArgsForCall = append(fake.getVhostArgsForCall, struct {
 		arg1 string
 	}{arg1})
+	stub := fake.GetVhostStub
+	fakeReturns := fake.getVhostReturns
 	fake.recordInvocation("GetVhost", []interface{}{arg1})
 	fake.getVhostMutex.Unlock()
-	if fake.GetVhostStub != nil {
-		return fake.GetVhostStub(arg1)
+	if stub != nil {
+		return stub(arg1)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.getVhostReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -417,15 +421,16 @@ func (fake *FakeAPIClient) ListConnections() ([]rabbithole.ConnectionInfo, error
 	ret, specificReturn := fake.listConnectionsReturnsOnCall[len(fake.listConnectionsArgsForCall)]
 	fake.listConnectionsArgsForCall = append(fake.listConnectionsArgsForCall, struct {
 	}{})
+	stub := fake.ListConnectionsStub
+	fakeReturns := fake.listConnectionsReturns
 	fake.recordInvocation("ListConnections", []interface{}{})
 	fake.listConnectionsMutex.Unlock()
-	if fake.ListConnectionsStub != nil {
-		return fake.ListConnectionsStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.listConnectionsReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -472,15 +477,16 @@ func (fake *FakeAPIClient) ListUsers() ([]rabbithole.UserInfo, error) {
 	ret, specificReturn := fake.listUsersReturnsOnCall[len(fake.listUsersArgsForCall)]
 	fake.listUsersArgsForCall = append(fake.listUsersArgsForCall, struct {
 	}{})
+	stub := fake.ListUsersStub
+	fakeReturns := fake.listUsersReturns
 	fake.recordInvocation("ListUsers", []interface{}{})
 	fake.listUsersMutex.Unlock()
-	if fake.ListUsersStub != nil {
-		return fake.ListUsersStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.listUsersReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -527,15 +533,16 @@ func (fake *FakeAPIClient) ProtocolPorts() (map[string]rabbithole.Port, error) {
 	ret, specificReturn := fake.protocolPortsReturnsOnCall[len(fake.protocolPortsArgsForCall)]
 	fake.protocolPortsArgsForCall = append(fake.protocolPortsArgsForCall, struct {
 	}{})
+	stub := fake.ProtocolPortsStub
+	fakeReturns := fake.protocolPortsReturns
 	fake.recordInvocation("ProtocolPorts", []interface{}{})
 	fake.protocolPortsMutex.Unlock()
-	if fake.ProtocolPortsStub != nil {
-		return fake.ProtocolPortsStub()
+	if stub != nil {
+		return stub()
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.protocolPortsReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -585,15 +592,16 @@ func (fake *FakeAPIClient) PutPolicy(arg1 string, arg2 string, arg3 rabbithole.P
 		arg2 string
 		arg3 rabbithole.Policy
 	}{arg1, arg2, arg3})
+	stub := fake.PutPolicyStub
+	fakeReturns := fake.putPolicyReturns
 	fake.recordInvocation("PutPolicy", []interface{}{arg1, arg2, arg3})
 	fake.putPolicyMutex.Unlock()
-	if fake.PutPolicyStub != nil {
-		return fake.PutPolicyStub(arg1, arg2, arg3)
+	if stub != nil {
+		return stub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.putPolicyReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -649,15 +657,16 @@ func (fake *FakeAPIClient) PutUser(arg1 string, arg2 rabbithole.UserSettings) (*
 		arg1 string
 		arg2 rabbithole.UserSettings
 	}{arg1, arg2})
+	stub := fake.PutUserStub
+	fakeReturns := fake.putUserReturns
 	fake.recordInvocation("PutUser", []interface{}{arg1, arg2})
 	fake.putUserMutex.Unlock()
-	if fake.PutUserStub != nil {
-		return fake.PutUserStub(arg1, arg2)
+	if stub != nil {
+		return stub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.putUserReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -713,15 +722,16 @@ func (fake *FakeAPIClient) PutVhost(arg1 string, arg2 rabbithole.VhostSettings) 
 		arg1 string
 		arg2 rabbithole.VhostSettings
 	}{arg1, arg2})
+	stub := fake.PutVhostStub
+	fakeReturns := fake.putVhostReturns
 	fake.recordInvocation("PutVhost", []interface{}{arg1, arg2})
 	fake.putVhostMutex.Unlock()
-	if fake.PutVhostStub != nil {
-		return fake.PutVhostStub(arg1, arg2)
+	if stub != nil {
+		return stub(arg1, arg2)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.putVhostReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 
@@ -778,15 +788,16 @@ func (fake *FakeAPIClient) UpdatePermissionsIn(arg1 string, arg2 string, arg3 ra
 		arg2 string
 		arg3 rabbithole.Permissions
 	}{arg1, arg2, arg3})
+	stub := fake.UpdatePermissionsInStub
+	fakeReturns := fake.updatePermissionsInReturns
 	fake.recordInvocation("UpdatePermissionsIn", []interface{}{arg1, arg2, arg3})
 	fake.updatePermissionsInMutex.Unlock()
-	if fake.UpdatePermissionsInStub != nil {
-		return fake.UpdatePermissionsInStub(arg1, arg2, arg3)
+	if stub != nil {
+		return stub(arg1, arg2, arg3)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.updatePermissionsInReturns
 	return fakeReturns.result1, fakeReturns.result2
 }
 

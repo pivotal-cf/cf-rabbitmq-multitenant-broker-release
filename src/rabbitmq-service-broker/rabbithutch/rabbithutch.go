@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	rabbithole "github.com/michaelklishin/rabbit-hole"
+	rabbithole "github.com/michaelklishin/rabbit-hole/v2"
 )
 
 //go:generate counterfeiter -o ./fakes/api_client_fake.go $FILE APIClient
