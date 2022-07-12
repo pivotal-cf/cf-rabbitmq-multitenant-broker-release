@@ -14,8 +14,8 @@ releases:
   version: latest
 
 stemcells:
-- alias: xenial
-  os: ubuntu-xenial
+- alias: bionic
+  os: ubuntu-bionic
   version: ((stemcell-version))
 
 instance_groups:
@@ -113,7 +113,7 @@ instance_groups:
       smoke_tests:
         org: system
   vm_type: n1-standard-1
-  stemcell: xenial
+  stemcell: bionic
   azs:
   - z1
   networks:

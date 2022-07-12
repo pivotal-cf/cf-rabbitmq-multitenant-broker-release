@@ -41,7 +41,7 @@
           cluster_partition_handling: ((cluster-partition-handling-strategy))
           disk_alarm_threshold: ((disk_alarm_threshold))
     vm_type: n1-highmem-2
-    stemcell: xenial
+    stemcell: bionic
     persistent_disk_type: 50GB
     networks:
     - name: default
@@ -82,7 +82,7 @@
     - name: bpm
       release: bpm
     vm_type: n1-standard-1
-    stemcell: xenial
+    stemcell: bionic
     networks:
     - name: default
     azs:
