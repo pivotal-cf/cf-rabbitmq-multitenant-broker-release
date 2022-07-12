@@ -16,6 +16,7 @@
       release: cf-rabbitmq
       properties:
         rabbitmq-server:
+          ip_addresses: true
           restart_statsdb_cron_schedule: "42 */4 * * *"
           plugins:
           - rabbitmq_management
