@@ -16,7 +16,6 @@
       release: cf-rabbitmq
       properties:
         rabbitmq-server:
-          ip_addresses: true
           restart_statsdb_cron_schedule: "42 */4 * * *"
           plugins:
           - rabbitmq_management
@@ -41,6 +40,9 @@
           cookie: "rabbit-cluster:aws"
           cluster_partition_handling: ((cluster-partition-handling-strategy))
           disk_alarm_threshold: ((disk_alarm_threshold))
+      consumes:
+        rabbitmq-server:
+          ip_addresses: true
     vm_type: n1-highmem-2
     stemcell: bionic
     persistent_disk_type: 50GB
