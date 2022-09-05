@@ -22,7 +22,7 @@ instance_groups:
 - name: rmq-broker
   instances: 1
   jobs:
-  - name: cf-cli-6-linux
+  - name: cf-cli-7-linux
     release: cf-cli
   - name: rabbitmq-service-broker
     release: cf-rabbitmq-multitenant-broker
