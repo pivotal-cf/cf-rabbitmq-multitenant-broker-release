@@ -134,7 +134,7 @@ class CloudFoundry
   end
 
   def push_app(app_path, name)
-    cf("push #{name} -p #{app_path} -n #{name} -d #{domain}")
+    cf("push #{name} -p #{app_path}")
 
     App.new(name, "https://#{name}.#{domain}")
   end
