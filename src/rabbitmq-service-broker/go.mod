@@ -6,7 +6,7 @@ require (
 	code.cloudfoundry.org/lager v2.0.0+incompatible
 	github.com/michaelklishin/rabbit-hole/v2 v2.12.0
 	github.com/onsi/ginkgo v1.16.5
-	github.com/onsi/gomega v1.21.1
+	github.com/onsi/gomega v1.22.1
 	github.com/pivotal-cf/brokerapi v6.4.2+incompatible
 	github.com/streadway/amqp v1.0.0
 	gopkg.in/go-playground/validator.v9 v9.31.0
@@ -15,7 +15,7 @@ require (
 
 require (
 	github.com/drewolson/testflight v1.0.0 // indirect
-	github.com/fsnotify/fsnotify v1.5.4 // indirect
+	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
@@ -28,9 +28,9 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
-	golang.org/x/net v0.0.0-20221004154528-8021a29435af // indirect
-	golang.org/x/sys v0.0.0-20221006211917-84dc82d7e875 // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/net v0.0.0-20221014081412-f15817d10f9b // indirect
+	golang.org/x/sys v0.0.0-20221013171732-95e765b1cc43 // indirect
+	golang.org/x/text v0.3.8 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
