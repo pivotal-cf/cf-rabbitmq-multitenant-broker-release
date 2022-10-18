@@ -44,7 +44,7 @@
         rabbitmq-server:
           ip_addresses: true
     vm_type: n1-highmem-2
-    stemcell: bionic
+    stemcell: jammy
     persistent_disk_type: 50GB
     networks:
     - name: default
@@ -85,7 +85,7 @@
     - name: bpm
       release: bpm
     vm_type: n1-standard-1
-    stemcell: bionic
+    stemcell: jammy
     networks:
     - name: default
     azs:
