@@ -14,8 +14,8 @@ releases:
   version: latest
 
 stemcells:
-- alias: bionic
-  os: ubuntu-bionic
+- alias: jammy
+  os: ubuntu-jammy
   version: ((stemcell-version))
 
 instance_groups:
@@ -113,7 +113,7 @@ instance_groups:
       smoke_tests:
         org: system
   vm_type: n1-standard-1
-  stemcell: bionic
+  stemcell: jammy
   azs:
   - z1
   networks:
