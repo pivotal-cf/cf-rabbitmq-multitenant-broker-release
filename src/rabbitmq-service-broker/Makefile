@@ -16,16 +16,16 @@ run: ## starts the broker for testing
 	go run -mod=vendor main.go -configPath ${config_path}
 
 integration_tests: ## runs integration tests in Docker (for development)
-	@echo "$$(lpass show --password "Shared-PCF RabbitMQ/DockerHub - PCF RabbitMQ")" | docker login -u "$$(lpass show --username "Shared-PCF RabbitMQ/DockerHub - PCF RabbitMQ")" --password-stdin
-	docker run --rm -v "${PWD}:/rabbitmq-service-broker" pcfrabbitmq/pcf-rabbitmq-ci /rabbitmq-service-broker/ci/run_integration_tests.sh
+	gcloud --project cf-rabbitmq auth configure-docker
+	docker run --rm -v "${PWD}:/rabbitmq-service-broker" gcr.io/cf-rabbitmq/pcf-rabbitmq-ci:stable /rabbitmq-service-broker/ci/run_integration_tests.sh
 
 unit_tests: ## runs the unit tests
-	GOFLAGS='-mod=vendor' ginkgo -r --skipPackage=integrationtests
+	GOFLAGS='-mod=vendor' ginkgo -r --skip-package=integrationtests
 
 tests: unit_tests integration_tests ## runs unit and integration tests
 
 coverage: ## runs test coverage tool
-	GOFLAGS='-mod=vendor' ginkgo -r --skipPackage=integrationtests -cover -coverprofile rabbitmq-service-broker.coverprofile -outputdir .
+	GOFLAGS='-mod=vendor' ginkgo -r --skip-package=integrationtests --cover --coverprofile rabbitmq-service-broker.coverprofile --outputdir .
 	echo 'mode: atomic' >rabbitmq-service-broker.coverage ## https://github.com/onsi/ginkgo/issues/518
 	grep -v 'mode:' rabbitmq-service-broker.coverprofile >>rabbitmq-service-broker.coverage
 	go tool cover -html=rabbitmq-service-broker.coverage
