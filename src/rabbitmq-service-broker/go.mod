@@ -5,8 +5,8 @@ go 1.18
 require (
 	code.cloudfoundry.org/lager v1.1.1-0.20221004181944-27f8ca0d093f
 	github.com/michaelklishin/rabbit-hole/v2 v2.12.0
-	github.com/onsi/ginkgo/v2 v2.6.0
-	github.com/onsi/gomega v1.24.1
+	github.com/onsi/ginkgo/v2 v2.6.1
+	github.com/onsi/gomega v1.24.2
 	github.com/pivotal-cf/brokerapi v6.4.2+incompatible
 	github.com/streadway/amqp v1.0.0
 	gopkg.in/go-playground/validator.v9 v9.31.0
