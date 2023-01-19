@@ -173,6 +173,11 @@ class CloudFoundry
     cf("delete-org #{org_name} -f")
   end
 
+  def create_and_bind_security_group(security_group_name, org_name, space_name)
+    cf("create-security-group #{security_group_name} #{security_group_path}")
+    cf("bind-security-group #{security_group_name} #{org_name} --space #{space_name}")
+  end
+
   private
 
   attr_reader :org_name
@@ -199,6 +204,7 @@ def cf
 
   @cf = CloudFoundry.new(domain, username, password, api_url)
   @cf.create_org_and_space("cf-org-#{random_string}", "cf-space-#{random_string}")
+  @cf.create_and_bind_security_group("cf-sg-#{random_string}", "cf-org-#{random_string}", "cf-space-#{random_string}")
   @cf
 end
 
@@ -212,6 +218,10 @@ end
 
 def test_app_path
   File.expand_path('../../assets/rabbit-labrat', __FILE__)
+end
+
+def security_group_path
+  File.expand_path('../assets/security-group.json', __FILE__)
 end
 
 module ExcludeHelper
