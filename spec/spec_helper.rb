@@ -203,7 +203,6 @@ def cf
   password = ENV.fetch('CF_PASSWORD', 'admin')
   api_url = ENV.fetch('CF_API', 'api.bosh-lite.com')
 
-
   @cf = CloudFoundry.new(domain, username, password, api_url)
   @cf.create_org_and_space("cf-org-#{random_string}", "cf-space-#{random_string}")
   @cf.create_and_bind_security_group("cf-sg-#{random_string}")
