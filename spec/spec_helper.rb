@@ -167,20 +167,21 @@ class CloudFoundry
     cf("create-space #{space_name}")
     cf("target -s #{space_name}")
     @org_name = org_name
+    @space_name = space_name
   end
 
   def tear_down_org_and_space
     cf("delete-org #{org_name} -f")
   end
 
-  def create_and_bind_security_group(security_group_name, org_name, space_name)
+  def create_and_bind_security_group(security_group_name)
     cf("create-security-group #{security_group_name} #{security_group_path}")
     cf("bind-security-group #{security_group_name} #{org_name} --space #{space_name}")
   end
 
   private
 
-  attr_reader :org_name
+  attr_reader :org_name, :space_name
 
   def cf(command)
     p "cf #{command}" unless command.include?('auth')
@@ -202,9 +203,10 @@ def cf
   password = ENV.fetch('CF_PASSWORD', 'admin')
   api_url = ENV.fetch('CF_API', 'api.bosh-lite.com')
 
+
   @cf = CloudFoundry.new(domain, username, password, api_url)
   @cf.create_org_and_space("cf-org-#{random_string}", "cf-space-#{random_string}")
-  @cf.create_and_bind_security_group("cf-sg-#{random_string}", "cf-org-#{random_string}", "cf-space-#{random_string}")
+  @cf.create_and_bind_security_group("cf-sg-#{random_string}")
   @cf
 end
 
