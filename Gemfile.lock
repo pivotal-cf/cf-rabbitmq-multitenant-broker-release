@@ -60,7 +60,7 @@ GEM
       rspec-core (> 3.3)
     rspec-support (3.7.1)
     semi_semantic (1.2.0)
-    stomp (1.4.4)
+    stomp (1.4.10)
 
 PLATFORMS
   ruby
