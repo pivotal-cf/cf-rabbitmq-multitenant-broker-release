@@ -6,7 +6,7 @@ require (
 	code.cloudfoundry.org/lager v1.1.1-0.20221004181944-27f8ca0d093f
 	github.com/michaelklishin/rabbit-hole/v2 v2.12.0
 	github.com/onsi/ginkgo/v2 v2.8.1
-	github.com/onsi/gomega v1.26.0
+	github.com/onsi/gomega v1.27.1
 	github.com/pivotal-cf/brokerapi v6.4.2+incompatible
 	github.com/streadway/amqp v1.0.0
 	gopkg.in/go-playground/validator.v9 v9.31.0
@@ -28,7 +28,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
-	golang.org/x/net v0.6.0 // indirect
+	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
