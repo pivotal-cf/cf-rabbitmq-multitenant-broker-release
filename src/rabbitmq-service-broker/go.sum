@@ -1,5 +1,5 @@
-code.cloudfoundry.org/lager v1.1.1-0.20221004181944-27f8ca0d093f h1:IN5YcOlyZ5gjNqwLbqK+kNBfxAbcQJFBmXHOST6RdDk=
-code.cloudfoundry.org/lager v1.1.1-0.20221004181944-27f8ca0d093f/go.mod h1:jec/onzTrTepdLpCYrtyjpLpaRHnIG5YRV9Zx2oIj3k=
+code.cloudfoundry.org/lager v2.0.0+incompatible h1:WZwDKDB2PLd/oL+USK4b4aEjUymIej9My2nUQ9oWEwQ=
+code.cloudfoundry.org/lager v2.0.0+incompatible/go.mod h1:O2sS7gKP3HM2iemG+EnwvyNQK7pTSC6Foi4QiMp9sSk=
 github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869/go.mod h1:Ekp36dRnpXw/yCqJaO+ZrUyxD+3VXMFFr56k5XYrpB4=
 github.com/bmizerany/pat v0.0.0-20170815010413-6226ea591a40/go.mod h1:8rLXio+WjiTceGBHIoTvn60HIbs7Hm7bcHjyrSqYB9c=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
