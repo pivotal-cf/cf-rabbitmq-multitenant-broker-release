@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"code.cloudfoundry.org/lager"
-	"github.com/pivotal-cf/brokerapi"
+	"code.cloudfoundry.org/lager/v3"
+	"github.com/pivotal-cf/brokerapi/v9"
 )
 
 func (b *RabbitMQServiceBroker) Provision(ctx context.Context, instanceID string, details brokerapi.ProvisionDetails, asyncAllowed bool) (spec brokerapi.ProvisionedServiceSpec, err error) {

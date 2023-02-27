@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 
-	"github.com/pivotal-cf/brokerapi"
+	"github.com/pivotal-cf/brokerapi/v9"
+	"github.com/pivotal-cf/brokerapi/v9/domain"
 )
 
-func (b *RabbitMQServiceBroker) GetBinding(ctx context.Context, instanceID, bindingID string) (brokerapi.GetBindingSpec, error) {
+func (b *RabbitMQServiceBroker) GetBinding(ctx context.Context, instanceID, bindingID string, details domain.FetchBindingDetails) (brokerapi.GetBindingSpec, error) {
 	return brokerapi.GetBindingSpec{}, brokerapi.NewFailureResponse(errors.New("GetBinding Not Implemented"), 404, "")
 }
