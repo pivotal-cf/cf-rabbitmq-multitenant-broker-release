@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	code.cloudfoundry.org/lager/v3 v3.0.0
-	github.com/michaelklishin/rabbit-hole/v2 v2.12.0
+	github.com/michaelklishin/rabbit-hole/v2 v2.13.0
 	github.com/onsi/ginkgo/v2 v2.8.4
 	github.com/onsi/gomega v1.27.1
 	github.com/pivotal-cf/brokerapi/v9 v9.0.0-20230220031135-8c8b713666a4
@@ -28,7 +28,6 @@ require (
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
-	github.com/stretchr/testify v1.7.0 // indirect
 	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
