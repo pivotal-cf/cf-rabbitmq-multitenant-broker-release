@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/pivotal-cf/brokerapi/v9"
+	"github.com/pivotal-cf/brokerapi"
 )
 
 func (b *RabbitMQServiceBroker) Services(ctx context.Context) ([]brokerapi.Service, error) {

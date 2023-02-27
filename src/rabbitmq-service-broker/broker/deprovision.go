@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"code.cloudfoundry.org/lager/v3"
-	"github.com/pivotal-cf/brokerapi/v9"
+	"code.cloudfoundry.org/lager"
+	"github.com/pivotal-cf/brokerapi"
 )
 
 func (b *RabbitMQServiceBroker) Deprovision(ctx context.Context, instanceID string, details brokerapi.DeprovisionDetails, asyncAllowed bool) (brokerapi.DeprovisionServiceSpec, error) {

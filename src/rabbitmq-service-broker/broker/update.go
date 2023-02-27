@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/pivotal-cf/brokerapi/v9"
+	"github.com/pivotal-cf/brokerapi"
 )
 
 func (b *RabbitMQServiceBroker) Update(ctx context.Context, instanceID string, details brokerapi.UpdateDetails, asyncAllowed bool) (brokerapi.UpdateServiceSpec, error) {

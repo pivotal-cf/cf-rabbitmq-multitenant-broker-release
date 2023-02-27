@@ -9,11 +9,11 @@ import (
 	"rabbitmq-service-broker/broker"
 	"rabbitmq-service-broker/config"
 
-	"github.com/pivotal-cf/brokerapi/v9"
+	"github.com/pivotal-cf/brokerapi"
 
 	"rabbitmq-service-broker/rabbithutch/fakes"
 
-	"code.cloudfoundry.org/lager/v3/lagertest"
+	"code.cloudfoundry.org/lager/lagertest"
 )
 
 func TestBroker(t *testing.T) {

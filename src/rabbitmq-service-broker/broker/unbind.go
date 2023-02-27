@@ -3,8 +3,8 @@ package broker
 import (
 	"context"
 
-	"code.cloudfoundry.org/lager/v3"
-	"github.com/pivotal-cf/brokerapi/v9"
+	"code.cloudfoundry.org/lager"
+	"github.com/pivotal-cf/brokerapi"
 )
 
 func (b *RabbitMQServiceBroker) Unbind(ctx context.Context, instanceID, bindingID string, details brokerapi.UnbindDetails, asyncAllowed bool) (brokerapi.UnbindSpec, error) {

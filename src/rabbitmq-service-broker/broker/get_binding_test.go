@@ -7,8 +7,7 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"github.com/pivotal-cf/brokerapi/v9"
-	"github.com/pivotal-cf/brokerapi/v9/domain"
+	"github.com/pivotal-cf/brokerapi"
 )
 
 var _ = Describe("Get Binding", func() {
@@ -26,7 +25,7 @@ var _ = Describe("Get Binding", func() {
 	})
 
 	It("returns an appropriate error", func() {
-		_, err := broker.GetBinding(ctx, "instance-id", "binding-id", domain.FetchBindingDetails{})
+		_, err := broker.GetBinding(ctx, "instance-id", "binding-id")
 		failResponse, ok := err.(*brokerapi.FailureResponse)
 		Expect(ok).To(BeTrue(), "err wasn't a FailureResponse")
 		Expect(failResponse.ValidatedStatusCode(nil)).To(Equal(404))
