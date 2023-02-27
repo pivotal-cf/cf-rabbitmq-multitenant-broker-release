@@ -7,7 +7,7 @@ import (
 
 	"rabbitmq-service-broker/rabbithutch/fakes"
 
-	"github.com/pivotal-cf/brokerapi"
+	"github.com/pivotal-cf/brokerapi/v9"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
