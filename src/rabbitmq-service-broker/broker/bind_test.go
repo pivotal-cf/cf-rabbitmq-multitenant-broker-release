@@ -10,7 +10,7 @@ import (
 
 	"rabbitmq-service-broker/rabbithutch/fakes"
 
-	"github.com/pivotal-cf/brokerapi"
+	"github.com/pivotal-cf/brokerapi/v9"
 )
 
 var _ = Describe("Binding a RMQ service instance", func() {

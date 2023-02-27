@@ -5,8 +5,8 @@ import (
 
 	"rabbitmq-service-broker/binding"
 
-	"code.cloudfoundry.org/lager"
-	"github.com/pivotal-cf/brokerapi"
+	"code.cloudfoundry.org/lager/v3"
+	"github.com/pivotal-cf/brokerapi/v9"
 )
 
 func (b *RabbitMQServiceBroker) Bind(ctx context.Context, instanceID, bindingID string, details brokerapi.BindDetails, asyncAllowed bool) (brokerapi.Binding, error) {

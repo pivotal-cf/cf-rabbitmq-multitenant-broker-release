@@ -4,8 +4,8 @@ import (
 	"rabbitmq-service-broker/config"
 	"rabbitmq-service-broker/rabbithutch"
 
-	"code.cloudfoundry.org/lager"
-	"github.com/pivotal-cf/brokerapi"
+	"code.cloudfoundry.org/lager/v3"
+	"github.com/pivotal-cf/brokerapi/v9"
 )
 
 type RabbitMQServiceBroker struct {
