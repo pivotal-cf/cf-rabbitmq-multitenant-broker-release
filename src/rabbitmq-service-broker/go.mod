@@ -7,7 +7,7 @@ require (
 	github.com/michaelklishin/rabbit-hole/v2 v2.13.0
 	github.com/onsi/ginkgo/v2 v2.8.4
 	github.com/onsi/gomega v1.27.2
-	github.com/pivotal-cf/brokerapi/v9 v9.0.0-20230220031135-8c8b713666a4
+	github.com/pivotal-cf/brokerapi/v9 v9.0.0
 	github.com/streadway/amqp v1.0.0
 	gopkg.in/go-playground/validator.v9 v9.31.0
 	gopkg.in/yaml.v2 v2.4.0
