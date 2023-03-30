@@ -3,7 +3,7 @@ module rabbitmq-service-broker
 go 1.18
 
 require (
-	code.cloudfoundry.org/lager/v3 v3.0.0
+	code.cloudfoundry.org/lager/v3 v3.0.1
 	github.com/michaelklishin/rabbit-hole/v2 v2.13.0
 	github.com/onsi/ginkgo/v2 v2.9.2
 	github.com/onsi/gomega v1.27.5
@@ -25,9 +25,9 @@ require (
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/kr/pretty v0.3.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/openzipkin/zipkin-go v0.4.1 // indirect
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
