@@ -1,6 +1,42 @@
-## Changes Between 2.12.0 and 2.13.0 (under development)
+## Changes Between 2.15.0 and 2.16.0 (in development)
 
-No changes yet.
+No changes yet
+
+## Changes Between 2.14.0 and 2.15.0 (May 18, 2023)
+
+### Further Improve Shovel Support
+
+Contributed by @ChunyiLyu.
+
+GitHub issue: [#266](https://github.com/michaelklishin/rabbit-hole/pull/268)
+
+## Changes Between 2.13.0 and 2.14.0 (May 11, 2023)
+
+### Allow Setting Default Queue Type for Virtual Hosts
+
+GitHub issue: [#261](https://github.com/michaelklishin/rabbit-hole/pull/261)
+
+Contributed by @mqhenning.
+
+### Correctly Set (Shovel) Destination Publish Properties
+
+Correctly pass `dest-publish-properties` as a map.
+
+GitHub issue: [#262](https://github.com/michaelklishin/rabbit-hole/pull/262)
+
+Contributed by @Galvill.
+
+
+## Changes Between 2.12.0 and 2.13.0 (Feb 23, 2023)
+
+### Avoids a Panic When Destination Type is Not Set
+
+GitHub issue: [#253](https://github.com/michaelklishin/rabbit-hole/pull/253)
+
+### Federation message TTL is No Longer Set When Omitted
+
+GitHub issue: [#233](https://github.com/michaelklishin/rabbit-hole/pull/233)
+
 
 ## Changes Between 2.11.0 and 2.12.0 (Dec 12, 2021)
 
@@ -8,7 +44,7 @@ No changes yet.
 
 GitHub issue: [#220](https://github.com/michaelklishin/rabbit-hole/pull/220)
 
-contributed by @shubhang93.
+Contributed by @shubhang93.
 
 ### Support to User Limits
 
