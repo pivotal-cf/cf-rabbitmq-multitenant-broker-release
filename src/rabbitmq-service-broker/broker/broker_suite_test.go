@@ -9,7 +9,7 @@ import (
 	"rabbitmq-service-broker/broker"
 	"rabbitmq-service-broker/config"
 
-	"github.com/pivotal-cf/brokerapi/v9"
+	"github.com/pivotal-cf/brokerapi/v10"
 
 	"rabbitmq-service-broker/rabbithutch/fakes"
 
