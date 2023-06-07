@@ -13,7 +13,7 @@ import (
 	"rabbitmq-service-broker/rabbithutch"
 
 	"code.cloudfoundry.org/lager/v3"
-	"github.com/pivotal-cf/brokerapi/v9"
+	"github.com/pivotal-cf/brokerapi/v10"
 )
 
 var (
