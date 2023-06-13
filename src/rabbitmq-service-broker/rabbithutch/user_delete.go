@@ -3,7 +3,7 @@ package rabbithutch
 import (
 	"net/http"
 
-	"github.com/pivotal-cf/brokerapi/v9"
+	"github.com/pivotal-cf/brokerapi/v10"
 )
 
 func (r *rabbitHutch) DeleteUserAndConnections(username string) error {
