@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	rabbithole "github.com/michaelklishin/rabbit-hole/v2"
-	"github.com/pivotal-cf/brokerapi/v9"
+	"github.com/pivotal-cf/brokerapi/v10"
 )
 
 func (r *rabbitHutch) CreateUserAndGrantPermissions(username, vhost, tags string) (string, error) {
