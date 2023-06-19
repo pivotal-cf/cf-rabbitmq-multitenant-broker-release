@@ -3,7 +3,7 @@ module rabbitmq-service-broker
 go 1.20
 
 require (
-	code.cloudfoundry.org/lager/v3 v3.0.1
+	code.cloudfoundry.org/lager/v3 v3.0.2
 	github.com/michaelklishin/rabbit-hole/v2 v2.15.0
 	github.com/onsi/ginkgo/v2 v2.10.0
 	github.com/onsi/gomega v1.27.8
