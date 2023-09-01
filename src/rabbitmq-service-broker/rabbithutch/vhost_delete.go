@@ -1,7 +1,7 @@
 package rabbithutch
 
-func (b *rabbitHutch) VHostDelete(vhost string) error {
-	resp, err := b.client.DeleteVhost(vhost)
+func (r *rabbitHutch) VHostDelete(vhost string) error {
+	resp, err := r.client.DeleteVhost(vhost)
 	if err != nil {
 		return err
 	}
