@@ -2,7 +2,7 @@
 
 set -euxo pipefail
 
-ENVIRONMENT="$(cat environment-lock/name)"
+ENVIRONMENT="$(jq -r '.name' environment-lock/metadata)"
 
 bosh interpolate --var deployment-name=cf-rabbitmq-multitenant-broker-release-ci \
 	--var-errs --ops-file=git-bosh-release/manifests/add-cf-rabbitmq.yml \
