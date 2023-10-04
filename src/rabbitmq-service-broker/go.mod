@@ -8,7 +8,7 @@ require (
 	code.cloudfoundry.org/lager/v3 v3.0.2
 	github.com/michaelklishin/rabbit-hole/v2 v2.15.0
 	github.com/onsi/ginkgo/v2 v2.12.1
-	github.com/onsi/gomega v1.27.10
+	github.com/onsi/gomega v1.28.0
 	github.com/pivotal-cf/brokerapi/v10 v10.0.0
 	github.com/streadway/amqp v1.1.0
 	gopkg.in/go-playground/validator.v9 v9.31.0
