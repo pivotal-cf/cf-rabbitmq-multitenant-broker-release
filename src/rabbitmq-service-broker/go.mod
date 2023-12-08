@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.21.1
 
 require (
-	code.cloudfoundry.org/lager/v3 v3.0.2
+	code.cloudfoundry.org/lager/v3 v3.0.3
 	github.com/michaelklishin/rabbit-hole/v2 v2.15.0
 	github.com/onsi/ginkgo/v2 v2.13.2
 	github.com/onsi/gomega v1.30.0
