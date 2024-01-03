@@ -3,7 +3,8 @@
 set -euxo pipefail
 
 ENVIRONMENT="$(jq -r '.name' environment-lock/metadata)"
-SYS_DOMAIN="$(jq -r '.sys_domain' environment-lock/metadata)"
+API_URL="$(jq -r '.cf.api_url' environment-lock/metadata)"
+SYS_DOMAIN=${API_URL//api./}
 
 bosh interpolate --var deployment-name=cf-rabbitmq-multitenant-broker-release-ci \
 	--var-errs --ops-file=git-bosh-release/manifests/add-cf-rabbitmq.yml \
