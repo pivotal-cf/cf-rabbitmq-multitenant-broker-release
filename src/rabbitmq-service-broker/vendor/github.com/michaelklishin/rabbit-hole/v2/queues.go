@@ -64,8 +64,19 @@ type ChannelDetails struct {
 	Node           string `json:"node"`
 	Number         uint   `json:"number"`
 	PeerHost       string `json:"peer_host"`
-	PeerPort       uint   `json:"peer_port"`
+	PeerPort       Port   `json:"peer_port"`
 	User           string `json:"user"`
+}
+
+// Handles special case where `ChannelDetails` is an empty array
+// See https://github.com/rabbitmq/rabbitmq-server/issues/2684
+func (c *ChannelDetails) UnmarshalJSON(data []byte) error {
+	if string(data) == "[]" {
+		*c = ChannelDetails{}
+		return nil
+	}
+	type Alias ChannelDetails
+	return json.Unmarshal(data, (*Alias)(c))
 }
 
 // QueueDetail describe queue information with a consumer
@@ -100,7 +111,7 @@ type QueueInfo struct {
 	// Extra queue arguments
 	Arguments map[string]interface{} `json:"arguments"`
 
-	// RabbitMQ node that hosts master for this queue
+	// RabbitMQ node that hosts the leader replica for this queue
 	Node string `json:"node,omitempty"`
 	// Queue status
 	Status string `json:"state,omitempty"`
@@ -295,7 +306,6 @@ func (c *Client) PagedListQueuesWithParameters(params url.Values) (rec PagedQueu
 	}
 
 	return rec, nil
-
 }
 
 // PagedListQueuesWithParameters lists queues with pagination in the vhost vhost.
@@ -310,7 +320,6 @@ func (c *Client) PagedListQueuesWithParametersIn(vhost string, params url.Values
 	}
 
 	return rec, nil
-
 }
 
 //
@@ -338,7 +347,6 @@ func (c *Client) ListQueuesIn(vhost string) (rec []QueueInfo, err error) {
 // GetQueue returns information about a queue.
 func (c *Client) GetQueue(vhost, queue string) (rec *DetailedQueueInfo, err error) {
 	req, err := newGETRequest(c, "queues/"+url.PathEscape(vhost)+"/"+url.PathEscape(queue))
-
 	if err != nil {
 		return nil, err
 	}
