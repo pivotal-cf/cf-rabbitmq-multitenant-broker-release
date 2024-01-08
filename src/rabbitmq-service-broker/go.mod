@@ -6,7 +6,7 @@ toolchain go1.21.1
 
 require (
 	code.cloudfoundry.org/lager/v3 v3.0.3
-	github.com/michaelklishin/rabbit-hole/v2 v2.15.0
+	github.com/michaelklishin/rabbit-hole/v2 v2.16.0
 	github.com/onsi/ginkgo/v2 v2.13.2
 	github.com/onsi/gomega v1.30.0
 	github.com/pivotal-cf/brokerapi/v10 v10.1.1
@@ -16,7 +16,6 @@ require (
 )
 
 require (
-	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-chi/chi/v5 v5.0.10 // indirect
 	github.com/go-logr/logr v1.3.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
