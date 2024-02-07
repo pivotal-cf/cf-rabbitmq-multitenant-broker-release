@@ -1,8 +1,8 @@
 module rabbitmq-service-broker
 
-go 1.21
+go 1.22
 
-toolchain go1.21.1
+toolchain go1.22.0
 
 require (
 	code.cloudfoundry.org/lager/v3 v3.0.3
