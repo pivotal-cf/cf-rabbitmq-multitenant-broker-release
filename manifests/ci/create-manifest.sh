@@ -6,7 +6,9 @@ ENVIRONMENT="$(jq -r '.name' environment-lock/metadata)"
 API_URL="$(jq -r '.cf.api_url' environment-lock/metadata)"
 DOMAIN=${API_URL//api./}
 
-bosh interpolate --var deployment-name=cf-rabbitmq-multitenant-broker-release-ci \
+bosh interpolate \
+	--var deployment-name=cf-rabbitmq-multitenant-broker-release-ci \
+	--var rabbitmq-release-name="${RABBITMQ_RELEASE_NAME:=cf-rabbitmq}" \
 	--var-errs \
 	--ops-file=git-bosh-release/manifests/add-cf-rabbitmq.yml \
 	--ops-file=git-bosh-release/manifests/change-vcap-password.yml \
@@ -17,7 +19,6 @@ bosh interpolate --var deployment-name=cf-rabbitmq-multitenant-broker-release-ci
 	--vars-file=cf-rabbitmq-pipelines/manifests/vars-files/cf-rabbitmq-vars.yml \
 	--vars-file=cf-rabbitmq-pipelines/manifests/vars-files/cf-rabbitmq-multitenant-broker-vars.yml \
 	--vars-file=cf-rabbitmq-pipelines/manifests/vars-files/smith-cf-deployment-vars.yml \
-	--var rabbitmq-release-name="${RABBITMQ_RELEASE_NAME:=cf-rabbitmq}" \
 	--var cf-admin-password="((/bosh-${ENVIRONMENT}/cf/cf_admin_password))" \
 	--var nats-client-cert="((/bosh-${ENVIRONMENT}/cf/nats_client_cert.certificate))" \
 	--var nats-client-key="((/bosh-${ENVIRONMENT}/cf/nats_client_cert.private_key))" \
