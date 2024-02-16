@@ -1,10 +1,9 @@
 ---
 - type: replace
-  path: /releases/name=cf-rabbitmq?
+  path: /releases/name=((rabbitmq-release-name))?
   value:
-    name: cf-rabbitmq
+    name: ((rabbitmq-release-name))
     version: latest
-    url: "https://bosh.io/d/github.com/pivotal-cf/cf-rabbitmq-release"
 
 - type: replace
   path: /instance_groups/-
@@ -13,7 +12,7 @@
     instances: 3
     jobs:
     - name: rabbitmq-server
-      release: cf-rabbitmq
+      release: ((rabbitmq-release-name))
       properties:
         rabbitmq-server:
           restart_statsdb_cron_schedule: "42 */4 * * *"
@@ -59,7 +58,7 @@
     instances: ((haproxy-instances))
     jobs:
     - name: rabbitmq-haproxy
-      release: cf-rabbitmq
+      release: ((rabbitmq-release-name))
       properties:
         rabbitmq-haproxy:
           stats:
