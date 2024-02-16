@@ -21,5 +21,5 @@ bosh interpolate --var deployment-name=cf-rabbitmq-multitenant-broker-release-ci
 	--var cf-admin-password="((/bosh-${ENVIRONMENT}/cf/cf_admin_password))" \
 	--var nats-client-cert="((/bosh-${ENVIRONMENT}/cf/nats_client_cert.certificate))" \
 	--var nats-client-key="((/bosh-${ENVIRONMENT}/cf/nats_client_cert.private_key))" \
-	--var system-domain="$SYS_DOMAIN" \
+	--var system-domain="$DOMAIN" \
 	--var-file stemcell-version=./stemcell-resource/version git-bosh-release/manifests/cf-rabbitmq-broker-template.yml > manifest/manifest.yml
