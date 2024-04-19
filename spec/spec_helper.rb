@@ -2,6 +2,7 @@ require 'yaml'
 require 'pry'
 require 'rspec/retry'
 require 'open3'
+require 'shellwords'
 
 Dir[File.expand_path('support/**/*.rb', __dir__)].each do |file|
   require file
