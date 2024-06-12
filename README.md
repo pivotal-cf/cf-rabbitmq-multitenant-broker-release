@@ -14,7 +14,6 @@ In order to test this release locally you will need:
 - [bundler](http://bundler.io/)
 - [BOSH CLI v2](https://bosh.io/docs/cli-v2.html#install)
 - [BOSH Lite](https://bosh.io/docs/bosh-lite)
-- [Leiningen](https://leiningen.org)
 
 ## Install
 
