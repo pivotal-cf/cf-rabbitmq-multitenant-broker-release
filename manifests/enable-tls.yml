@@ -8,7 +8,7 @@
     cacert: "((tls_certificate.ca))"
     versions:
       - "tlsv1.2"
-      - "tlsv1.1"
+      - "tlsv1.3"
     verify: false
     verification_depth: 5
     fail_if_no_peer_cert: false
