@@ -7,7 +7,7 @@ toolchain go1.22.0
 require (
 	code.cloudfoundry.org/lager/v3 v3.0.3
 	github.com/michaelklishin/rabbit-hole/v2 v2.16.0
-	github.com/onsi/ginkgo/v2 v2.20.0
+	github.com/onsi/ginkgo/v2 v2.20.1
 	github.com/onsi/gomega v1.34.1
 	github.com/pivotal-cf/brokerapi/v10 v10.2.0
 	github.com/streadway/amqp v1.1.0
