@@ -47,7 +47,7 @@ instance_groups:
           operator_set_policy:
             enabled: true
             policy_name: "operator_set_policy"
-            policy_definition: "{\"ha-mode\":\"exactly\",\"ha-params\":2,\"ha-sync-mode\":\"automatic\"}"
+            policy_definition: "{\"dead-letter-exchange\":\"dlx\"}"
             policy_priority: 50
           management_domain: ((rabbitmq-management-hostname)).((system-domain))
           management:

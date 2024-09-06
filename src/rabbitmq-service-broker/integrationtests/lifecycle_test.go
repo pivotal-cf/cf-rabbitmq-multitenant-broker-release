@@ -59,9 +59,7 @@ var _ = Describe("the lifecycle of a service instance", func() {
 		Expect(policies).To(HaveLen(1))
 		Expect(policies[0].Name).To(Equal("operator_set_policy"))
 		Expect(policies[0].Definition).To(Equal(rabbithole.PolicyDefinition{
-			"ha-mode":      "exactly",
-			"ha-params":    float64(2),
-			"ha-sync-mode": "automatic",
+			"dead-letter-exchange": "dlx",
 		}))
 		Expect(policies[0].Priority).To(Equal(50))
 
