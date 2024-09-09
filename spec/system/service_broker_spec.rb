@@ -93,7 +93,7 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
         rabbitmq_service_broker_job['properties']['rabbitmq-service-broker']['rabbitmq']['operator_set_policy'] = {
           'enabled' => true,
           'policy_name' => 'operator_set_policy',
-          'policy_definition' => '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}',
+          'policy_definition' => '{"dead-letter-exchange":"dlx"}',
           'policy_priority' => 50
         }
 
@@ -129,9 +129,9 @@ RSpec.describe 'Using a Cloud Foundry service broker' do
       end
     end
 
-    context 'when broker is configured with HA policy' do
-      it 'sets queue policy to each created service instance', :pushes_cf_app do
-        provides_mirrored_queue_policy_as_a_default(@app, service_name)
+    context 'when broker is configured with DLX policy' do
+      it 'sets queue policy in each created service instance', :pushes_cf_app do
+        provides_dlx_queue_policy_as_a_default(@app, service_name)
       end
     end
 
@@ -275,7 +275,7 @@ def check_connection_data(service_key_data, protocol, port)
   expect(service_key_data['protocols'][protocol]['vhost']).not_to be_empty
 end
 
-def provides_mirrored_queue_policy_as_a_default(app, service_name)
+def provides_dlx_queue_policy_as_a_default(app, service_name)
   vcap_services = cf.app_vcap_services(app.name)
 
   credentials = vcap_services[service_name].first['credentials']
@@ -290,6 +290,6 @@ def provides_mirrored_queue_policy_as_a_default(app, service_name)
   expect(policy).to_not be_nil
   expect(policy['pattern']).to eq('.*')
   expect(policy['apply-to']).to eq('all')
-  expect(policy['definition']).to eq('ha-mode' => 'exactly', 'ha-params' => 2, 'ha-sync-mode' => 'automatic')
+  expect(policy['definition']).to eq('dead-letter-exchange' => 'dlx')
   expect(policy['priority']).to eq(50)
 end

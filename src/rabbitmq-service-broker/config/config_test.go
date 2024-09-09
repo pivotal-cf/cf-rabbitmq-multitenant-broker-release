@@ -58,9 +58,7 @@ var _ = Describe("Config", func() {
 					Enabled: true,
 					Name:    "operator_set_policy",
 					Definition: PolicyDefinition{
-						"ha-mode":      "exactly",
-						"ha-params":    float64(2),
-						"ha-sync-mode": "automatic",
+						"dead-letter-exchange": "dlx",
 					},
 					Priority: 50,
 				},
