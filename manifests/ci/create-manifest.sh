@@ -19,8 +19,8 @@ bosh interpolate \
 	--vars-file=cf-rabbitmq-pipelines/manifests/vars-files/cf-rabbitmq-vars.yml \
 	--vars-file=cf-rabbitmq-pipelines/manifests/vars-files/cf-rabbitmq-multitenant-broker-vars.yml \
 	--vars-file=cf-rabbitmq-pipelines/manifests/vars-files/smith-cf-deployment-vars.yml \
-	--var cf-admin-password="((/bosh-${ENVIRONMENT}/cf/cf_admin_password))" \
-	--var nats-client-cert="((/bosh-${ENVIRONMENT}/cf/nats_client_cert.certificate))" \
-	--var nats-client-key="((/bosh-${ENVIRONMENT}/cf/nats_client_cert.private_key))" \
+	--var cf-admin-password="((/bosh-lite/cf/cf_admin_password))" \
+	--var nats-client-cert="((/bosh-lite/cf/nats_client_cert.certificate))" \
+	--var nats-client-key="((/bosh-lite/cf/nats_client_cert.private_key))" \
 	--var system-domain="$DOMAIN" \
 	--var-file stemcell-version=./stemcell-resource/version git-bosh-release/manifests/cf-rabbitmq-broker-template.yml > manifest/manifest.yml

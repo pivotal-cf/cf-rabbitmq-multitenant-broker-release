@@ -42,9 +42,9 @@
       consumes:
         rabbitmq-server:
           ip_addresses: true
-    vm_type: n1-highmem-2
+    vm_type: default
     stemcell: jammy
-    persistent_disk_type: 50GB
+    persistent_disk_type: 10GB 
     networks:
     - name: default
     azs:
@@ -83,7 +83,7 @@
             - ((rabbitmq-management-hostname)).((system-domain))
     - name: bpm
       release: bpm
-    vm_type: n1-standard-1
+    vm_type: default
     stemcell: jammy
     networks:
     - name: default
