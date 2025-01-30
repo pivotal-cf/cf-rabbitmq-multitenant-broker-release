@@ -2,7 +2,6 @@
 final_name: cf-rabbitmq-multitenant-broker
 min_cli_version: 1.2690.0
 blobstore:
-  provider: s3
+  provider: gcs
   options:
-    bucket_name: pcf-rabbitmq-bosh-release-blobs
-    region: eu-west-1
+    bucket_name: cf-rabbitmq-multitenant-broker-bosh-release-blobs
