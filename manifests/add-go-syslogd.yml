@@ -23,7 +23,7 @@
       - name: route_registrar
         release: routing
         consumes:
-          nats-tls: {from: nats-tls, deployment: cf}
+          nats-tls: {from: nats-tls, deployment: ((cf-deployment-name))}
         properties:
           nats:
             tls:
@@ -40,11 +40,9 @@
       - name: bpm
         release: bpm
     azs:
-    - z1
+    - "null"
     instances: 1
     networks:
-    - name: default
-      static_ips:
-      - ((syslog-host))
+    - name: network
     stemcell: jammy
-    vm_type: n1-standard-1
+    vm_type: default

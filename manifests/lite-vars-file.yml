@@ -21,7 +21,7 @@ rabbitmq-management-hostname: pivotal-rabbitmq
 rabbitmq-hosts: USING BOSH LINKS
 
 syslog-port: 8081
-syslog-host: 10.244.16.126
+syslog-host: 10.244.3.126
 
 cf-admin-password: admin
 cf-admin-username: admin

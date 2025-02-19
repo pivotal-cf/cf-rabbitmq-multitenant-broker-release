@@ -12,8 +12,8 @@
           targets:
           - query: '*'
             instance_group: nats
-            deployment: cf
-            network: default
+            deployment: ((cf-deployment-name))
+            network: network
             domain: bosh
 
 - type: replace
