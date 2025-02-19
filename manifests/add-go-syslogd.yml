@@ -47,4 +47,4 @@
       static_ips:
       - ((syslog-host))
     stemcell: jammy
-    vm_type: n1-standard-1
+    vm_type: default
