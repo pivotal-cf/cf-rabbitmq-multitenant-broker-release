@@ -42,14 +42,13 @@
       consumes:
         rabbitmq-server:
           ip_addresses: true
-    vm_type: n1-highmem-2
+    vm_type: default
     stemcell: jammy
-    persistent_disk_type: 50GB
+    persistent_disk_type: 10240
     networks:
-    - name: default
+    - name: network
     azs:
-    - z1
-    - z2
+    - "null"
 
 - type: replace
   path: /instance_groups/-
@@ -67,7 +66,7 @@
     - name: route_registrar
       release: routing
       consumes:
-        nats-tls: {from: nats-tls, deployment: cf}
+        nats-tls: {from: nats-tls, deployment: ((cf-deployment-name))}
       properties:
         nats:
           tls:
@@ -83,10 +82,9 @@
             - ((rabbitmq-management-hostname)).((system-domain))
     - name: bpm
       release: bpm
-    vm_type: n1-standard-1
+    vm_type: default
     stemcell: jammy
     networks:
-    - name: default
+    - name: network
     azs:
-    - z1
-    - z2
+    - "null"

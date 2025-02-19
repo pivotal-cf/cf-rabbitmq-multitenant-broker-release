@@ -58,7 +58,7 @@ instance_groups:
   - name: route_registrar
     release: routing
     consumes:
-      nats-tls: {from: nats-tls, deployment: cf}
+      nats-tls: {from: nats-tls, deployment: ((cf-deployment-name))}
     properties:
       nats:
         tls:
@@ -112,12 +112,12 @@ instance_groups:
         name: ((product-name))
       smoke_tests:
         org: system
-  vm_type: n1-standard-1
+  vm_type: default 
   stemcell: jammy
   azs:
-  - z1
+  - "null"
   networks:
-  - name: default
+  - name: network
 
 update:
   canaries: 1
