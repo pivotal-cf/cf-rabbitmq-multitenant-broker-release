@@ -5,6 +5,7 @@ GEM
       public_suffix (>= 2.0.2, < 7.0)
     amq-protocol (2.3.2)
     ansi (1.5.0)
+    bigdecimal (3.2.3)
     bosh-template (2.3.0)
       semi_semantic (~> 1.2.0)
     bunny (2.23.0)
@@ -13,7 +14,7 @@ GEM
     byebug (11.1.3)
     chronic (0.10.2)
     coderay (1.1.3)
-    csv (3.3.0)
+    csv (3.3.5)
     diff-lcs (1.5.1)
     faraday (2.10.0)
       faraday-net_http (>= 2.0, < 3.2)
@@ -23,7 +24,7 @@ GEM
     faraday-net_http (3.1.0)
       net-http
     hashie (4.1.0)
-    httparty (0.22.0)
+    httparty (0.23.1)
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -32,7 +33,8 @@ GEM
     mini_mime (1.1.5)
     mqtt (0.6.0)
     multi_json (1.15.0)
-    multi_xml (0.6.0)
+    multi_xml (0.7.2)
+      bigdecimal (~> 3.1)
     net-http (0.4.1)
       uri
     papertrail (0.11.2)
