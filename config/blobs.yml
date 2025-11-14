@@ -1,6 +1,6 @@
 ---
 # this comment prevents git conflicts
-cf-rabbitmq-multitenant-broker-golang/go1.25.1.linux-amd64.tar.gz:
-  size: 59660846
-  object_id: eb0f4bf7-e9c5-4eba-555e-36b23ea4a5e0
-  sha: sha256:7716a0d940a0f6ae8e1f3b3f4f36299dc53e31b16840dbd171254312c41ca12e
+cf-rabbitmq-multitenant-broker-golang/go1.25.4.linux-amd64.tar.gz:
+  size: 59766394
+  object_id: 0adc3023-7ccc-4788-44bf-db234b220fc5
+  sha: sha256:9fa5ffeda4170de60f67f3aa0f824e426421ba724c21e133c1e35d6159ca1bec
