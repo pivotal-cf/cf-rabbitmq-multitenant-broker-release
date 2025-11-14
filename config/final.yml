@@ -4,4 +4,4 @@ min_cli_version: 1.2690.0
 blobstore:
   provider: gcs
   options:
-    bucket_name: cf-rmq-multitenant-broker-bosh-release-blobs
+    bucket_name: pcf-rmq-multitenant-broker-bosh-release-blobs
