@@ -167,7 +167,7 @@ func validateConfig(config Config) error {
 			for _, err := range errs {
 				missing = append(missing, strings.TrimPrefix(err.Namespace(), "Config."))
 			}
-			return fmt.Errorf("Config file has missing fields: " + strings.Join(missing, ", "))
+			return fmt.Errorf("Config file has missing fields: %s", strings.Join(missing, ", "))
 		}
 		return err
 	}
