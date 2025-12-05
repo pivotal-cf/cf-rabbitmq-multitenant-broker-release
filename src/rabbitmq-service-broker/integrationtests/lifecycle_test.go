@@ -91,7 +91,7 @@ var _ = Describe("the lifecycle of a service instance", func() {
 		protocols := creds["protocols"].(map[string]interface{})
 		amqp := protocols["amqp"].(map[string]interface{})
 		uris := amqp["uris"].([]interface{})
-		conn, err := client.Dial(fmt.Sprintf(uris[0].(string)))
+		conn, err := client.Dial(fmt.Sprintf("%s", uris[0].(string)))
 		Expect(err).NotTo(HaveOccurred())
 		_, err = conn.Channel()
 		Expect(err).NotTo(HaveOccurred())
