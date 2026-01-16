@@ -6,7 +6,7 @@ releases:
   version: latest
 - name: routing
   version: latest
-- name: cf-cli
+- name: tanzu-cf-cli
   version: latest
 - name: cf-rabbitmq-smoke-tests
   version: latest
@@ -22,8 +22,8 @@ instance_groups:
 - name: rmq-broker
   instances: 1
   jobs:
-  - name: cf-cli-8-linux
-    release: cf-cli
+  - name: tanzu-cf-cli-linux
+    release: tanzu-cf-cli
   - name: rabbitmq-service-broker
     release: cf-rabbitmq-multitenant-broker
     properties:
