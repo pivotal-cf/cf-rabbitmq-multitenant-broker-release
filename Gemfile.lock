@@ -1,11 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.8)
+    addressable (2.8.9)
       public_suffix (>= 2.0.2, < 8.0)
     amq-protocol (2.5.1)
     ansi (1.5.0)
-    bigdecimal (4.0.1)
+    bigdecimal (4.1.0)
     bosh-template (2.4.0)
       semi_semantic (~> 1.2.0)
     bunny (2.24.0)
@@ -17,7 +17,7 @@ GEM
     coderay (1.1.3)
     csv (3.3.5)
     diff-lcs (1.6.2)
-    faraday (2.14.0)
+    faraday (2.14.1)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
@@ -32,7 +32,7 @@ GEM
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     io-console (0.8.2)
-    json (2.18.0)
+    json (2.19.3)
     logger (1.7.0)
     method_source (1.1.0)
     mini_mime (1.1.5)
@@ -53,7 +53,7 @@ GEM
     pry-byebug (3.12.0)
       byebug (~> 13.0)
       pry (>= 0.13, < 0.17)
-    public_suffix (7.0.2)
+    public_suffix (7.0.5)
     rabbitmq_http_api_client (3.2.2)
       addressable (~> 2.7)
       faraday (~> 2.9)
@@ -75,18 +75,16 @@ GEM
       rspec-support (~> 3.13.0)
     rspec-instafail (1.0.0)
       rspec
-    rspec-mocks (3.13.7)
+    rspec-mocks (3.13.8)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
     rspec-support (3.13.7)
     semi_semantic (1.2.0)
-    set (1.1.2)
     shellwords (0.2.2)
-    sorted_set (1.0.3)
+    sorted_set (1.1.0)
       rbtree
-      set (~> 1.0)
     stomp (1.4.10)
     uri (1.1.1)
 
@@ -112,4 +110,4 @@ RUBY VERSION
   ruby 3.4.8
 
 BUNDLED WITH
-  4.0.5
+  4.0.9
