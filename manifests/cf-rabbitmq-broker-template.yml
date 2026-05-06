@@ -108,6 +108,8 @@ instance_groups:
         domain: ((system-domain))
         admin_username: ((cf-admin-username))
         admin_password: ((cf-admin-password))
+        admin_client: ((cf-admin-client))
+        admin_client_secret: ((cf-admin-client-secret))
       broker:
         name: ((product-name))
       smoke_tests:

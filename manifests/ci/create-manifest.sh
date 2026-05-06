@@ -26,6 +26,8 @@ bosh interpolate \
 	--vars-file=cf-rabbitmq-pipelines/manifests/vars-files/cf-rabbitmq-multitenant-broker-vars.yml \
 	--vars-file=cf-rabbitmq-pipelines/manifests/vars-files/smith-cf-deployment-vars.yml \
 	--var cf-admin-password="$(om -k curl -s -p "/api/v0/deployed/products/$cf_guid/credentials/.uaa.admin_credentials" | jq -r .credential.value.password)" \
+	--var cf-admin-client="((/opsmgr/${BOSH_DEPLOYMENT}/uaa/tile_installer_client_credentials.identity))" \
+	--var cf-admin-client-secret="((/opsmgr/${BOSH_DEPLOYMENT}/uaa/tile_installer_client_credentials.password))" \
 	--var nats-client-cert="((/opsmgr/${BOSH_DEPLOYMENT}/nats_client_cert.cert_pem))" \
 	--var nats-client-key="((/opsmgr/${BOSH_DEPLOYMENT}/nats_client_cert.private_key_pem))" \
 	--var system-domain="$DOMAIN" \
