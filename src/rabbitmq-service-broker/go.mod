@@ -5,8 +5,8 @@ go 1.26
 require (
 	code.cloudfoundry.org/lager/v3 v3.66.0
 	github.com/michaelklishin/rabbit-hole/v2 v2.16.0
-	github.com/onsi/ginkgo/v2 v2.28.1
-	github.com/onsi/gomega v1.39.1
+	github.com/onsi/ginkgo/v2 v2.28.3
+	github.com/onsi/gomega v1.40.0
 	github.com/pivotal-cf/brokerapi/v10 v10.2.0
 	github.com/streadway/amqp v1.1.0
 	gopkg.in/go-playground/validator.v9 v9.31.0
