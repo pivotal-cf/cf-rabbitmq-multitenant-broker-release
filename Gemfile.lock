@@ -61,7 +61,7 @@ GEM
       faraday-follow_redirects (~> 0.3)
       hashie (>= 4.1)
       multi_json (~> 1.15)
-    rake (13.3.1)
+    rake (13.4.2)
     rbtree (0.4.6)
     reline (0.6.3)
       io-console (~> 0.5)
