@@ -3,9 +3,9 @@ module rabbitmq-service-broker
 go 1.26
 
 require (
-	code.cloudfoundry.org/lager/v3 v3.81.0
+	code.cloudfoundry.org/lager/v3 v3.82.0
 	github.com/michaelklishin/rabbit-hole/v2 v2.16.0
-	github.com/onsi/ginkgo/v2 v2.32.0
+	github.com/onsi/ginkgo/v2 v2.32.1
 	github.com/onsi/gomega v1.42.1
 	github.com/pivotal-cf/brokerapi/v10 v10.2.0
 	github.com/streadway/amqp v1.1.0
@@ -28,7 +28,7 @@ require (
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
-	golang.org/x/mod v0.38.0 // indirect
+	golang.org/x/mod v0.39.0 // indirect
 	golang.org/x/net v0.57.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
