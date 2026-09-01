@@ -1,0 +1,80 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "timezone": "Asia/Kolkata",
+  "schedule": [
+    "after 8am and before 9am on monday,thursday"
+  ],
+  "dependencyDashboard": true,
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
+  "lockFileMaintenance": {
+    "enabled": false
+  },
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "description": "Disable GitHub Actions dependency updates",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Group security vulnerability updates and follow schedule",
+      "matchCategories": [
+        "vulnerability"
+      ],
+      "groupName": "Vulnerability updates",
+      "groupSlug": "vulnerabilities",
+      "schedule": [
+        "after 8am and before 9am on monday,thursday"
+      ]
+    },
+    {
+      "description": "Batch non-major Go dependencies",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "groupName": "Go non-major dependencies",
+      "groupSlug": "go-non-major"
+    },
+    {
+      "description": "Batch major Go dependencies separately",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "groupName": "Go major dependencies",
+      "groupSlug": "go-major"
+    },
+    {
+      "description": "Batch Ruby dependencies",
+      "matchManagers": [
+        "bundler"
+      ],
+      "groupName": "Ruby dependencies",
+      "groupSlug": "bundler"
+    },
+    {
+      "description": "Batch npm dependencies",
+      "matchManagers": [
+        "npm"
+      ],
+      "groupName": "npm dependencies",
+      "groupSlug": "npm"
+    }
+  ]
+}
