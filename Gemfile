@@ -5,6 +5,7 @@ ruby File.read(File.join(File.dirname(__FILE__), '.ruby-version')).strip
 gem 'bosh-template'
 gem 'bunny'
 gem 'httparty'
+gem 'json', '< 3'
 gem 'mqtt'
 gem 'papertrail'
 gem 'pry-byebug'
