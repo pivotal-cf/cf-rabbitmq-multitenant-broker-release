@@ -5,7 +5,7 @@ go 1.27
 require (
 	code.cloudfoundry.org/lager/v3 v3.92.0
 	github.com/michaelklishin/rabbit-hole/v2 v2.16.0
-	github.com/onsi/ginkgo/v2 v2.33.1
+	github.com/onsi/ginkgo/v2 v2.34.0
 	github.com/onsi/gomega v1.44.0
 	github.com/pivotal-cf/brokerapi/v10 v10.2.0
 	github.com/streadway/amqp v1.1.0
